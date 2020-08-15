@@ -1,0 +1,4 @@
+pybullet
+scipy
+numpy
+gym
