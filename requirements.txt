@@ -1,4 +1,0 @@
-pybullet
-scipy
-numpy
-gym
