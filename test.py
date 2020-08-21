@@ -1,25 +1,28 @@
-import math
-
-import gym  # open ai gym
-#import pybulletgym  # register PyBullet enviroments with open ai gym
-from pybullet_envs.bullet.racecarGymEnv import RacecarGymEnv
-import time
-import numpy as np
+from time import time, sleep
 
 from agents.gap_follower import GapFollower
-from racecar_gym.single_car_env import SingleCarEnv, SingleCarEnvScenario
-from race_env import RaceEnv
-x = './m'
-scenario = SingleCarEnvScenario(map='models/tracks/barca_track.sdf',
-                                car='models/cars/racecar_differential.urdf',
-                                initial_pose=np.array([0, 0, 0.1]))
-env = SingleCarEnv(scenario=scenario)
-env.render() # call this before racecar_gym.reset, if you want a window showing the environment
-observation = env.reset()  # should return a state vector if everything worked
-print(env.observation_space)
+import gym
+from gym import wrappers
+import racecar_gym
+
+env = gym.make('f1tenth-porto-two-v0')
+monitor_env = env#wrappers.Monitor(env, directory='../recordings', force=True, video_callable=lambda episode_id: True)
+#env.render()
+observation = monitor_env.reset()
 agent = GapFollower()
-while True:
-    action = agent.action(observation)
-    observation, reward, done, info = env.step(action)
-    print(observation)
-    env.render()
+done = False
+i = 0
+start = time()
+while not done:
+    actions = [agent.action(obs) for obs in observation]
+    observation, reward, dones, info = monitor_env.step(actions)
+    done = any(dones)
+    i += 1
+    #sleep(0.01)
+end = time()
+
+print('wall time: ' + str((end-start)))
+print('sim time: ' + str(i/100))
+print('RTF: ', (i/100) / (end-start))
+monitor_env.close()
+env.close()

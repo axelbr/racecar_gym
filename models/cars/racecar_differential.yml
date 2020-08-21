@@ -1,0 +1,6 @@
+name: racecar
+urdf_file: racecar_differential.urdf
+motorized_joints: [diff_ring_chassis, diff2_ring_chassis]
+steering_joints: [left_steering_hinge_joint, right_steering_hinge_joint]
+lidar_joint: hokuyo_joint
+camera_joint: zed_camera_joint
