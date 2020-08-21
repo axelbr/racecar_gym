@@ -12,7 +12,16 @@ pip install -e .
 
 ## Environments
 
-The observation space is a box space with the RGB pixels the agent sees in a numpy array of shape (64, 64, 3).  The expected step rate for a human player is 15 Hz.
+The observation space is a `n-tuple` of `Dict`, where `n` is the number of agents. An observation for a single agent has the following form.
+
+|Key|Space|Bounds|Description|
+|---|---|---|---|
+|pose|`Box(6,)`||Holds the position (`x`, `y`, `z`) and the orientation (`roll`, `pitch`, `yaw`) in that order.|
+|velocity|`Box(6,)`||Holds the translational velocity (`x`, `y`, `z`) and the rotational velocity around the `x`, `y` and `z` axis, in that order.|
+|lap|`Discrete(<laps>)`||The current lap of the vehicle. `laps` is a parameter for the simulation.|
+|time|`Box(6,)`||Passed time since the start of the race.|
+|collision|`Discrete(2)`||Indicates if an agent is involved in a collision with the wall or an opponent.|
+
 
 The action space is `Discrete(15)` for which button combo to press.  The button combos are defined in [`env.py`](procgen/env.py).
 
