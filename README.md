@@ -4,7 +4,7 @@
 
 A gym environment for a miniature racecar using the bullet physics engine with pybullet.
 ## Installation
-Clone the repositroy.
+Clone the repository.
 You can install ``racecar_gym`` with the following commands:
 
 ```shell_script
@@ -28,12 +28,12 @@ The observation space is a `n-tuple` of `Dict`, where `n` is the number of agent
 
 Currently two maps are available and a total of four scenarios are specified.
 
- Name | Description |
-| --- | --- |
-|`f1tenth-berlin-two-gui-v0`|A head to head race on the berlin track (original course from [F1Tenth Berlin Grand Prix](https://www.ifac2020.org/program/competitions/f1tenth-autonomous-grand-prix/)) with rendering enabled.|
-|`f1tenth-berlin-two-v0`|The same scenario as in `f1tenth-berlin-two-gui-v0`, but without GUI.|
-|`f1tenth-porto-two-gui-v0`|A head to head race on the porto track (from the [F1Tenth Race Day in Porto](https://f1tenth.org/race.html)) with rendering enabled.|
-|`f1tenth-porto-two-v0`|The same scenario as in `f1tenth-porto-two-gui-v0`, but without GUI.|
+| Image | Name | Description |
+| --- | --- | --- |
+|![berlin](docs/berlin.png)|`f1tenth-berlin-two-gui-v0`|A head to head race on the berlin track (original course from [F1Tenth Berlin Grand Prix](https://www.ifac2020.org/program/competitions/f1tenth-autonomous-grand-prix/)) with rendering enabled.|
+|![berlin](docs/berlin.png)|`f1tenth-berlin-two-v0`|The same scenario as in `f1tenth-berlin-two-gui-v0`, but without GUI.|
+|![berlin](docs/porto.png)|`f1tenth-porto-two-gui-v0`|A head to head race on the porto track (from the [F1Tenth Race Day in Porto](https://f1tenth.org/race.html)) with rendering enabled.|
+|![berlin](docs/porto.png)|`f1tenth-porto-two-v0`|The same scenario as in `f1tenth-porto-two-gui-v0`, but without GUI.|
 
 ## Notes
 Please note that this is work in progress, and interfaces might change. Also more detailed documentation and additional scenarios will follow.

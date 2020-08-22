@@ -7,6 +7,5 @@ starting_grid:
   - {x: -0.540967, y: 0.774283, yaw: 0.0}
   - {x: -0.540967, y: -0.701126, yaw: 0.0}
 
-area_bounds:
-  min: [-12.8, -12.8, 0.0]
-  max: [12.8, 12.8, 3.0]
+lower_area_bounds: [-12.8, -12.8, 0.0]
+upper_area_bounds: [12.8, 12.8, 3.0]
