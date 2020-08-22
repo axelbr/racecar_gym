@@ -63,4 +63,4 @@ class GapFollower:
         # Publish Drive message
         angle = (-math.pi/2 + best_point * math.pi / 99)
         angle = math.copysign(min(1, abs(angle)), angle)
-        return 2.5, angle, 1
+        return 1, angle, 1
