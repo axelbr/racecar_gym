@@ -1,10 +1,10 @@
 import os
-import yaml
+
 from pybullet_utils.bullet_client import BulletClient
 
-from racecar_gym.definitions import Pose
-from racecar_gym.models.map import Map, MapConfig
-from racecar_gym.models.racecar import RaceCar, RaceCarConfig
+from racecar_gym.models.configs import VehicleConfig, MapConfig
+from racecar_gym.models.map import Map
+from racecar_gym.models.racecar import RaceCar
 
 
 def load_map(client: BulletClient, config_file: str) -> Map:
@@ -17,13 +17,13 @@ def load_map(client: BulletClient, config_file: str) -> Map:
     Returns:
         A map which is loaded into the simulation.
     """
-    with open(config_file) as f:
-        config = yaml.safe_load(f)
-    config['sdf_file'] = f"{os.path.dirname(config_file)}/{config['sdf_file']}"
-    map_config = MapConfig(**config)
+    map_config = MapConfig()
+    map_config.load(config_file)
+    map_config.sdf_file = f'{os.path.dirname(config_file)}/{map_config.sdf_file}'
     return Map(client=client, config=map_config)
 
-def load_vehicle(pose: Pose, client: BulletClient, config_file: str, debug: bool = False) -> RaceCar:
+
+def load_vehicle(client: BulletClient, map: Map, config_file: str) -> RaceCar:
     """
     Loads a vehicle into simulation from a config file.
     Args:
@@ -35,18 +35,8 @@ def load_vehicle(pose: Pose, client: BulletClient, config_file: str, debug: bool
     Returns:
         Vehicle which is loaded into the simulation.
     """
-    with open(config_file) as f:
-        config = yaml.safe_load(f)
-    config['urdf_file'] = f"{os.path.dirname(config_file)}/{config['urdf_file']}"
-    car_config = RaceCarConfig(
-        debug=debug,
-        urdf_file=config['urdf_file'],
-        starting_pose=pose,
-        motorized_joints=config['motorized_joints'],
-        steering_joints=config['steering_joints'],
-        lidar_joint=config['lidar_joint'],
-        camera_joint=config['camera_joint'],
-
-    )
-    vehicle = RaceCar(client, config=car_config)
+    car_config = VehicleConfig()
+    car_config.load(config_file)
+    car_config.urdf_file = f'{os.path.dirname(config_file)}/{car_config.urdf_file}'
+    vehicle = RaceCar(client=client, map=map, config=car_config)
     return vehicle

@@ -1,6 +1,19 @@
-name: racecar
+
 urdf_file: racecar_differential.urdf
-motorized_joints: [diff_ring_chassis, diff2_ring_chassis]
-steering_joints: [left_steering_hinge_joint, right_steering_hinge_joint]
-lidar_joint: hokuyo_joint
-camera_joint: zed_camera_joint
+max_speed: 14.0
+max_steering_angle: 0.4
+max_force: 5.0
+speed_multiplier: 20.0
+steering_multiplier: 0.5
+
+joints:
+  motorized_joints: [diff_ring_chassis, diff2_ring_chassis]
+  steering_joints: [left_steering_hinge_joint, right_steering_hinge_joint]
+  lidar_joint: [hokuyo_joint]
+  camera_joint: [zed_camera_joint]
+
+sensors:
+  lidar:
+    rays: 100
+    range: 5.0
+    min_range: 0.25

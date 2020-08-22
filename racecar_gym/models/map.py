@@ -1,46 +1,37 @@
-from dataclasses import dataclass
-from typing import Tuple, List, Dict
+from typing import Tuple
 
 from pybullet_utils.bullet_client import BulletClient
 
 from racecar_gym.definitions import Position, Pose
-
-
-@dataclass
-class MapConfig:
-    name: str
-    sdf_file: str
-    starting_grid: List[Dict[str, float]]
-    area_bounds: Dict[str, Position]
+from racecar_gym.models.configs import MapConfig
 
 
 class Map:
     def __init__(self, client: BulletClient, config: MapConfig):
-        self._model = config.sdf_file
         self._client = client
-        self._floor_id, self._walls_id, self._finish_id = self._load_map()
+        self._floor_id, self._walls_id, self._finish_id = None, None, None
         self._config = config
         self._starting_grid = [
-            ((pose['x'], pose['y'], 0.5), (0.0, 0.0, pose['yaw']))
+            ((pose['x'], pose['y'], 0.25), (0.0, 0.0, pose['yaw']))
             for pose
             in config.starting_grid
         ]
 
-        self._bounds = (config.area_bounds['min'], config.area_bounds['max'])
-
-    def _load_map(self) -> Tuple[int, int, int]:
-        return self._client.loadSDF(self._model, globalScaling=1)
+        self._bounds = (config.lower_area_bounds, config.upper_area_bounds)
 
     @property
     def floor_id(self) -> int:
+        assert self._floor_id is not None, 'reset() has to be called at least once'
         return self._floor_id
 
     @property
     def walls_id(self) -> int:
+        assert self._walls_id is not None, 'reset() has to be called at least once'
         return self._walls_id
 
     @property
     def finish_id(self) -> int:
+        assert self._finish_id is not None, 'reset() has to be called at least once'
         return self._finish_id
 
     @property
@@ -53,4 +44,4 @@ class Map:
         return tuple(position), tuple(orientation)
 
     def reset(self):
-        self._floor_id, self._walls_id, self._finish_id = self._load_map()
+        self._floor_id, self._walls_id, self._finish_id = self._client.loadSDF(self._config.sdf_file, globalScaling=1)

@@ -1,0 +1,12 @@
+laps: 2
+max_time: 120
+map_spec:
+  config_file: models/tracks/berlin/berlin.yml
+vehicle_spec:
+  - config_file: models/cars/racecar_differential.yml
+    sensors: [lidar, odometry]
+  - config_file:  models/cars/racecar_differential.yml
+    sensors: [lidar, odometry]
+simulation_spec:
+  time_step: 0.01
+  rendering: False
