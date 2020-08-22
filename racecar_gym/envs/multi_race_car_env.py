@@ -69,7 +69,7 @@ class MultiRaceCarEnv(gym.Env):
         self.action_space = self._make_action_space(self._vehicles)
         self.observation_space = self._make_observation_space(self._scenario)
 
-        return [self._observe(v, sensors=self._scenario.vehicle_spec[i].sensors) for i, v in enumerate(self._vehicles)]
+        return [self._observe(v, sensors=self._scenario.vehicle_spec[i].sensors)[0] for i, v in enumerate(self._vehicles)]
 
     def render(self, mode='human'):
         pass

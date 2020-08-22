@@ -11,6 +11,9 @@ monitor_env = env#wrappers.Monitor(env, directory='../recordings', force=True, v
 observation = monitor_env.reset()
 agent = GapFollower()
 done = False
+
+print(env.observation_space)
+
 i = 0
 start = time()
 while not done:
