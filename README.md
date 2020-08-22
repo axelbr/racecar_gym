@@ -22,7 +22,7 @@ The observation space is a `n-tuple` of `Dict`, where `n` is the number of agent
 |velocity|`Box(6,)`||Holds the translational velocity (`x`, `y`, `z`) and the rotational velocity around the `x`, `y` and `z` axis, in that order.|
 |lidar|`Box(<scans>,)`|`scans: 100`|Lidar range scans.|
 |lap|`Discrete(<laps>)`|`laps: 2`|The current lap of the vehicle. `laps` is a parameter for the simulation.|
-|time|`Box(6,)`||Passed time since the start of the race.|
+|time|`Box(1,)`||Passed time since the start of the race.|
 |collision|`Discrete(2)`||Indicates if an agent is involved in a collision with the wall or an opponent.|
 
 Currently two maps are available and a total of four scenarios are specified.
