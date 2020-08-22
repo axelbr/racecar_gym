@@ -1,4 +1,7 @@
 # Racecar Gym (work in progress!)
+
+![berlin track](https://raw.githubusercontent.com/axelbr/racecar_gym/master/docs/racecar_gym.gif?token=ACOSGYBTWDQGFPDIVTZLS3K7JIW2Y)
+
 A gym environment for a miniature racecar using the bullet physics engine with pybullet.
 ## Installation
 Clone the repositroy.
