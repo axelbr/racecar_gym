@@ -5,7 +5,7 @@ import gym
 from gym import wrappers
 import racecar_gym
 
-env = gym.make('f1tenth-berlin-two-gui-v0')
+env = gym.make('f1tenth-porto-two-gui-v0')
 monitor_env = env#wrappers.Monitor(env, directory='../recordings', force=True, video_callable=lambda episode_id: True)
 #env.render()
 observation = monitor_env.reset()
@@ -21,7 +21,7 @@ while not done:
     observation, reward, dones, info = monitor_env.step(actions)
     done = any(dones)
     i += 1
-    #sleep(0.01)
+    sleep(0.01)
 end = time()
 
 print('wall time: ' + str((end-start)))
