@@ -1,4 +1,4 @@
-# Racecar Gym (work in progress!)
+# Racecar Gym
 
 ![berlin track](docs/racecar_gym.gif)
 
