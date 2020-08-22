@@ -1,5 +1,5 @@
 # Racecar Gym (work in progress!)
-A gym environment for a miniature racecar using the pybullet physics engine.
+A gym environment for a miniature racecar using the bullet physics engine with pybullet.
 ## Installation
 Clone the repositroy.
 You can install ``racecar_gym`` with the following commands:
