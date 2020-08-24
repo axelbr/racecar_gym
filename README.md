@@ -14,7 +14,7 @@ pip install -e .
 
 ## Environments
 
-The observation and action space is a `n-tuple` of `Dict`, where `n` is the number of agents. An observation for a single agent has the following form.
+The observation and action space is a `n-tuple` where `n` is the number of agents. The observation space for a single agent is a `Dict` which consists of the entries described below.
 
 |Key|Space|Defaults|Description|
 |---|---|---|---|
