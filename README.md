@@ -14,7 +14,7 @@ pip install -e .
 
 ## Environments
 
-The observation space is a `n-tuple` of `Dict`, where `n` is the number of agents. An observation for a single agent has the following form.
+The observation and action space is a `n-tuple` of `Dict`, where `n` is the number of agents. An observation for a single agent has the following form.
 
 |Key|Space|Defaults|Description|
 |---|---|---|---|
@@ -24,6 +24,9 @@ The observation space is a `n-tuple` of `Dict`, where `n` is the number of agent
 |lap|`Discrete(<laps>)`|`laps: 2`|The current lap of the vehicle. `laps` is a parameter for the simulation.|
 |time|`Box(1,)`||Passed time since the start of the race.|
 |collision|`Discrete(2)`||Indicates if an agent is involved in a collision with the wall or an opponent.|
+
+The action space for a single agent is a `Box(3,)`, holding the target velocity, target steering angle, and the force
+which should be applied to reach the velocity in that order.
 
 Currently two maps are available and a total of four scenarios are specified.
 
