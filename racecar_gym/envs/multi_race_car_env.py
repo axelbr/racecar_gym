@@ -6,6 +6,7 @@ import numpy as np
 from pybullet_utils.bullet_client import BulletClient
 
 from racecar_gym.envs.specs import ScenarioSpec
+from racecar_gym.envs.tasks import from_spec
 from racecar_gym.models import load_map, load_vehicle, Map
 from racecar_gym.models.racecar import RaceCar
 
@@ -17,6 +18,7 @@ class MultiRaceCarEnv(gym.Env):
         self._client = client_factory()
         self._map, self._vehicles = self._load_models()
         self._simulation_time = 0.0
+        self._task = from_spec(spec=scenario.task_spec)
 
     def _load_models(self) -> Tuple[Map, List[RaceCar]]:
         map = load_map(client=self._client, config_file=self._scenario.map_spec.config_file)
@@ -52,8 +54,8 @@ class MultiRaceCarEnv(gym.Env):
         spec = self._scenario.vehicle_spec[vehicle_index]
         observation, info = self._observe(vehicle=vehicle, sensors=spec.sensors)
         vehicle.step(velocity=action[0], steering_angle=action[1], force=action[2])
-        done = self._check_termination(observation)
-        reward = 0.0
+        done = self._task.done(observation)
+        reward = self._task.reward(observation, action)
         return observation, reward, done, info
 
     def reset(self):
@@ -85,17 +87,6 @@ class MultiRaceCarEnv(gym.Env):
 
         observation['time'] = self._simulation_time
         return observation, info
-
-
-
-    def _check_termination(self, observation: Dict[str, Any]) -> bool:
-        if observation['collision']:
-            return True
-        if observation['lap'] > self._scenario.laps:
-            return True
-        if self._simulation_time >= self._scenario.max_time:
-            return True
-        return False
 
     def _make_action_space(self, vehicles: List[RaceCar]) -> gym.spaces.Tuple:
         return gym.spaces.Tuple([v.action_space for v in vehicles])
