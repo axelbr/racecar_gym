@@ -96,13 +96,8 @@ class MultiRaceCarEnv(gym.Env):
         for vehicle in self._vehicles:
             space = {}
 
-            if vehicle.config.sensors.lidar:
-                lidar_config = vehicle.config.sensors.lidar
-                space['lidar'] = gym.spaces.Box(
-                    low=0,
-                    high=lidar_config.range,
-                    shape=(lidar_config.rays,)
-                )
+            observation_space = vehicle.space()
+            space.update(observation_space.spaces.items())
 
             lower_bound, upper_bound = self._map.bounds
             space['pose'] = gym.spaces.Box(

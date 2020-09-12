@@ -1,21 +1,17 @@
 from dataclasses import dataclass, field
-from typing import List, Dict
+from typing import List, Dict, Union, Any
 
 from yamldataclassconfig import YamlDataClassConfig
 
 from racecar_gym.definitions import Position
 
-
-@dataclass
-class LidarConfig(YamlDataClassConfig):
-    rays: int = 100
-    range: float = 5.0
-    min_range: float = 0.25
-
-
 @dataclass
 class SensorConfig(YamlDataClassConfig):
-    lidar: LidarConfig = LidarConfig()
+    type: str = None
+    name: str = None
+    link: str = None
+    params: Dict[str, Any] = None
+    frequency: int = None
 
 
 @dataclass
@@ -35,7 +31,7 @@ class VehicleConfig(YamlDataClassConfig):
     speed_multiplier: float = 20.0
     steering_multiplier: float = 0.5
     debug: bool = False
-    sensors: SensorConfig = SensorConfig()
+    sensors: List[SensorConfig] = field(default_factory=lambda: [])
     joints: VehicleJointConfig = VehicleJointConfig()
 
 
@@ -46,3 +42,10 @@ class MapConfig(YamlDataClassConfig):
     starting_grid: List[Dict[str, float]] = None
     lower_area_bounds: Position = None
     upper_area_bounds: Position = None
+
+
+if __name__ == '__main__':
+    s = VehicleConfig()
+    s.load('../../models/cars/racecar_differential.yml')
+    x = s.sensors[0].params.rays
+    x = 0

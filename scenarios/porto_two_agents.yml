@@ -4,7 +4,7 @@ map_spec:
   config_file: models/tracks/porto/porto.yml
 vehicle_spec:
   - config_file: models/cars/racecar_differential.yml
-    sensors: [lidar, odometry]
+    sensors: [lidar, odometry, rgb_camera]
   - config_file:  models/cars/racecar_differential.yml
     sensors: [lidar, odometry]
 simulation_spec:

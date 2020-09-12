@@ -6,26 +6,54 @@ from pybullet_utils.bullet_client import BulletClient
 
 from racecar_gym.definitions import Pose
 from racecar_gym.models import Map
-from racecar_gym.models.configs import VehicleConfig, VehicleJointConfig
-from racecar_gym.models.lidar import Lidar
-
+from racecar_gym.models.configs import VehicleConfig, VehicleJointConfig, SensorConfig
+from racecar_gym.models.sensors import Lidar, RGBCamera, Sensor, InertialMeasurementUnit, GPS, Tachometer, \
+    FixedTimestepSensor
+from racecar_gym.models.simulation import SimulationHandle
 
 class RaceCar:
+
+    def space(self) -> gym.spaces.Dict:
+        observation_space =  gym.spaces.Dict()
+        for type, sensor in self._sensors.items():
+            observation_space.spaces[type] = sensor.space()
+        return observation_space
 
     def __init__(self, client: BulletClient, map: Map, config: VehicleConfig):
         self._client = client
         self._config = config
         self._id = None
         self._joint_dict = {}
-        self._lidar = None
         self._on_finish = False
         self._lap = 0
         self._map = map
-
+        self._sensors = {}
         self.action_space = gym.spaces.Box(
             low=np.array([-config.max_speed, -config.max_steering_angle, 0]),
             high=np.array([config.max_speed, config.max_steering_angle, config.max_force]),
         )
+
+
+    def _create_sensor(self, config: SensorConfig) -> Sensor:
+        link_index = None
+        if config.link:
+            link_index = self._joint_dict[config.link]
+        handle = SimulationHandle(link_index=link_index, body_id=self.id, client=self._client)
+        sensor = None
+        if config.type == 'lidar':
+            sensor = Lidar(handle=handle, config=Lidar.Config(**config.params))
+        elif config.type == 'rgb_camera':
+            sensor = RGBCamera(handle=handle, config=RGBCamera.Config(**config.params))
+        elif config.type == 'imu':
+            sensor = InertialMeasurementUnit(handle=handle, config=InertialMeasurementUnit.Config(**config.params))
+        elif config.type == 'gps':
+            sensor = GPS(handle=handle, config=GPS.Config(**config.params))
+        elif config.type == 'tacho':
+            sensor = Tachometer(handle=handle, config=Tachometer.Config(**config.params))
+        else:
+            NotImplementedError('No such sensor type implemented')
+        timestep = self._client.getPhysicsEngineParameters()['fixedTimeStep']
+        return FixedTimestepSensor(sensor=sensor, frequency=config.frequency, time_step=timestep)
 
     @property
     def id(self) -> int:
@@ -58,11 +86,9 @@ class RaceCar:
     def observe(self, sensors: List[str]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         observations = {}
         info = {}
-        for sensor in sensors:
-            if sensor == 'odometry':
-                observations['pose'], observations['velocity'] = self._odometry()
-            if sensor == 'lidar':
-                observations[sensor] = self._lidar_scan()
+        for sensor_type in sensors:
+            if sensor_type in self._sensors.keys():
+                observations[sensor_type] = self._sensors[sensor_type].observe()
         observations['lap'] = self._lap
         info['collisions'] = self._check_collisions()
         observations['collision'] = len(info['collisions']) > 0
@@ -76,19 +102,16 @@ class RaceCar:
         velocities = np.array(velocities[0] + velocities[1])
         return pose, velocities
 
-    def _lidar_scan(self) -> np.ndarray:
-        return self._lidar.scan()
 
     def reset(self, pose: Pose):
         self._id = self._load_model(self._config.urdf_file, pose)
         self._joint_dict = self._load_joint_indices(self._config.joints)
         self._setup_constraints()
-        if not self._lidar:
-            self._lidar = Lidar(client=self._client,
-                                id=self._joint_dict[self._config.joints.lidar_joint[0]],
-                                car_id=self._id,
-                                config=self._config.sensors.lidar)
-        self._lidar.reset()
+        self._sensors = {}
+        for sensor_config in self._config.sensors:
+            self._sensors[sensor_config.type] = self._create_sensor(sensor_config)
+
+
 
     def _load_joint_indices(self, config: VehicleJointConfig) -> Dict[str, int]:
         available_joints = config.motorized_joints \

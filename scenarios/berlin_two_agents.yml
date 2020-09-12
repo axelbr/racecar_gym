@@ -4,9 +4,9 @@ map_spec:
   config_file: models/tracks/berlin/berlin.yml
 vehicle_spec:
   - config_file: models/cars/racecar_differential.yml
-    sensors: [lidar, odometry]
+    sensors: [lidar, gps, imu, tacho]
   - config_file:  models/cars/racecar_differential.yml
-    sensors: [lidar, odometry]
+    sensors: [lidar, rgb_camera]
 simulation_spec:
   time_step: 0.01
   rendering: False
