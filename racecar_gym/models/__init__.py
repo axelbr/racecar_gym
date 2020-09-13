@@ -1,11 +1,12 @@
 import os
 
 from pybullet_utils.bullet_client import BulletClient
-
+import racecar_gym
 from racecar_gym.models.configs import VehicleConfig, MapConfig
 from racecar_gym.models.map import Map
 from racecar_gym.models.racecar import RaceCar
 
+base_path = os.path.dirname(racecar_gym.__file__)
 
 def load_map(client: BulletClient, config_file: str) -> Map:
     """
@@ -19,7 +20,8 @@ def load_map(client: BulletClient, config_file: str) -> Map:
     """
     map_config = MapConfig()
     map_config.load(config_file)
-    map_config.sdf_file = f'{os.path.dirname(config_file)}/{map_config.sdf_file}'
+    map_config.sdf_file = f'{base_path}/../{os.path.dirname(config_file)}/{map_config.sdf_file}'
+    print(map_config.sdf_file)
     return Map(client=client, config=map_config)
 
 
@@ -37,6 +39,6 @@ def load_vehicle(client: BulletClient, map: Map, config_file: str) -> RaceCar:
     """
     car_config = VehicleConfig()
     car_config.load(config_file)
-    car_config.urdf_file = f'{os.path.dirname(config_file)}/{car_config.urdf_file}'
+    car_config.urdf_file = f'{base_path}/../{os.path.dirname(config_file)}/{car_config.urdf_file}'
     vehicle = RaceCar(client=client, map=map, config=car_config)
     return vehicle
