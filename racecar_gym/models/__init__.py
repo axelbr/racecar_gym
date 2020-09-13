@@ -19,7 +19,7 @@ def load_map(client: BulletClient, config_file: str) -> Map:
         A map which is loaded into the simulation.
     """
     map_config = MapConfig()
-    map_config.load(config_file)
+    map_config.load(f'{base_path}/../{config_file}')
     map_config.sdf_file = f'{base_path}/../{os.path.dirname(config_file)}/{map_config.sdf_file}'
     print(map_config.sdf_file)
     return Map(client=client, config=map_config)
@@ -38,7 +38,7 @@ def load_vehicle(client: BulletClient, map: Map, config_file: str) -> RaceCar:
         Vehicle which is loaded into the simulation.
     """
     car_config = VehicleConfig()
-    car_config.load(config_file)
+    car_config.load(f'{base_path}/../{config_file}')
     car_config.urdf_file = f'{base_path}/../{os.path.dirname(config_file)}/{car_config.urdf_file}'
     vehicle = RaceCar(client=client, map=map, config=car_config)
     return vehicle
