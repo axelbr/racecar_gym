@@ -38,7 +38,7 @@ class RaceCar:
         link_index = None
         if config.link:
             link_index = self._joint_dict[config.link]
-        handle = SimulationHandle(link_index=link_index, body_id=self.id, client=self._client)
+        handle = SimulationHandle(link_index=link_index, body_id=self.id)
         sensor = None
         if config.type == 'lidar':
             sensor = Lidar(handle=handle, config=Lidar.Config(**config.params))
@@ -92,6 +92,7 @@ class RaceCar:
         observations['lap'] = self._lap
         info['collisions'] = self._check_collisions()
         observations['collision'] = len(info['collisions']) > 0
+        print(observations)
         return observations, info
 
     def _odometry(self) -> Tuple[np.ndarray, np.ndarray]:
