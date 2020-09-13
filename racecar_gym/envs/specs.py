@@ -22,12 +22,14 @@ class MultiRaceCarScenario:
 @dataclass
 class VehicleSpec(YamlDataClassConfig):
     config_file: str = None
+    name: str = None
     sensors: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
 class MapSpec(YamlDataClassConfig):
     config_file: str = None
+    name: str = None
 
 @dataclass
 class SimulationSpec(YamlDataClassConfig):

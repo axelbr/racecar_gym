@@ -7,7 +7,9 @@ from pybullet_utils.bullet_client import BulletClient
 
 from racecar_gym.envs.specs import ScenarioSpec
 from racecar_gym.envs.tasks import from_spec
-from racecar_gym.models import load_map, load_vehicle, Map
+from racecar_gym.models import load_map_from_config, load_map_by_name, load_vehicle_from_config, Map, \
+    load_vehicle_by_name
+
 from racecar_gym.models.racecar import RaceCar
 
 
@@ -21,12 +23,24 @@ class MultiRaceCarEnv(gym.Env):
         self._task = from_spec(spec=scenario.task_spec)
 
     def _load_models(self) -> Tuple[Map, List[RaceCar]]:
-        map = load_map(client=self._client, config_file=self._scenario.map_spec.config_file)
-        vehicles = [
-            load_vehicle(client=self._client, map=map, config_file=vehicle_spec.config_file)
-            for i, vehicle_spec
-            in enumerate(self._scenario.vehicle_spec)
-        ]
+        if self._scenario.map_spec.config_file:
+            map = load_map_from_config(client=self._client, config_file=self._scenario.map_spec.config_file)
+        elif self._scenario.map_spec.name:
+            map = load_map_by_name(client=self._client, map_name=self._scenario.map_spec.name)
+        else:
+            raise ValueError('You need to specify either a config file or a valid map name.')
+
+        vehicles = []
+        for vehicle_spec in self._scenario.vehicle_spec:
+            if vehicle_spec.config_file:
+                vehicle = load_vehicle_from_config(client=self._client, map=map, config_file=vehicle_spec.config_file)
+            elif vehicle_spec.name:
+                vehicle = load_vehicle_by_name(client=self._client, map=map, vehicle=vehicle_spec.name)
+            else:
+                raise ValueError('You need to specify either a config file or a valid vehicle name.')
+
+            vehicles.append(vehicle)
+
         return map, vehicles
 
 

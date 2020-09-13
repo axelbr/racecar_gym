@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
 import imageio
 
-env = gym.make('f1tenth-berlin-two-gui-v0')
+env = gym.make('f1tenth-porto-two-gui-v0')
 monitor_env = env#wrappers.Monitor(env, directory='../recordings', force=True, video_callable=lambda episode_id: True)
 #env.render()
 observation = monitor_env.reset()
@@ -27,7 +27,7 @@ images = []
 while not done:
     actions = [agent.action(obs) for obs in observation]
     observation, reward, dones, info = monitor_env.step(actions)
-  
+
 
     rewards += np.array(reward)
     done = any(dones)

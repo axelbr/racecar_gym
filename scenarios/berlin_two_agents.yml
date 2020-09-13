@@ -1,11 +1,11 @@
 laps: 2
 max_time: 120
 map_spec:
-  config_file: models/tracks/berlin/berlin.yml
+  name: berlin
 vehicle_spec:
-  - config_file: models/cars/racecar_differential.yml
+  - name: racecar_differential
     sensors: [lidar, gps, imu, tacho]
-  - config_file:  models/cars/racecar_differential.yml
+  - name: racecar_differential
     sensors: [lidar, rgb_camera]
 simulation_spec:
   time_step: 0.01

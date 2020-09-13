@@ -1,0 +1,54 @@
+urdf_file: racecar_differential.urdf
+max_speed: 14.0
+max_steering_angle: 0.4
+max_force: 5.0
+speed_multiplier: 20.0
+steering_multiplier: 0.5
+
+joints:
+  motorized_joints: [diff_ring_chassis, diff2_ring_chassis]
+  steering_joints: [left_steering_hinge_joint, right_steering_hinge_joint]
+  lidar_joint: [hokuyo_joint]
+  camera_joint: [zed_camera_joint]
+
+sensors:
+  - type: gps
+    name: pose
+    frequency: 100
+    params:
+      max_x: 100.0
+      max_y: 100.0
+      max_z: 3.0
+
+  - type: imu
+    name: imu
+    frequency: 100
+    params:
+      max_acceleration: 30.0
+      max_angular_velocity: 6.0
+
+  - type: tacho
+    name: velocity
+    frequency: 100
+    params:
+      max_linear_velocity: 14.0
+      max_angular_velocity: 6.0
+
+  - type: lidar
+    name: lidar
+    link: hokuyo_joint
+    frequency: 25
+    params:
+      rays: 100
+      range: 5.0
+      min_range: 0.25
+
+  - type: rgb_camera
+    name: rgb
+    link: zed_camera_joint
+    frequency: 5
+    params:
+      width: 640
+      height: 480
+      fov: 90
+      distance: 2.0
