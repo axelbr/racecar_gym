@@ -78,13 +78,6 @@ class MultiRaceCarEnv(gym.Env):
 
     def _observe(self, vehicle: RaceCar, sensors: List[str]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         observation, info = vehicle.observe(sensors=sensors)
-
-        if self._map.walls_id in info['collisions']:
-            print(f'Car {vehicle.id} crashed into wall')
-
-        if not (set([v.id for v in self._vehicles]) - {self._map.walls_id}).isdisjoint(info['collisions']):
-            print(f'Car {vehicle.id} crashed into car {observation["collisions"]}')
-
         observation['time'] = self._simulation_time
         return observation, info
 
