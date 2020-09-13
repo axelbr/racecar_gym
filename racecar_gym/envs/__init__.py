@@ -11,9 +11,9 @@ def load_spec(path: str) -> ScenarioSpec:
     return scenario
 
 
-def load_from_spec(path: str, render: bool = False) -> MultiRaceCarEnv:
+def load_from_spec(path: str) -> MultiRaceCarEnv:
     scenario = load_spec(path)
-    if render:
+    if scenario.simulation_spec.rendering:
         client_factory = lambda: BulletClient(pybullet.GUI)
     else:
         client_factory = lambda: BulletClient(pybullet.DIRECT)

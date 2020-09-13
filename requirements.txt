@@ -3,3 +3,4 @@ scipy
 numpy
 gym
 yamldataclassconfig
+nptyping
