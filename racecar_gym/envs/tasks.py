@@ -40,33 +40,17 @@ class TimeBasedRacingTask(Task):
         self._laps = laps
 
     def reward_range(self) -> RewardRange:
-        return RewardRange(-self._max_time, 0)
+        return RewardRange(-10 * self._time_step, 0)
 
     def reward(self, state, action) -> float:
         if state['collision']:
-            return -self._max_time
+            return -10 * self._time_step
         return -self._time_step
 
 
     def done(self, state) -> bool:
-        return state['time'] > self._max_time\
-               or state['collision']\
-               or state['lap'] > self._laps
+        return state['time'] > self._max_time or state['lap'] > self._laps
 
 def from_spec(spec: TaskSpec):
     if spec.task_name == 'time_based':
         return TimeBasedRacingTask(**spec.params)
-
-
-class MultiAgentTask:
-    def __init__(self, assigned_tasks: Dict[str, Task]):
-        self._tasks = assigned_tasks
-
-    def reward(self, states: Dict, actions: Dict) -> Dict[Any, float]:
-        rewards = defaultdict(float)
-        for agent in self._tasks.keys():
-            rewards[agent] += self._tasks[agent].reward(states[agent], actions[agent])
-        return rewards
-
-    def done(self, states: Dict):
-        return all([task.done(states[agent]) for agent, task in self._tasks.items()])
