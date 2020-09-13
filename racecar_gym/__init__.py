@@ -3,7 +3,7 @@ from gym.envs.registration import register
 from pybullet_utils.bullet_client import BulletClient
 import os
 
-from racecar_gym.envs import load_spec
+from racecar_gym.envs import load_spec, load_from_spec
 
 base_path = os.path.dirname(__file__)
 
