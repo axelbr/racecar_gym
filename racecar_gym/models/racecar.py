@@ -92,7 +92,7 @@ class RaceCar:
         observations['lap'] = self._lap
         info['collisions'] = self._check_collisions()
         observations['collision'] = len(info['collisions']) > 0
-        print(observations)
+
         return observations, info
 
     def _odometry(self) -> Tuple[np.ndarray, np.ndarray]:
