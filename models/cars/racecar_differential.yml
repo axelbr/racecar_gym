@@ -46,9 +46,9 @@ sensors:
   - type: rgb_camera
     name: rgb
     link: zed_camera_joint
-    frequency: 5
+    frequency: 30
     params:
-      width: 640
-      height: 480
+      width: 320
+      height: 240
       fov: 90
       distance: 2.0
