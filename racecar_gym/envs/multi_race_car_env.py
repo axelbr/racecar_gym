@@ -2,8 +2,8 @@ from typing import List, Dict
 
 import gym
 
+from racecar_gym.entities.world import World
 from racecar_gym.racing.agent import Agent
-from racecar_gym.racing.world import World
 
 
 class MultiRaceCarEnv(gym.Env):

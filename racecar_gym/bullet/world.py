@@ -3,8 +3,8 @@ from dataclasses import dataclass
 import pybullet as p
 
 from racecar_gym.bullet.configs import MapConfig
+from racecar_gym.entities import world
 from racecar_gym.entities.definitions import Pose
-from racecar_gym.racing import world
 
 
 class World(world.World):
