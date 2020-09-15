@@ -5,21 +5,6 @@ from yamldataclassconfig import YamlDataClassConfig
 
 
 @dataclass
-class MultiRaceCarScenario:
-    map: str
-    cars: Union[List[str], str]
-    time_step: float = 0.01
-    no_of_cars: int = 1
-    max_speed: float = 14.0
-    max_steering_angle: float = 0.4
-    lidar_rays: int = 100
-    lidar_range: float = 5
-    start_gui: bool = False
-    laps: int = 2
-    max_time: float = 120.0
-
-
-@dataclass
 class VehicleSpec(YamlDataClassConfig):
     config_file: str = None
     name: str = None
@@ -42,10 +27,14 @@ class TaskSpec(YamlDataClassConfig):
     params: Dict[str, Any] = field(default_factory=lambda: {})
 
 @dataclass
+class AgentSpec(YamlDataClassConfig):
+    vehicle: VehicleSpec = VehicleSpec()
+    task: TaskSpec = TaskSpec()
+
+@dataclass
 class ScenarioSpec(YamlDataClassConfig):
     laps: int = 2
     max_time: float = 120.0
-    map_spec: MapSpec = MapSpec()
-    task_spec: TaskSpec = TaskSpec()
-    vehicle_spec: List[VehicleSpec] = field(default_factory=lambda: [])
-    simulation_spec: SimulationSpec = SimulationSpec()
+    map: MapSpec = MapSpec()
+    agents: List[AgentSpec] = field(default_factory=lambda: [])
+    simulation: SimulationSpec = SimulationSpec()

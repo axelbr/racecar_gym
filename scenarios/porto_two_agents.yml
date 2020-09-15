@@ -1,15 +1,20 @@
-laps: 2
-max_time: 120
-map_spec:
-  config_file: models/tracks/porto/porto.yml
-vehicle_spec:
-  - config_file: models/cars/racecar_differential.yml
-    sensors: [lidar, odometry, rgb_camera]
-  - config_file:  models/cars/racecar_differential.yml
-    sensors: [lidar, odometry]
-simulation_spec:
+map:
+  name: porto
+agents:
+  - vehicle:
+      name: racecar_differential
+      sensors: [lidar, gps, imu, tacho]
+    task:
+      task_name: time_based
+      params: {max_time: 120.0, time_step: 0.01, laps: 2}
+  - vehicle:
+      name: racecar_differential
+      sensors: [lidar, rgb_camera]
+    task:
+      task_name: time_based
+      params: {max_time: 120.0, time_step: 0.01, laps: 2}
+
+simulation:
   time_step: 0.01
   rendering: False
-task_spec:
-  task_name: time_based
-  params: {max_time: 120.0, time_step: 0.01, laps: 2}
+
