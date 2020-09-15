@@ -1,6 +1,0 @@
-
-
-
-
-class Scenario:
-    pass

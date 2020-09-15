@@ -1,11 +1,6 @@
 from abc import ABC
-from collections import defaultdict
-from typing import List, Dict, Any
 
-import gym
-import numpy as np
-
-from racecar_gym.models.specs import TaskSpec
+from racecar_gym.racing.specs import TaskSpec
 
 
 class RewardRange:
@@ -50,6 +45,7 @@ class TimeBasedRacingTask(Task):
 
     def done(self, state) -> bool:
         return state['time'] > self._max_time or state['lap'] > self._laps
+
 
 def from_spec(spec: TaskSpec):
     if spec.task_name == 'time_based':

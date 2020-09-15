@@ -1,7 +1,5 @@
-laps: 2
-max_time: 120
 map:
-  name: berlin
+  name: porto
 agents:
   - vehicle:
       name: racecar_differential
@@ -18,6 +16,5 @@ agents:
 
 simulation:
   time_step: 0.01
-  rendering: False
-  implementation: bullet
+  rendering: True
 

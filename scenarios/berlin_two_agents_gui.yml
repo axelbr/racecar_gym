@@ -18,6 +18,5 @@ agents:
 
 simulation:
   time_step: 0.01
-  rendering: False
-  implementation: bullet
+  rendering: True
 

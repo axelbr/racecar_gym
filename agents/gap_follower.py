@@ -1,5 +1,6 @@
 import math
 from typing import Dict, Tuple
+
 import numpy as np
 from scipy.signal import medfilt
 
@@ -61,6 +62,8 @@ class GapFollower:
         best_point = min_index + self.find_best_point(start_i=gap[0], end_i=gap[1], ranges=proc_ranges)
 
         # Publish Drive message
-        angle = (-math.pi/2 + best_point * math.pi / 99)
+        angle = (-math.pi / 2 + best_point * math.pi / 99)
         angle = math.copysign(min(1, abs(angle)), angle)
-        return 1, angle, 1
+        return np.random.normal(loc=1.0, scale=1), \
+               np.random.normal(loc=angle, scale=0.3), \
+               np.random.normal(loc=1, scale=0.1)

@@ -1,17 +1,12 @@
-from time import time, sleep
+from time import time
 
+import gym
 import numpy as np
 
 from agents.gap_follower import GapFollower
-import gym
-from gym import wrappers
-import racecar_gym
-import matplotlib.pyplot as plt
-from PIL import Image, ImageDraw
-import imageio
 
-env = gym.make('f1tenth-berlin-two-v0')
-monitor_env = env#wrappers.Monitor(env, directory='../recordings', force=True, video_callable=lambda episode_id: True)
+env = gym.make('f1tenth-porto-two-gui-v0')
+monitor_env = env  # wrappers.Monitor(env, directory='../recordings', force=True, video_callable=lambda episode_id: True)
 #env.render()
 observation = monitor_env.reset()
 agent = GapFollower()

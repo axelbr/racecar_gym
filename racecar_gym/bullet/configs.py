@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
-from typing import List, Dict, Union, Any
+from typing import List, Dict, Any
 
 from yamldataclassconfig import YamlDataClassConfig
 
-from racecar_gym.models.definitions import Position
+from racecar_gym.entities.definitions import Position
+
 
 @dataclass
 class SensorConfig(YamlDataClassConfig):
@@ -43,9 +44,3 @@ class MapConfig(YamlDataClassConfig):
     lower_area_bounds: Position = None
     upper_area_bounds: Position = None
 
-
-if __name__ == '__main__':
-    s = VehicleConfig()
-    s.load('../../models/cars/racecar_differential.yml')
-    x = s.sensors[0].params.rays
-    x = 0
