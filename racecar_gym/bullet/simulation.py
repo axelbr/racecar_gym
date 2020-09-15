@@ -4,7 +4,7 @@ import numpy as np
 from nptyping import NDArray
 import pybullet as p
 
-from racecar_gym.definitions import Pose, Velocity
+from racecar_gym.models.definitions import Pose, Velocity
 
 
 @dataclass

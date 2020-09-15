@@ -5,7 +5,7 @@ from typing import List, Dict, Any
 import gym
 import numpy as np
 
-from racecar_gym.envs.specs import TaskSpec
+from racecar_gym.models.specs import TaskSpec
 
 
 class RewardRange:

@@ -1,14 +1,15 @@
 from typing import Tuple
 
+import pybullet
 from pybullet_utils.bullet_client import BulletClient
 
-from racecar_gym.definitions import Position, Pose
-from racecar_gym.models.configs import MapConfig
+from racecar_gym.bullet import MapConfig
+from racecar_gym.models.definitions import Position, Pose
 
 
 class Map:
     def __init__(self, client: BulletClient, config: MapConfig):
-        self._client = client
+        self._client = BulletClient(pybullet.SHARED_MEMORY)
         self._floor_id, self._walls_id, self._finish_id = None, None, None
         self._config = config
         self._starting_grid = [
@@ -44,4 +45,4 @@ class Map:
         return tuple(position), tuple(orientation)
 
     def reset(self):
-        self._floor_id, self._walls_id, self._finish_id = self._client.loadSDF(self._config.sdf_file, globalScaling=1)
+        self._floor_id, self._walls_id, self._finish_id = pybullet.loadSDF(self._config.sdf_file, globalScaling=1)

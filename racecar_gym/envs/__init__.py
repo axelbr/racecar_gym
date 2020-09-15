@@ -2,7 +2,7 @@ import pybullet
 from pybullet_utils.bullet_client import BulletClient
 
 from .multi_race_car_env import MultiRaceCarEnv
-from .specs import ScenarioSpec
+from ..models.specs import ScenarioSpec
 
 
 def load_spec(path: str) -> ScenarioSpec:
@@ -14,7 +14,7 @@ def load_spec(path: str) -> ScenarioSpec:
 def load_from_spec(path: str) -> MultiRaceCarEnv:
     scenario = load_spec(path)
     if scenario.simulation.rendering:
-        client_factory = lambda: BulletClient(pybullet.GUI)
+        client_factory = lambda: BulletClient(pybullet.GUI_SERVER)
     else:
         client_factory = lambda: BulletClient(pybullet.DIRECT)
 

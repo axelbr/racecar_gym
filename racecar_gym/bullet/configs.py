@@ -3,7 +3,7 @@ from typing import List, Dict, Union, Any
 
 from yamldataclassconfig import YamlDataClassConfig
 
-from racecar_gym.definitions import Position
+from racecar_gym.models.definitions import Position
 
 @dataclass
 class SensorConfig(YamlDataClassConfig):

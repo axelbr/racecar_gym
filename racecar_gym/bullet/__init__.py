@@ -2,9 +2,9 @@ import os
 
 from pybullet_utils.bullet_client import BulletClient
 import racecar_gym
-from racecar_gym.models.configs import VehicleConfig, MapConfig
+from racecar_gym.bullet.configs import MapConfig, VehicleConfig
 from racecar_gym.models.map import Map
-from racecar_gym.models.racecar import RaceCar
+from racecar_gym.bullet.vehicle import RaceCarDifferential as Vehicle
 
 base_path = os.path.dirname(racecar_gym.__file__)
 
@@ -35,7 +35,7 @@ def load_map_by_name(client: BulletClient, map_name: str) -> Map:
         raise FileNotFoundError(f'No such map: {map}')
 
 
-def load_vehicle_by_name(client: BulletClient, map: Map, vehicle: str) -> RaceCar:
+def load_vehicle_by_name(client: BulletClient, map: Map, vehicle: str, id: int) -> Vehicle:
     """
     Loads a vehicle into simulation from a config file.
     Args:
@@ -52,14 +52,14 @@ def load_vehicle_by_name(client: BulletClient, map: Map, vehicle: str) -> RaceCa
         car_config = VehicleConfig()
         car_config.load(f'{path}/{vehicle}.yml')
         car_config.urdf_file = f'{path}/{car_config.urdf_file}'
-        vehicle = RaceCar(client=client, map=map, config=car_config)
+        vehicle = Vehicle(map=map, config=car_config, position=id)
         return vehicle
     else:
         raise FileNotFoundError(f'No such vehicle: {vehicle}')
 
-def load_vehicle_from_config(client: BulletClient, map: Map, config_file: str) -> RaceCar:
+def load_vehicle_from_config(client: BulletClient, map: Map, config_file: str, id: int) -> Vehicle:
     car_config = VehicleConfig()
     car_config.load(config_file)
     car_config.urdf_file = f'{os.path.dirname(config_file)}/{car_config.urdf_file}'
-    vehicle = RaceCar(client=client, map=map, config=car_config)
+    vehicle = Vehicle(map=map, config=car_config, position=id)
     return vehicle

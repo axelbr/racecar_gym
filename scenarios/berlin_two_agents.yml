@@ -18,5 +18,5 @@ agents:
 
 simulation:
   time_step: 0.01
-  rendering: False
+  rendering: True
 
