@@ -65,5 +65,5 @@ class GapFollower:
         angle = (-math.pi / 2 + best_point * math.pi / 99)
         angle = math.copysign(min(1, abs(angle)), angle)
         return np.random.normal(loc=1.0, scale=1), \
-               np.random.normal(loc=angle, scale=0.3), \
-               np.random.normal(loc=1, scale=0.1)
+               np.random.normal(loc=1.0, scale=0.1), \
+               np.random.normal(loc=angle, scale=0.3),

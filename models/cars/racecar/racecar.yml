@@ -1,4 +1,4 @@
-urdf_file: racecar_differential.urdf
+urdf_file: racecar.urdf
 
 actuators:
   - type: steering
@@ -30,14 +30,14 @@ sensors:
       max_angular_velocity: 6.0
 
   - type: tacho
-    name: velocity
+    name: tacho
     frequency: 100
     params:
       max_linear_velocity: 14.0
       max_angular_velocity: 6.0
 
   - type: lidar
-    name: hokuyo
+    name: lidar
     frequency: 25
     params:
       rays: 100
@@ -45,7 +45,7 @@ sensors:
       min_range: 0.25
 
   - type: rgb_camera
-    name: zed
+    name: rgb_camera
     frequency: 0.5
     params:
       width: 640
@@ -54,3 +54,14 @@ sensors:
       distance: 2.0
       near_plane: 0.01
       far_plane: 100
+
+  - type: collision
+    name: collision
+    frequency: 100
+
+  - type: lap
+    name: lap
+    frequency: 100
+    params:
+      max_laps: 2
+      margin: 0.05

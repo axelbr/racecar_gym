@@ -1,21 +1,17 @@
-import pybullet
-from pybullet_utils.bullet_client import BulletClient
 
-from .multi_race_car_env import MultiRaceCarEnv
-from ..models.specs import ScenarioSpec
+if False:
+    register(id='f1tenth-berlin-two-v0',
+             entry_point='racecar_gym.envs:load_from_spec',
+             kwargs={'path': f'{base_path}/../scenarios/berlin_two_agents.yml'})
 
+    register(id='f1tenth-berlin-two-gui-v0',
+             entry_point='racecar_gym.envs:load_from_spec',
+             kwargs={'path': f'{base_path}/../scenarios/porto_two_agents_gui.yml'})
 
-def load_spec(path: str) -> ScenarioSpec:
-    scenario = ScenarioSpec()
-    scenario.load(path)
-    return scenario
+    register(id='f1tenth-porto-two-gui-v0',
+             entry_point='racecar_gym.envs:load_from_spec',
+             kwargs={'path': f'{base_path}/../scenarios/porto_two_agents_gui.yml'})
 
-
-def load_from_spec(path: str) -> MultiRaceCarEnv:
-    scenario = load_spec(path)
-    if scenario.simulation.rendering:
-        client_factory = lambda: BulletClient(pybullet.GUI_SERVER)
-    else:
-        client_factory = lambda: BulletClient(pybullet.DIRECT)
-
-    return MultiRaceCarEnv(client_factory, scenario)
+    register(id='f1tenth-porto-two-v0',
+             entry_point='racecar_gym.envs:load_from_spec',
+             kwargs={'path': f'{base_path}/../scenarios/porto_two_agents.yml'})

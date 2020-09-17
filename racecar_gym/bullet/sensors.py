@@ -1,5 +1,6 @@
+from abc import ABC
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, TypeVar
 
 import gym
 import numpy as np
@@ -7,18 +8,62 @@ import pybullet as p
 from nptyping import NDArray
 
 from racecar_gym.bullet.world import World
-from racecar_gym.entities import sensors
+from racecar_gym.core import Sensor
+
+T = TypeVar('T')
 
 
-class Lidar(sensors.Lidar):
+class BulletSensor(Sensor[T], ABC):
+
+    def __init__(self, name: str):
+        super().__init__(name)
+        self._body_id = None
+        self._joint_index = None
+
+    def reset(self, body_id: int, joint_index: int = None):
+        self._body_id = body_id
+        self._joint_index = joint_index
+
+    @property
+    def body_id(self) -> int:
+        return self._body_id
+
+    @property
+    def joint_index(self) -> int:
+        return self._joint_index
+
+
+class FixedTimestepSensor(BulletSensor[T], ABC):
+
+    def __init__(self, sensor: BulletSensor, frequency: float, time_step: float):
+        super().__init__(sensor.name)
+        self._sensor = sensor
+        self._frequency = 1.0 / frequency
+        self._time_step = time_step
+        self._last_timestep = 0
+        self._last_observation = None
+
+    def space(self) -> gym.Space:
+        return self._sensor.space()
+
+    def observe(self) -> T:
+        self._last_timestep += self._time_step
+        if self._last_timestep >= self._frequency or self._last_observation is None:
+            self._last_observation = self._sensor.observe()
+            self._last_timestep = 0
+        return self._last_observation
+
+    def reset(self, body_id: int, joint_index: int = None):
+        self._sensor.reset(body_id=body_id, joint_index=joint_index)
+
+
+class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
     @dataclass
     class Config:
-        body_id: int
-        link_index: int
         rays: int
         range: float
         min_range: float
-        debug: bool
+        debug: bool = False
 
     def __init__(self, name: str, config: Config):
         super().__init__(name)
@@ -61,8 +106,8 @@ class Lidar(sensors.Lidar):
 
     def observe(self) -> NDArray[(Any,), np.float]:
         results = p.rayTestBatch(self._from, self._to, 0,
-                                 parentObjectUniqueId=self._config.body_id,
-                                 parentLinkIndex=self._config.link_index)
+                                 parentObjectUniqueId=self.body_id,
+                                 parentLinkIndex=self.joint_index)
         scan = np.full(self._rays, self._range)
 
         for i in range(self._rays):
@@ -72,15 +117,15 @@ class Lidar(sensors.Lidar):
             if self._config.debug:
                 if len(self._ray_ids) < self._rays:
                     ray_id = p.addUserDebugLine(self._from[i], self._to[i], self._miss_color,
-                                                parentObjectUniqueId=self._config.body_id,
-                                                parentLinkIndex=self._config.link_index)
+                                                parentObjectUniqueId=self.body_id,
+                                                parentLinkIndex=self.joint_index)
                     self._ray_ids.append(ray_id)
 
                 if (hit_fraction == 1.):
                     p.addUserDebugLine(self._from[i], self._to[i], self._miss_color,
                                        replaceItemUniqueId=self._ray_ids[i],
-                                       parentObjectUniqueId=self._config.body_id,
-                                       parentLinkIndex=self._config.link_index)
+                                       parentObjectUniqueId=self.body_id,
+                                       parentLinkIndex=self.joint_index)
                 else:
                     localHitTo = [
                         self._from[i][0] + hit_fraction * (self._to[i][0] - self._from[i][0]),
@@ -91,16 +136,14 @@ class Lidar(sensors.Lidar):
                                        localHitTo,
                                        self._hit_color,
                                        replaceItemUniqueId=self._ray_ids[i],
-                                       parentObjectUniqueId=self._config.body_id,
-                                       parentLinkIndex=self._config.link_index)
+                                       parentObjectUniqueId=self.body_id,
+                                       parentLinkIndex=self.joint_index)
         return scan
 
 
-class RGBCamera(sensors.RGBCamera):
+class RGBCamera(BulletSensor[NDArray[(Any, Any, 3), np.int]]):
     @dataclass
     class Config:
-        body_id: int
-        link_index: int
         width: int
         height: int
         fov: int
@@ -126,7 +169,7 @@ class RGBCamera(sensors.RGBCamera):
 
     def observe(self) -> NDArray[(Any, Any, 3), np.int]:
         width, height = self._config.width, self._config.height
-        state = p.getLinkState(self._config.body_id, linkIndex=self._config.link_index, computeForwardKinematics=True)
+        state = p.getLinkState(self.body_id, linkIndex=self.joint_index, computeForwardKinematics=True)
         position, orientation = state[0], state[1]
         rot_matrix = p.getMatrixFromQuaternion(orientation)
         rot_matrix = np.array(rot_matrix).reshape(3, 3)
@@ -147,17 +190,16 @@ class RGBCamera(sensors.RGBCamera):
         return rgb_array
 
 
-class IMU(sensors.IMU):
+class IMU(BulletSensor[NDArray[(6,), np.float]]):
     @dataclass
     class Config:
-        body_id: int
         max_acceleration: float
         max_angular_velocity: float
 
     def __init__(self, name: str, config: Config):
         super().__init__(name)
         self._config = config
-        self._last_velocity = self._get_velocity()
+        self._last_velocity = np.zeros(shape=6)
 
     def space(self) -> gym.Space:
         high = np.array(3 * [self._config.max_acceleration] + 3 * [self._config.max_angular_velocity])
@@ -165,7 +207,7 @@ class IMU(sensors.IMU):
         return gym.spaces.Box(low=low, high=high)
 
     def _get_velocity(self):
-        v_linear, v_rotation = p.getBaseVelocity(self._config.body_id)
+        v_linear, v_rotation = p.getBaseVelocity(self.body_id)
         return v_linear + v_rotation
 
     def observe(self) -> NDArray[(6,), np.float]:
@@ -175,10 +217,9 @@ class IMU(sensors.IMU):
         return np.append(linear_acceleration, velocity[3:])
 
 
-class Tachometer(sensors.Tachometer):
+class Tachometer(BulletSensor[NDArray[(6,), np.float]]):
     @dataclass
     class Config:
-        body_id: int
         max_linear_velocity: float
         max_angular_velocity: float
 
@@ -187,7 +228,7 @@ class Tachometer(sensors.Tachometer):
         self._config = config
 
     def _get_velocity(self):
-        v_linear, v_rotation = p.getBaseVelocity(self._config.body_id)
+        v_linear, v_rotation = p.getBaseVelocity(self.body_id)
         return v_linear + v_rotation
 
     def space(self) -> gym.Space:
@@ -200,10 +241,9 @@ class Tachometer(sensors.Tachometer):
         return np.array(velocity)
 
 
-class GPS(sensors.GPS):
+class GPS(BulletSensor[NDArray[(6,), np.float]]):
     @dataclass
     class Config:
-        body_id: int
         max_x: float
         max_y: float
         max_z: float
@@ -218,32 +258,27 @@ class GPS(sensors.GPS):
         return gym.spaces.Box(low=low, high=high)
 
     def observe(self) -> NDArray[(6,), np.float]:
-        position, orientation = p.getBasePositionAndOrientation(self._config.body_id)
+        position, orientation = p.getBasePositionAndOrientation(self.body_id)
         return np.append(position, orientation)
 
 
-class CollisionSensor(sensors.CollisionSensor):
-    @dataclass
-    class Config:
-        body_id: int
+class CollisionSensor(BulletSensor[bool]):
 
-    def __init__(self, name: str, config: Config):
+    def __init__(self, name: str):
         super().__init__(name)
-        self._config = config
 
     def space(self) -> gym.Space:
         return gym.spaces.Discrete(2)
 
     def observe(self) -> bool:
-        collisions = set([c[2] for c in p.getContactPoints(self._config.body_id)])
+        collisions = set([c[2] for c in p.getContactPoints(self.body_id)])
         collisions_without_floor = collisions - {World.FLOOR_ID, World.FINISH_ID}
         return len(collisions_without_floor) > 0
 
 
-class LapCounter(sensors.LapCounter):
+class LapCounter(BulletSensor[int]):
     @dataclass
     class Config:
-        body_id: int
         max_laps: int
         margin: float
 
@@ -257,7 +292,7 @@ class LapCounter(sensors.LapCounter):
         return gym.spaces.Discrete(self._config.max_laps)
 
     def observe(self) -> int:
-        closest_points = p.getClosestPoints(self._config.body_id, World.FINISH_ID, float)
+        closest_points = p.getClosestPoints(self.body_id, World.FINISH_ID, self._config.margin)
         if len(closest_points) > 0:
             if not self._on_finish:
                 self._on_finish = True

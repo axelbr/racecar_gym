@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
+from typing import Dict, Any
 
-from racecar_gym.entities.definitions import Pose
+import gym
+
+from .definitions import Pose
 
 
 class World(ABC):
@@ -19,4 +22,12 @@ class World(ABC):
 
     @abstractmethod
     def initial_pose(self, position: int) -> Pose:
+        pass
+
+    @abstractmethod
+    def space(self) -> gym.Space:
+        pass
+
+    @abstractmethod
+    def state(self) -> Dict[str, Any]:
         pass

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, Tuple
+from typing import Generic, TypeVar
 
 import gym
 
@@ -22,11 +22,3 @@ class Actuator(ABC, Generic[T]):
     @property
     def name(self):
         return self._name
-
-
-class Motor(Actuator[Tuple[float, float]], ABC):
-    pass
-
-
-class SteeringWheel(Actuator[float], ABC):
-    pass

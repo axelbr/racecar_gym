@@ -1,11 +1,10 @@
 from time import time
 
 import gym
-import numpy as np
 
 from agents.gap_follower import GapFollower
 
-env = gym.make('f1tenth-porto-two-gui-v0')
+env = gym.make('f1tenth-berlin-two-gui-v0')
 monitor_env = env  # wrappers.Monitor(env, directory='../recordings', force=True, video_callable=lambda episode_id: True)
 #env.render()
 observation = monitor_env.reset()
@@ -13,18 +12,23 @@ agent = GapFollower()
 done = False
 
 print(env.observation_space)
+print(env.action_space)
 
 i = 0
 start = time()
-rewards = np.zeros(shape=len(observation))
+rewards = dict([(id, 0) for id in observation.keys()])
 images = []
 
 while not done:
-    actions = [agent.action(obs) for obs in observation]
+    actions = {}
+    for id, obs in observation.items():
+        action = agent.action(obs)
+        actions[id] = {'motor': (action[0], action[1]), 'steering': action[2]}
     observation, reward, dones, info = monitor_env.step(actions)
-    #images.append(observation[1]['rgb_camera'])
-    rewards += np.array(reward)
-    done = any(dones)
+    # images.append(observation[1]['rgb_camera'])
+    for id, reward in reward.items():
+        rewards[id] += reward
+    done = all(dones.values())
     i += 1
     print(rewards)
 

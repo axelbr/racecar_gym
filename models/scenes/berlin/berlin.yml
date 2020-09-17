@@ -1,0 +1,16 @@
+name: berlin
+
+map:
+  sdf_file: berlin.sdf
+  starting_grid:
+    - {x: 0.442639, y: -0.701126, yaw: 0.0}
+    - {x: 0.442639, y: 0.774283, yaw: 0.0}
+    - {x: -0.540967, y: 0.774283, yaw: 0.0}
+    - {x: -0.540967, y: -0.701126, yaw: 0.0}
+
+physics:
+  gravity: -9.81
+
+simulation:
+  time_step: 0.01
+  rendering: True
