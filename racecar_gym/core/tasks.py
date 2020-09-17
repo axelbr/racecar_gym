@@ -19,7 +19,6 @@ class RewardRange:
     def __contains__(self, reward):
         return reward >= self.min() and reward <= self.max()
 
-
 class Task(ABC):
 
     @abstractmethod

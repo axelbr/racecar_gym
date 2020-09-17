@@ -1,15 +1,18 @@
 world:
   name: berlin
+  rendering: False
 agents:
-  - vehicle:
+  - id: A
+    vehicle:
       name: racecar
-      sensors: [lidar, rgb_camera, gps, imu, tacho, collision, lap]
+      sensors: [lidar, gps, imu, tacho, collision, lap]
     task:
       task_name: time_based
-      params: {max_time: 120.0, time_step: 0.01, laps: 2}
-  - vehicle:
+      params: {max_time: 5.0, time_step: 0.01, laps: 2}
+  - id: B
+    vehicle:
       name: racecar
-      sensors: [lidar, rgb_camera, gps, imu, tacho, collision, lap]
+      sensors: [lidar, gps, imu, tacho, collision, lap]
     task:
       task_name: time_based
       params: {max_time: 120.0, time_step: 0.01, laps: 2}

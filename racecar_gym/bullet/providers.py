@@ -64,6 +64,7 @@ def load_world(spec: WorldSpec) -> core.World:
 
     config = SceneConfig()
     config.load(config_file)
+    config.simulation.rendering = spec.rendering
     config.map.sdf_file = f'{os.path.dirname(config_file)}/{config.map.sdf_file}'
     world_config = World.Config(map_config=config.map,
                                 time_step=config.simulation.time_step,
