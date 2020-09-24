@@ -33,7 +33,7 @@ def load_actuator(config: ActuatorConfig) -> BulletActuator:
 
 
 def load_vehicle(spec: VehicleSpec) -> core.Vehicle:
-    config_file = f'{base_path}/../../models/cars/{spec.name}/{spec.name}.yml'
+    config_file = f'{base_path}/../../models/vehicles/{spec.name}/{spec.name}.yml'
     if not os.path.exists(config_file):
         raise NotImplementedError(f'No vehicle with name {spec.name} implemented.')
 
