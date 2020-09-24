@@ -30,6 +30,8 @@ class VehicleConfig(YamlDataClassConfig):
 @dataclass
 class MapConfig(YamlDataClassConfig):
     sdf_file: str = None
+    wall_name: str = None
+    segment_prefix: str = None
     starting_grid: List[Dict[str, float]] = None
 
 

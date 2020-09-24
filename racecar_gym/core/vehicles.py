@@ -22,6 +22,11 @@ class Vehicle(ABC):
 
     @property
     @abstractmethod
+    def id(self) -> Any:
+        pass
+
+    @property
+    @abstractmethod
     def sensors(self) -> List[Sensor]:
         pass
 

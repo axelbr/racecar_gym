@@ -1,3 +1,4 @@
+import math
 from abc import ABC, abstractmethod
 from typing import List
 
@@ -60,21 +61,25 @@ class MultiTask(Task):
 
 class TimeBasedRacingTask(Task):
 
-    def __init__(self, max_time: float, time_step: float, laps: int):
+    def __init__(self, max_time: float):
         self._max_time = max_time
-        self._time_step = time_step
-        self._laps = laps
+        self._last_section = 0
 
     def reward_range(self) -> RewardRange:
-        return RewardRange(-10 * self._time_step, 0)
+        return RewardRange(-math.inf, math.inf)
 
     def reward(self, state, action) -> float:
+        reward = 0
+        section = state['section']
+        if section > self._last_section:
+            reward += 1.0
+            self._last_section = section
         if state['collision']:
-            return -10 * self._time_step
-        return -self._time_step
+            reward -= 10
+        return reward
 
     def done(self, state) -> bool:
-        return state['time'] > self._max_time or state['lap'] > self._laps
+        return state['time'] > self._max_time
 
 
 tasks = {

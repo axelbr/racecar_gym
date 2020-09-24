@@ -3,8 +3,7 @@ import os
 from racecar_gym import core
 from racecar_gym.bullet.actuators import BulletActuator, Motor, SteeringWheel
 from racecar_gym.bullet.configs import SensorConfig, VehicleConfig, ActuatorConfig, SceneConfig
-from racecar_gym.bullet.sensors import Lidar, GPS, IMU, Tachometer, RGBCamera, BulletSensor, FixedTimestepSensor, \
-    CollisionSensor, LapCounter
+from racecar_gym.bullet.sensors import Lidar, GPS, IMU, Tachometer, RGBCamera, BulletSensor, FixedTimestepSensor, LapCounter
 from racecar_gym.bullet.vehicle import RaceCar
 from .world import World
 from ..core.specs import WorldSpec, VehicleSpec
@@ -21,8 +20,6 @@ def load_sensor(config: SensorConfig) -> BulletSensor:
         return Tachometer(name=config.name, config=Tachometer.Config(**config.params))
     if config.type == 'rgb_camera':
         return RGBCamera(name=config.name, config=RGBCamera.Config(**config.params))
-    if config.type == 'collision':
-        return CollisionSensor(name=config.name)
     if config.type == 'lap':
         return LapCounter(name=config.name, config=LapCounter.Config(**config.params))
 
@@ -47,7 +44,7 @@ def load_vehicle(spec: VehicleSpec) -> core.Vehicle:
     available_sensors = set([sensor.name for sensor in config.sensors])
 
     if not requested_sensors.issubset(available_sensors):
-        raise NotImplementedError(f'Sensors {available_sensors - requested_sensors} not available.')
+        raise NotImplementedError(f'Sensors {requested_sensors - available_sensors} not available.')
     sensors = list(filter(lambda s: s.name in requested_sensors, config.sensors))
     sensors = [FixedTimestepSensor(sensor=load_sensor(config=c), frequency=c.frequency, time_step=0.01) for c in
                sensors]

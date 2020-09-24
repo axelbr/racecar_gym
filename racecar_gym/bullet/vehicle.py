@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Dict
+from typing import List, Dict, Any
 
 import pybullet
 
@@ -31,6 +31,10 @@ class RaceCar(Vehicle):
         }
         self._actuators = dict([(a.name, a) for a in actuators])
         self._sensors = sensors
+
+    @property
+    def id(self) -> Any:
+        return self._id
 
     @property
     def sensors(self) -> List[BulletSensor]:

@@ -55,10 +55,6 @@ sensors:
       near_plane: 0.01
       far_plane: 100
 
-  - type: collision
-    name: collision
-    frequency: 100
-
   - type: lap
     name: lap
     frequency: 100

@@ -26,6 +26,7 @@ class World(world.World):
         self._config = config
         self._map_id = None
         self._time = 0.0
+        self._objects = {}
         self._starting_grid = [
             ((pose['x'], pose['y'], 0.25), (0.0, 0.0, pose['yaw']))
             for pose
@@ -40,18 +41,28 @@ class World(world.World):
         else:
             p.connect(p.DIRECT)
 
-        floor_id, walls_id, finish_id = p.loadSDF(self._config.map_config.sdf_file)
-        assert floor_id == World.FLOOR_ID and walls_id == World.WALLS_ID and finish_id == World.FINISH_ID, 'Objects not in correct order'
+        self._load_scene(self._config.map_config.sdf_file)
         p.setTimeStep(self._config.time_step)
         p.setGravity(0, 0, self._config.gravity)
 
     def reset(self):
         p.resetSimulation()
-        floor_id, walls_id, finish_id = p.loadSDF(self._config.map_config.sdf_file)
-        assert floor_id == World.FLOOR_ID and walls_id == World.WALLS_ID and finish_id == World.FINISH_ID, 'Objects not in correct order'
+        self._load_scene(self._config.map_config.sdf_file)
         p.setTimeStep(self._config.time_step)
         p.setGravity(0, 0, self._config.gravity)
         self._time = 0.0
+
+    def _load_scene(self, sdf_file: str):
+        ids = p.loadSDF(sdf_file)
+        objects = dict([(p.getBodyInfo(i)[1].decode('ascii'), i) for i in ids])
+        self._objects['wall'] = objects[self._config.map_config.wall_name]
+        segment_ids = filter(
+            lambda name: name.startswith(self._config.map_config.segment_prefix),
+            objects.keys()
+        )
+
+        self._objects['segments'] = dict([(objects[id], i) for i, id in enumerate(segment_ids)])
+
 
     def initial_pose(self, position: int) -> Pose:
         assert position <= len(self._starting_grid), f'No position {position} available'
@@ -62,8 +73,22 @@ class World(world.World):
         p.stepSimulation()
         self._time += self._config.time_step
 
-    def state(self) -> Dict[str, Any]:
+    def state(self, vehicle_id: Any) -> Dict[str, Any]:
+        contact_points = set([c[2] for c in p.getContactPoints(vehicle_id)])
+
+        segment = 0
+        collision = False
+        for contact in contact_points:
+            if self._objects['wall'] == contact:
+                collision = True
+            elif contact in self._objects['segments']:
+                segment = max(segment, contact)
+            else:
+                collision = True
+
         return {
+            'collision': collision,
+            'section': segment,
             'time': self._time
         }
 

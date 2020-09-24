@@ -262,20 +262,6 @@ class GPS(BulletSensor[NDArray[(6,), np.float]]):
         return np.append(position, orientation)
 
 
-class CollisionSensor(BulletSensor[bool]):
-
-    def __init__(self, name: str):
-        super().__init__(name)
-
-    def space(self) -> gym.Space:
-        return gym.spaces.Discrete(2)
-
-    def observe(self) -> bool:
-        collisions = set([c[2] for c in p.getContactPoints(self.body_id)])
-        collisions_without_floor = collisions - {World.FLOOR_ID, World.FINISH_ID}
-        return len(collisions_without_floor) > 0
-
-
 class LapCounter(BulletSensor[int]):
     @dataclass
     class Config:

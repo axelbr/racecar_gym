@@ -1,10 +1,10 @@
 from time import time
 
 import gym
-
+import racecar_gym
 from agents.gap_follower import GapFollower
 
-env = gym.make('f1tenth-porto-two-gui-v0')
+env = gym.make('austria-v0')
 monitor_env = env  # wrappers.Monitor(env, directory='../recordings', force=True, video_callable=lambda episode_id: True)
 #env.render()
 observation = monitor_env.reset()
@@ -29,8 +29,9 @@ while not done:
     for id, reward in reward.items():
         rewards[id] += reward
     done = all(dones.values())
-    i += 1
     print(rewards)
+    i += 1
+
 
 #imageio.mimsave('movie.gif', images)
 end = time()

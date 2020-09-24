@@ -25,7 +25,8 @@ class MultiAgentRaceCarEnv(gym.Env):
 
         for id, agent in self._scenario.agents.items():
             observation, info = agent.step(action=action[id])
-            observation.update(self._scenario.world.state())
+            state = self._scenario.world.state(agent.vehicle_id)
+            observation.update(state)
 
             done = agent.done(observation)
             reward = agent.reward(observation, action[id])

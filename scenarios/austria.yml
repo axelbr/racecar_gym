@@ -1,0 +1,32 @@
+world:
+  name: austria
+  rendering: True
+agents:
+  - id: A
+    vehicle:
+      name: racecar
+      sensors: [lidar, gps, imu, tacho]
+    task:
+      task_name: time_based
+      params: {max_time: 120.0}
+  - id: B
+    vehicle:
+      name: racecar
+      sensors: [lidar, gps, imu, tacho]
+    task:
+      task_name: time_based
+      params: {max_time: 120.0}
+  - id: C
+    vehicle:
+      name: racecar
+      sensors: [lidar, gps, imu, tacho]
+    task:
+      task_name: time_based
+      params: {max_time: 120.0}
+  - id: D
+    vehicle:
+      name: racecar
+      sensors: [lidar, gps, imu, tacho]
+    task:
+      task_name: time_based
+      params: {max_time: 120.0}

@@ -1,3 +1,5 @@
+from typing import Any
+
 import gym
 
 from .definitions import Pose
@@ -15,6 +17,10 @@ class Agent:
     @property
     def id(self) -> str:
         return self._id
+
+    @property
+    def vehicle_id(self) -> Any:
+        return self._vehicle.id
 
     @property
     def action_space(self) -> gym.Space:

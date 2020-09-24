@@ -1,0 +1,3135 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+  <sdf version="1.6">
+  <world name="austria">
+    <gravity>0 0 -9.8</gravity>
+            <model name="walls">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>walls.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>walls.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.000">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.000.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.000.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.001">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.001.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.001.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.002">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.002.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.002.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.003">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.003.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.003.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.004">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.004.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.004.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.005">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.005.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.005.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.006">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.006.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.006.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.007">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.007.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.007.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.008">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.008.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.008.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.009">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.009.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.009.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.010">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.010.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.010.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.011">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.011.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.011.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.012">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.012.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.012.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.013">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.013.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.013.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.014">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.014.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.014.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.015">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.015.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.015.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.016">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.016.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.016.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.017">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.017.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.017.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.018">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.018.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.018.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.019">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.019.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.019.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.020">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.020.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.020.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.021">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.021.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.021.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.022">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.022.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.022.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.023">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.023.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.023.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.024">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.024.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.024.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.025">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.025.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.025.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.026">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.026.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.026.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.027">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.027.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.027.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.028">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.028.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.028.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.029">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.029.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.029.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.030">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.030.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.030.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.031">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.031.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.031.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.032">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.032.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.032.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.033">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.033.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.033.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.034">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.034.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.034.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.035">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.035.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.035.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.036">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.036.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.036.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.037">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.037.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.037.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.038">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.038.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.038.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.039">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.039.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.039.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.040">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.040.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.040.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.041">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.041.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.041.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.042">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.042.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.042.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.043">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.043.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.043.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.044">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.044.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.044.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.045">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.045.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.045.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.046">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.046.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.046.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.047">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.047.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.047.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.048">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.048.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.048.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.049">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.049.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.049.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.050">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.050.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.050.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.051">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.051.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.051.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.052">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.052.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.052.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.053">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.053.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.053.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.054">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.054.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.054.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.055">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.055.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.055.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.056">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.056.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.056.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.057">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.057.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.057.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.058">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.058.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.058.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.059">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.059.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.059.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.060">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.060.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.060.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.061">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.061.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.061.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.062">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.062.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.062.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.063">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.063.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.063.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.064">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.064.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.064.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.065">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.065.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.065.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.066">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.066.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.066.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.067">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.067.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.067.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.068">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.068.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.068.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.069">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.069.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.069.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.070">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.070.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.070.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.071">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.071.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.071.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.072">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.072.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.072.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.073">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.073.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.073.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.074">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.074.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.074.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.075">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.075.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.075.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.076">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.076.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.076.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.077">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.077.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.077.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.078">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.078.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.078.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.079">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.079.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.079.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.080">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.080.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.080.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.081">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.081.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.081.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.082">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.082.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.082.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.083">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.083.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.083.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.084">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.084.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.084.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.085">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.085.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.085.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.086">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.086.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.086.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.087">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.087.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.087.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.088">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.088.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.088.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.089">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.089.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.089.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+            <model name="section.090">
+              <static>1</static>
+              <pose frame="">0 0 0 0 0 0</pose>
+              <link name="link_d0">
+                <inertial>
+                  <mass>0</mass>
+                  <inertia>
+                    <ixx>0.166667</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.166667</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.166667</izz>
+                  </inertia>
+                </inertial>
+                <collision concave="yes" name="collision_0">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.090.obj</uri>
+                    </mesh>
+                  </geometry>
+                </collision>
+                <visual name="visual">
+                  <geometry>
+                    <mesh>
+                      <scale>1 1 1</scale>
+                      <uri>section.090.obj</uri>
+                    </mesh>
+                  </geometry>
+                </visual>
+              </link>
+            </model>
+            
+  </world>
+</sdf>
