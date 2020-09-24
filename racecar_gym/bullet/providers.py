@@ -8,6 +8,7 @@ from racecar_gym.bullet.vehicle import RaceCar
 from .world import World
 from ..core.specs import WorldSpec, VehicleSpec
 
+base_path = os.path.dirname(os.path.abspath(__file__))
 
 def load_sensor(config: SensorConfig) -> BulletSensor:
     if config.type == 'lidar':
@@ -32,7 +33,7 @@ def load_actuator(config: ActuatorConfig) -> BulletActuator:
 
 
 def load_vehicle(spec: VehicleSpec) -> core.Vehicle:
-    config_file = f'models/cars/{spec.name}/{spec.name}.yml'
+    config_file = f'{base_path}/../../models/cars/{spec.name}/{spec.name}.yml'
     if not os.path.exists(config_file):
         raise NotImplementedError(f'No vehicle with name {spec.name} implemented.')
 
@@ -55,7 +56,7 @@ def load_vehicle(spec: VehicleSpec) -> core.Vehicle:
 
 
 def load_world(spec: WorldSpec) -> core.World:
-    config_file = f'models/scenes/{spec.name}/{spec.name}.yml'
+    config_file = f'{base_path}/../../models/scenes/{spec.name}/{spec.name}.yml'
     if not os.path.exists(config_file):
         raise NotImplementedError(f'No scene with name {spec.name} implemented.')
 
