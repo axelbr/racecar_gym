@@ -1,6 +1,5 @@
 world:
   name: austria
-  rendering: True
 agents:
   - id: A
     vehicle:

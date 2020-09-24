@@ -4,7 +4,7 @@ import gym
 import racecar_gym
 from agents.gap_follower import GapFollower
 
-env = gym.make('austria-v0')
+env = gym.make('austria-four-v0')
 monitor_env = env  # wrappers.Monitor(env, directory='../recordings', force=True, video_callable=lambda episode_id: True)
 #env.render()
 observation = monitor_env.reset()

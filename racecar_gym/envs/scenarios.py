@@ -14,9 +14,11 @@ class MultiAgentScenario:
     agents: Dict[str, Agent]
 
     @staticmethod
-    def from_spec(path: str) -> 'MultiAgentScenario':
+    def from_spec(path: str, rendering: bool = None) -> 'MultiAgentScenario':
         spec = MultiAgentScenarioSpec()
         spec.load(path)
+        if rendering:
+            spec.world.rendering = rendering
         agents = dict([
             (s.id, Agent(id=s.id, vehicle=load_vehicle(s.vehicle), task=task_from_spec(s.task)))
             for s
