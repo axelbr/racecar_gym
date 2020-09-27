@@ -75,7 +75,7 @@ class TimeBasedRacingTask(Task):
             reward += 1.0
             self._last_section = section
         if state['collision']:
-            reward -= 10
+            reward -= 1.0
         return reward
 
     def done(self, state) -> bool:
