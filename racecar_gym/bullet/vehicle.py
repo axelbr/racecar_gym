@@ -21,13 +21,13 @@ class RaceCar(Vehicle):
         self._on_finish = False
 
         self._sensor_indices = {
-            'lidar': 8,
-            'rgb_camera': 9
+            'lidar': 4,
+            'rgb_camera': 5
         }
 
         self._actuator_indices = {
-            'motor': [2, 3],
-            'steering': [4, 6]
+            'motor': [8, 15],
+            'steering': [0, 2]
         }
         self._actuators = dict([(a.name, a) for a in actuators])
         self._sensors = sensors
@@ -66,10 +66,91 @@ class RaceCar(Vehicle):
         return id
 
     def _setup_constraints(self):
-        for wheel in range(pybullet.getNumJoints(self._id)):
-            pybullet.setJointMotorControl2(self._id, wheel, pybullet.VELOCITY_CONTROL, targetVelocity=0,
-                                           force=0)
-            # print(pybullet.getJointInfo(self._id, wheel))
-        inactive_wheels = [5, 7]
-        for wheel in inactive_wheels:
-            pybullet.setJointMotorControl2(self._id, wheel, pybullet.VELOCITY_CONTROL, targetVelocity=0, force=0)
+        car = self._id
+        for wheel in range(pybullet.getNumJoints(car)):
+            pybullet.setJointMotorControl2(car,
+                                          wheel,
+                                          pybullet.VELOCITY_CONTROL,
+                                          targetVelocity=0,
+                                          force=0)
+            pybullet.getJointInfo(car, wheel)
+
+            # pybullet.setJointMotorControl2(car,10,pybullet.VELOCITY_CONTROL,targetVelocity=1,force=10)
+        c = pybullet.createConstraint(car,
+                                     9,
+                                     car,
+                                     11,
+                                     jointType=pybullet.JOINT_GEAR,
+                                     jointAxis=[0, 1, 0],
+                                     parentFramePosition=[0, 0, 0],
+                                     childFramePosition=[0, 0, 0])
+        pybullet.changeConstraint(c, gearRatio=1, maxForce=10000)
+
+        c = pybullet.createConstraint(car,
+                                     10,
+                                     car,
+                                     13,
+                                     jointType=pybullet.JOINT_GEAR,
+                                     jointAxis=[0, 1, 0],
+                                     parentFramePosition=[0, 0, 0],
+                                     childFramePosition=[0, 0, 0])
+        pybullet.changeConstraint(c, gearRatio=-1, maxForce=10000)
+
+        c = pybullet.createConstraint(car,
+                                     9,
+                                     car,
+                                     13,
+                                     jointType=pybullet.JOINT_GEAR,
+                                     jointAxis=[0, 1, 0],
+                                     parentFramePosition=[0, 0, 0],
+                                     childFramePosition=[0, 0, 0])
+        pybullet.changeConstraint(c, gearRatio=-1, maxForce=10000)
+
+        c = pybullet.createConstraint(car,
+                                     16,
+                                     car,
+                                     18,
+                                     jointType=pybullet.JOINT_GEAR,
+                                     jointAxis=[0, 1, 0],
+                                     parentFramePosition=[0, 0, 0],
+                                     childFramePosition=[0, 0, 0])
+        pybullet.changeConstraint(c, gearRatio=1, maxForce=10000)
+
+        c = pybullet.createConstraint(car,
+                                     16,
+                                     car,
+                                     19,
+                                     jointType=pybullet.JOINT_GEAR,
+                                     jointAxis=[0, 1, 0],
+                                     parentFramePosition=[0, 0, 0],
+                                     childFramePosition=[0, 0, 0])
+        pybullet.changeConstraint(c, gearRatio=-1, maxForce=10000)
+
+        c = pybullet.createConstraint(car,
+                                     17,
+                                     car,
+                                     19,
+                                     jointType=pybullet.JOINT_GEAR,
+                                     jointAxis=[0, 1, 0],
+                                     parentFramePosition=[0, 0, 0],
+                                     childFramePosition=[0, 0, 0])
+        pybullet.changeConstraint(c, gearRatio=-1, maxForce=10000)
+
+        c = pybullet.createConstraint(car,
+                                     1,
+                                     car,
+                                     18,
+                                     jointType=pybullet.JOINT_GEAR,
+                                     jointAxis=[0, 1, 0],
+                                     parentFramePosition=[0, 0, 0],
+                                     childFramePosition=[0, 0, 0])
+        pybullet.changeConstraint(c, gearRatio=-1, gearAuxLink=15, maxForce=10000)
+        c = pybullet.createConstraint(car,
+                                     3,
+                                     car,
+                                     19,
+                                     jointType=pybullet.JOINT_GEAR,
+                                     jointAxis=[0, 1, 0],
+                                     parentFramePosition=[0, 0, 0],
+                                     childFramePosition=[0, 0, 0])
+        pybullet.changeConstraint(c, gearRatio=-1, gearAuxLink=15, maxForce=10000)

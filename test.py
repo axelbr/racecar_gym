@@ -1,4 +1,4 @@
-from time import time
+from time import time, sleep
 
 import gym
 import racecar_gym
@@ -31,6 +31,7 @@ while not done:
     done = all(dones.values())
     print(rewards)
     i += 1
+    sleep(0.01)
 
 
 #imageio.mimsave('movie.gif', images)

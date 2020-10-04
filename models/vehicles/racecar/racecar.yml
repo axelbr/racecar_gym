@@ -10,8 +10,8 @@ actuators:
     name: motor
     params:
       velocity_multiplier: 20.0
-      max_velocity: 14.0
-      max_force: 5.0
+      max_velocity: 5.0
+      max_force: 0.2
 
 sensors:
   - type: gps
@@ -46,10 +46,10 @@ sensors:
 
   - type: rgb_camera
     name: rgb_camera
-    frequency: 0.5
+    frequency: 30
     params:
-      width: 640
-      height: 480
+      width: 320
+      height: 240
       fov: 90
       distance: 2.0
       near_plane: 0.01

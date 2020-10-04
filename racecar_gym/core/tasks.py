@@ -71,7 +71,7 @@ class TimeBasedRacingTask(Task):
     def reward(self, state, action) -> float:
         reward = 0
         section = state['section']
-        if section > self._last_section:
+        if section > self._last_section or section < self._last_section - 2:
             reward += 1.0
             self._last_section = section
         if state['collision']:

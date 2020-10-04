@@ -62,8 +62,8 @@ class GapFollower:
         best_point = min_index + self.find_best_point(start_i=gap[0], end_i=gap[1], ranges=proc_ranges)
 
         # Publish Drive message
-        angle = (-math.pi / 2 + best_point * math.pi / 99)
+        angle = 0.4 * (-math.pi / 2 + best_point * math.pi / 99)
         angle = math.copysign(min(1, abs(angle)), angle)
-        return np.random.normal(loc=1.0, scale=1), \
-               np.random.normal(loc=1.0, scale=0.1), \
-               np.random.normal(loc=angle, scale=0.3),
+        return np.random.normal(loc=14.0, scale=0), \
+               np.random.normal(loc=0.7, scale=0.0), \
+               np.random.normal(loc=angle, scale=0.0),
