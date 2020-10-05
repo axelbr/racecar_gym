@@ -29,7 +29,7 @@ class World(ABC):
         pass
 
     @abstractmethod
-    def state(self, vehicle_id: Any) -> Dict[str, Any]:
+    def state(self) -> Dict[str, Any]:
         pass
 
 

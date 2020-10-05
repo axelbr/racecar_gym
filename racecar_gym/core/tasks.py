@@ -27,11 +27,11 @@ class Task(ABC):
         pass
 
     @abstractmethod
-    def reward(self, state, action) -> float:
+    def reward(self, agent_id, state, action) -> float:
         pass
 
     @abstractmethod
-    def done(self, state) -> bool:
+    def done(self, agent_id, state) -> bool:
         pass
 
 
@@ -46,17 +46,17 @@ class MultiTask(Task):
     def reward_range(self) -> RewardRange:
         return RewardRange(-np.inf, np.inf)
 
-    def reward(self, state, action) -> float:
+    def reward(self, agent_id, state, action) -> float:
         if self._weights:
-            return sum([t.reward(state, action) * w for t, w in zip(self._tasks, self._weights)])
+            return sum([t.reward(agent_id, state, action) * w for t, w in zip(self._tasks, self._weights)])
         else:
-            return sum([t.reward(state, action) for t in self._tasks])
+            return sum([t.reward(agent_id, state, action) for t in self._tasks])
 
-    def done(self, state) -> bool:
+    def done(self, agent_id, state) -> bool:
         if self._all_done:
-            return all([t.done(state) for t in self._tasks])
+            return all([t.done(agent_id, state) for t in self._tasks])
         else:
-            return any([t.done(state) for t in self._tasks])
+            return any([t.done(agent_id, state) for t in self._tasks])
 
 
 class TimeBasedRacingTask(Task):
@@ -68,22 +68,65 @@ class TimeBasedRacingTask(Task):
     def reward_range(self) -> RewardRange:
         return RewardRange(-math.inf, math.inf)
 
-    def reward(self, state, action) -> float:
+    def reward(self, agent_id, state, action) -> float:
         reward = 0
-        section = state['section']
-        if section > self._last_section or section < self._last_section - 2:
+        section = state[agent_id]['section']
+        if section > self._last_section:
             reward += 1.0
             self._last_section = section
-        if state['collision']:
+        if state[agent_id]['collision']:
             reward -= 1.0
         return reward
 
-    def done(self, state) -> bool:
-        return state['time'] > self._max_time
+    def done(self, agent_id, state) -> bool:
+        return state[agent_id]['time'] > self._max_time
+
+class RankDiscountedProgressTask(Task):
+
+    def __init__(self, laps: int):
+        self._last_section = -1
+        self._current_lap = 0
+        self._laps = laps
+        self.leading = []
+
+    def reward_range(self) -> RewardRange:
+        pass
+
+    def reward(self, agent_id, state, action) -> float:
+        rank = 1
+        for id in state:
+            equal_laps =  state[id]['lap'] == state[agent_id]['lap']
+            equal_sections =  state[id]['section'] == state[agent_id]['section']
+            if state[id]['lap'] > state[agent_id]['lap']:
+                rank += 1
+            elif equal_laps and state[id]['section'] > state[agent_id]['section']:
+                rank += 1
+            elif equal_laps and equal_sections and state[id]['section_time'] < state[agent_id]['section_time']:
+                rank += 1
+
+        reward = 0
+        section = state[agent_id]['section']
+
+        if self._current_lap < state[agent_id]['lap']:
+            self._last_section = -1
+            self._current_lap = state[agent_id]['lap']
+
+        if section > self._last_section:
+            reward += 1.0 / float(rank)
+            self._last_section = section
+        if state[agent_id]['collision']:
+            reward -= 1.0
+
+        return reward
+
+
+    def done(self, agent_id, state) -> bool:
+        return state[agent_id]['lap'] > self._laps
 
 
 tasks = {
-    'time_based': TimeBasedRacingTask
+    'time_based': TimeBasedRacingTask,
+    'rank_discounted': RankDiscountedProgressTask
 }
 
 

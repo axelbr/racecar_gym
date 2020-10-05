@@ -25,4 +25,4 @@ class MultiAgentScenario:
             in spec.agents
         ])
 
-        return MultiAgentScenario(world=load_world(spec.world), agents=agents)
+        return MultiAgentScenario(world=load_world(spec.world, agents=list(agents.values())), agents=agents)

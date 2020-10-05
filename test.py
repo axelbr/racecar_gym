@@ -4,7 +4,7 @@ import gym
 import racecar_gym
 from agents.gap_follower import GapFollower
 
-env = gym.make('austria-four-gui-v0')
+env = gym.make('austria-four-v0')
 monitor_env = env  # wrappers.Monitor(env, directory='../recordings', force=True, video_callable=lambda episode_id: True)
 #env.render()
 observation = monitor_env.reset()
@@ -28,10 +28,11 @@ while not done:
     # images.append(observation[1]['rgb_camera'])
     for id, reward in reward.items():
         rewards[id] += reward
-    done = all(dones.values())
+
+    done = any(dones.values())
     print(rewards)
     i += 1
-    sleep(0.01)
+    #sleep(0.01)
 
 
 #imageio.mimsave('movie.gif', images)

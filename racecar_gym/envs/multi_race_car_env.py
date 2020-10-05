@@ -21,24 +21,19 @@ class MultiAgentRaceCarEnv(gym.Env):
         observations = {}
         dones = {}
         rewards = {}
-        infos = {}
-
+        state = self._scenario.world.state()
         for id, agent in self._scenario.agents.items():
             observation, info = agent.step(action=action[id])
-            state = self._scenario.world.state(agent.vehicle_id)
-            observation.update(state)
-
-            done = agent.done(observation)
-            reward = agent.reward(observation, action[id])
+            done = agent.done(state)
+            reward = agent.reward(state, action[id])
 
             observations[id] = observation
             dones[id] = done
             rewards[id] = reward
-            infos[id] = info
 
         self._time = self._scenario.world.update()
 
-        return observations, rewards, dones, infos
+        return observations, rewards, dones, state
 
     def reset(self):
         if not self._initialized:

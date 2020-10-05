@@ -4,28 +4,30 @@ agents:
   - id: A
     vehicle:
       name: racecar
-      sensors: [lidar, gps, imu, tacho, rgb_camera]
+      sensors: [lidar, gps, imu, tacho]
     task:
-      task_name: time_based
-      params: {max_time: 1200.0}
+      task_name: rank_discounted
+      params: {laps: 1}
   - id: B
     vehicle:
       name: racecar
       sensors: [lidar, gps, imu, tacho]
     task:
-      task_name: time_based
-      params: {max_time: 1200.0}
+      task_name: rank_discounted
+      params: {laps: 1}
+
   - id: C
     vehicle:
       name: racecar
-      sensors: [lidar, gps, imu, tacho]
+      sensors: [lidar, gps, imu, tacho ]
     task:
-      task_name: time_based
-      params: {max_time: 120.0}
+      task_name: rank_discounted
+      params: { laps: 1 }
+
   - id: D
     vehicle:
       name: racecar
-      sensors: [lidar, gps, imu, tacho]
+      sensors: [lidar, gps, imu, tacho ]
     task:
-      task_name: time_based
-      params: {max_time: 120.0}
+      task_name: rank_discounted
+      params: { laps: 1 }

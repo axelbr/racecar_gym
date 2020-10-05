@@ -1,0 +1,10 @@
+world:
+  name: straight
+agents:
+  - id: A
+    vehicle:
+      name: racecar
+      sensors: [lidar, gps, imu, tacho, rgb_camera]
+    task:
+      task_name: time_based
+      params: {max_time: 1200.0}

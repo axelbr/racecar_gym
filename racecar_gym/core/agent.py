@@ -36,10 +36,10 @@ class Agent:
         return observation, {}
 
     def done(self, state) -> bool:
-        return self._task.done(state)
+        return self._task.done(agent_id=self._id, state=state)
 
     def reward(self, state, action) -> float:
-        return self._task.reward(state, action)
+        return self._task.reward(agent_id=self._id, state=state, action=action)
 
     def reset(self, pose: Pose):
         self._vehicle.reset(pose=pose)
