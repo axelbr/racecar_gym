@@ -43,7 +43,7 @@ class World(world.World):
         if self._config.rendering:
             id = -1  # p.connect(p.SHARED_MEMORY)
             if id < 0:
-                p.connect(p.GUI_SERVER)
+                p.connect(p.GUI)
         else:
             p.connect(p.DIRECT)
 
@@ -52,8 +52,8 @@ class World(world.World):
         p.setGravity(0, 0, self._config.gravity)
 
     def reset(self):
-        p.resetSimulation()
-        self._load_scene(self._config.map_config.sdf_file)
+        #p.resetSimulation()
+        #self._load_scene(self._config.map_config.sdf_file)
         p.setTimeStep(self._config.time_step)
         p.setGravity(0, 0, self._config.gravity)
         self._time = 0.0

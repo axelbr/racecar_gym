@@ -37,6 +37,6 @@ class AgentSpec(YamlDataClassConfig):
 
 
 @dataclass
-class MultiAgentScenarioSpec(YamlDataClassConfig):
+class ScenarioSpec(YamlDataClassConfig):
     world: WorldSpec = None
     agents: List[AgentSpec] = None

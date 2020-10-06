@@ -10,8 +10,8 @@ actuators:
     name: motor
     params:
       velocity_multiplier: 20.0
-      max_velocity: 10.0
-      max_force: 1.0
+      max_velocity: 5.0
+      max_force: 0.5
 
 sensors:
   - type: gps

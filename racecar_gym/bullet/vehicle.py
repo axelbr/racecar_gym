@@ -45,8 +45,13 @@ class RaceCar(Vehicle):
         return self._actuators
 
     def reset(self, pose: Pose):
-        self._id = self._load_model(self._config.urdf_file, initial_pose=pose)
-        self._setup_constraints()
+        if not self._id:
+            self._id = self._load_model(self._config.urdf_file, initial_pose=pose)
+            self._setup_constraints()
+        else:
+            pos, orn = pose
+            pybullet.resetBasePositionAndOrientation(self._id, pos, pybullet.getQuaternionFromEuler(orn))
+
         for sensor in self.sensors:
             joint_index = None
             if sensor.name in self._sensor_indices:

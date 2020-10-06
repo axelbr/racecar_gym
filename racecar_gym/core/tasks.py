@@ -34,6 +34,10 @@ class Task(ABC):
     def done(self, agent_id, state) -> bool:
         pass
 
+    @abstractmethod
+    def reset(self):
+        pass
+
 
 class MultiTask(Task):
     def __init__(self, tasks: List[Task], all_done: bool = True, weights: List[float] = None):
@@ -81,12 +85,18 @@ class TimeBasedRacingTask(Task):
     def done(self, agent_id, state) -> bool:
         return state[agent_id]['time'] > self._max_time
 
+    def reset(self):
+        self._last_section = 0
+
+
 class RankDiscountedProgressTask(Task):
 
-    def __init__(self, laps: int):
+    def __init__(self, time_limit: float, laps: int, terminate_on_collision: bool):
         self._last_section = -1
         self._current_lap = 0
         self._laps = laps
+        self._time_limit = time_limit
+        self._terminate_on_collision = terminate_on_collision
         self.leading = []
 
     def reward_range(self) -> RewardRange:
@@ -121,7 +131,14 @@ class RankDiscountedProgressTask(Task):
 
 
     def done(self, agent_id, state) -> bool:
-        return state[agent_id]['lap'] > self._laps
+        if self._terminate_on_collision and state[agent_id]['collision']:
+            return True
+
+        return state[agent_id]['lap'] > self._laps or self._time_limit < state[agent_id]['time']
+
+    def reset(self):
+        self._last_section = -1
+        self._current_lap = 0
 
 
 tasks = {

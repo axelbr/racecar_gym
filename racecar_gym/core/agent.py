@@ -43,5 +43,6 @@ class Agent:
 
     def reset(self, pose: Pose):
         self._vehicle.reset(pose=pose)
+        self._task.reset()
         observation = self._vehicle.observe()
         return observation

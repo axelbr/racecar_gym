@@ -5,7 +5,7 @@ import os
 Blender script for generating obj files and the corresponding SDF file in the directory of the blender file.
 """
 
-track_name = 'straight'
+track_name = 'track1'
 
 sdf = f"""
 <?xml version="1.0" encoding="UTF-8"?>

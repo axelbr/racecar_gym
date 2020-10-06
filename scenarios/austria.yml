@@ -7,27 +7,25 @@ agents:
       sensors: [lidar, gps, imu, tacho]
     task:
       task_name: rank_discounted
-      params: {laps: 1}
+      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
   - id: B
     vehicle:
       name: racecar
       sensors: [lidar, gps, imu, tacho]
     task:
       task_name: rank_discounted
-      params: {laps: 1}
-
+      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
   - id: C
     vehicle:
       name: racecar
-      sensors: [lidar, gps, imu, tacho ]
+      sensors: [lidar, gps, imu, tacho]
     task:
       task_name: rank_discounted
-      params: { laps: 1 }
-
+      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
   - id: D
     vehicle:
       name: racecar
-      sensors: [lidar, gps, imu, tacho ]
+      sensors: [lidar, gps, imu, tacho]
     task:
       task_name: rank_discounted
-      params: { laps: 1 }
+      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
