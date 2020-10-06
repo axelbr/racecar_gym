@@ -60,26 +60,20 @@ images = []
 # the env is now wrapped automatically when passing it to the constructor
 # env = DummyVecEnv([lambda: env])
 env = SingleWrapper(env)
+obs = env.reset()
 eval_callback = EvalCallback(env, n_eval_episodes=5, eval_freq=10000, verbose=1)
 model = PPO2(CustomPolicy, env, verbose=1, tensorboard_log="./logs/", n_steps=6000)
-model.load('logs/model')
-model.learn(total_timesteps=1_000_000, tb_log_name="first_run", callback=eval_callback)
-model.save('logs/model')
+model.load('logs/model.zip', env)
+#model.learn(total_timesteps=1_000_000, tb_log_name="first_run", callback=eval_callback)
+#model.save('logs/model')
+
 
 while not done:
-    actions = {}
-    for id, obs in observation.items():
-        action = agent.action(obs)
-        actions[id] = {'motor': (action[0], action[1]), 'steering': action[2]}
-    observation, reward, dones, info = monitor_env.step(actions)
+    action, _ = model.predict(obs)
+    observation, reward, dones, info = env.step(action)
     # images.append(observation[1]['rgb_camera'])
-    for id, reward in reward.items():
-        rewards[id] += reward
 
-    done = any(dones.values())
-    print(rewards)
-    i += 1
-    #sleep(0.01)
+    sleep(0.01)
 
 
 #imageio.mimsave('movie.gif', images)

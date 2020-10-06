@@ -54,10 +54,3 @@ sensors:
       distance: 1
       near_plane: 0.01
       far_plane: 100
-
-  - type: lap
-    name: lap
-    frequency: 100
-    params:
-      max_laps: 2
-      margin: 0.05

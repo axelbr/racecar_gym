@@ -14,28 +14,81 @@ pip install -e .
 
 ## Environments
 
-The observation and action space is a `n-tuple` where `n` is the number of agents. The observation space for a single agent is a `Dict` which consists of the entries described below.
+The observation and action space is a `Dict` holding the agents and their id's. The observation and action space for a single agent 
+is also a `Dict`, which is described in more detail below. In general, observations are obtained through sensors and commands
+are executed by actuators. Vehicles can have multiple sensors and actuators. Those are described in the vehicle configuration
+(e.g. [differential racecar](models/vehicles/racecar/racecar.yml)). Agents, which consist of a vehicle and an assigned task,
+are specified in the scenario file (e.g. [austria.yml](scenarios/austria.yml)). In this file, agents are described by the
+sensors to use (note that they must be available in the vehicle configuration) and the corresponding task. Have a look at
+[tasks.py](racecar_gym/core/tasks.py) to see all available tasks.
+
+**Example:**
+```yaml
+world:
+  name: austria
+agents:
+  - id: A
+    vehicle:
+      name: racecar
+      sensors: [lidar, gps, imu, tacho]
+    task:
+      task_name: rank_discounted
+      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
+```
+
+This example specifies a scenario in the [Austria](models/scenes/austria/austria.yml) map. Furthermore, one agent with id **A**
+is specified. The agent controlls the differential drive racecar defined in [differential racecar](models/vehicles/racecar/racecar.yml),
+identified by its name. The task which is assigned to this agent is also identified by name (implementations can be found in [tasks.py](racecar_gym/core/tasks.py)).
+Task parameters are passed by the dict *params*.
+
+### Observations
+
+Observations are obtained through sensors. Each agent specifies which sensor to use. The observation space is a dictionary
+where the names of the sensors are the keys which map to the actual measurements. Currently, five sensors are implemented:
+GPS, IMU, Tachometer, LiDAR and RGB Camera. Further, the observation space also includes the current simulation time.
 
 |Key|Space|Defaults|Description|
 |---|---|---|---|
-|pose|`Box(6,)`||Holds the position (`x`, `y`, `z`) and the orientation (`roll`, `pitch`, `yaw`) in that order.|
-|velocity|`Box(6,)`||Holds the translational velocity (`x`, `y`, `z`) and the rotational velocity around the `x`, `y` and `z` axis, in that order.|
+|gps|`Box(6,)`| |Holds the position (`x`, `y`, `z`) and the orientation (`roll`, `pitch`, `yaw`) in that order.|
+|imu|`Box(6,)`| |Holds the `x`, `y` and `z` components of the translational and rotational acceleration.|
+|tacho|`Box(6,)`| |Holds the `x`, `y` and `z` components of the translational and rotational velocity.|
 |lidar|`Box(<scans>,)`|`scans: 100`|Lidar range scans.|
-|lap|`Discrete(<laps>)`|`laps: 2`|The current lap of the vehicle. `laps` is a parameter for the simulation.|
-|time|`Box(1,)`||Passed time since the start of the race.|
-|collision|`Discrete(2)`||Indicates if an agent is involved in a collision with the wall or an opponent.|
+|rgb_camera|`Box(<height>, <width>, 3)`|`height: 240, width: 320`|RGB image of the front camera.|
+|time|`Box(1,)`| |Current simulation time.|
 
-The action space for a single agent is a `Box(3,)`, holding the target velocity, target steering angle, and the force
-which should be applied to reach the velocity in that order.
+### Actions
+The action space for a single agent is a defined by the actuators of the vehicle. For instance, [differential racecar](models/vehicles/racecar/racecar.yml)
+defines two actuators: motor and steering. The action space is therefore a dictionary with keys `motor` and `steering`.
 
-Currently two maps are available and a total of four scenarios are specified.
+The complete action space for this vehicle looks like this:
 
-| Image | Name | Description |
-| --- | --- | --- |
-|![berlin](docs/berlin.png)|`f1tenth-berlin-two-gui-v0`|A head to head race on the berlin track (original course from [F1Tenth Berlin Grand Prix](https://www.ifac2020.org/program/competitions/f1tenth-autonomous-grand-prix/)) with rendering enabled.|
-|![berlin](docs/berlin.png)|`f1tenth-berlin-two-v0`|The same scenario as in `f1tenth-berlin-two-gui-v0`, but without GUI.|
-|![berlin](docs/porto.png)|`f1tenth-porto-two-gui-v0`|A head to head race on the porto track (from the [F1Tenth Race Day in Porto](https://f1tenth.org/race.html)) with rendering enabled.|
-|![berlin](docs/porto.png)|`f1tenth-porto-two-v0`|The same scenario as in `f1tenth-porto-two-gui-v0`, but without GUI.|
+|Key|Space|Defaults|Description|
+|---|---|---|---|
+|motor|`Box(2,)`| |Motor command consisting of the target speed and the force to apply.|
+|steering|`Box(1,)`| |Steering angle.|
 
+### State
+In addition to observations obtained by sensors, the environment passes back the true state of each vehicle in each
+step (the state is returned as the *info* dictionary). The state is a dictionary, where the keys are the ids of all agents.
+Currently, the state looks like this:
+
+|Key|Type|Description|
+|---|---|---|
+|collision|`bool`|Whether the vehicle is in a collision with another agent or the wall.|
+|section|`int`|Current section passed by the vehicle.|
+|section_time|`float`|Simulation time when the vehicle entered the current section.|
+|lap|`int`|Current lap in which the vehicle is.|
+|time|`float`|Simulation time.|
+
+## Scenes
+
+Currently two maps are available and a total of four scenarios are specified. Each scenario is also available with a GUI
+server. To launch the rendering window, you can append '*_Gui*' to the environment name (e.g. *MultiAgentTrack1-v0* vs *MultiAgentTrack1_Gui-v0*).
+
+
+| Image | Name |
+| --- | --- |
+|![austria](docs/austria.png)|`MultiAgentAustria-v0`|
+|![track1](docs/track1.png)|`MultiAgentTrack1-v0`|
 ## Notes
 Please note that this is work in progress, and interfaces might change. Also more detailed documentation and additional scenarios will follow.
