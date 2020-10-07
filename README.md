@@ -26,6 +26,7 @@ sensors to use (note that they must be available in the vehicle configuration) a
 ```yaml
 world:
   name: austria
+  start_positions: index
 agents:
   - id: A
     vehicle:
@@ -36,8 +37,12 @@ agents:
       params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
 ```
 
-This example specifies a scenario in the [Austria](models/scenes/austria/austria.yml) map. Furthermore, one agent with id **A**
-is specified. The agent controlls the differential drive racecar defined in [differential racecar](models/vehicles/racecar/racecar.yml),
+This example specifies a scenario in the [Austria](models/scenes/austria/austria.yml) map. Also, you can specify the way 
+how agents spawn. Using the *index* policy, agents will start on a fixed position, depending on their declaration order in
+the scenario. Using *random*, agents will spawn randomly on the track.
+
+Furthermore, one agent with id **A**
+is specified. The agent controls the differential drive racecar defined in [differential racecar](models/vehicles/racecar/racecar.yml),
 identified by its name. The task which is assigned to this agent is also identified by name (implementations can be found in [tasks.py](racecar_gym/core/tasks.py)).
 Task parameters are passed by the dict *params*.
 
