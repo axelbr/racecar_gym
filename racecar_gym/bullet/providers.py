@@ -4,7 +4,8 @@ from typing import List
 from racecar_gym import core
 from racecar_gym.bullet.actuators import BulletActuator, Motor, SteeringWheel
 from racecar_gym.bullet.configs import SensorConfig, VehicleConfig, ActuatorConfig, SceneConfig
-from racecar_gym.bullet.sensors import Lidar, GPS, IMU, Tachometer, RGBCamera, BulletSensor, FixedTimestepSensor, LapCounter
+from racecar_gym.bullet.sensors import Lidar, GPS, IMU, Tachometer, RGBCamera, BulletSensor, FixedTimestepSensor, \
+    LapCounter
 from racecar_gym.bullet.vehicle import RaceCar
 from .world import World
 from ..core.agent import Agent
@@ -69,5 +70,7 @@ def load_world(spec: WorldSpec, agents: List[Agent]) -> core.World:
     world_config = World.Config(map_config=config.map,
                                 time_step=config.simulation.time_step,
                                 gravity=config.physics.gravity,
-                                rendering=config.simulation.rendering)
+                                rendering=config.simulation.rendering,
+                                start_positions=spec.start_positions
+                                )
     return World(config=world_config, agents=agents)

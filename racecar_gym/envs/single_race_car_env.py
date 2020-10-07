@@ -2,7 +2,7 @@ from typing import Dict
 
 import gym
 
-from racecar_gym.envs.scenarios import MultiAgentScenario, SingleAgentScenario
+from racecar_gym.envs.scenarios import SingleAgentScenario
 
 
 class SingleAgentRaceCarEnv(gym.Env):
@@ -29,6 +29,6 @@ class SingleAgentRaceCarEnv(gym.Env):
             self._initialized = True
         else:
             self._scenario.world.reset()
-        obs = self._scenario.agent.reset(self._scenario.world.initial_pose(0))
+        obs = self._scenario.agent.reset(self._scenario.world.get_starting_position(0))
         obs['time'] = 0
         return obs

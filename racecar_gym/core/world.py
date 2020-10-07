@@ -3,6 +3,7 @@ from typing import Dict, Any
 
 import gym
 
+from .agent import Agent
 from .definitions import Pose
 
 
@@ -21,7 +22,7 @@ class World(ABC):
         pass
 
     @abstractmethod
-    def initial_pose(self, position: int) -> Pose:
+    def get_starting_position(self, agent: Agent) -> Pose:
         pass
 
     @abstractmethod

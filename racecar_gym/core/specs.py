@@ -26,6 +26,7 @@ class VehicleSpec(YamlDataClassConfig):
 @dataclass
 class WorldSpec(YamlDataClassConfig):
     name: str = None
+    start_positions: str = None
     rendering: bool = False
 
 

@@ -1,9 +1,10 @@
 import math
-from collections import defaultdict
+import random
 from dataclasses import dataclass
 from typing import Dict, Any, List
 
 import gym
+import numpy as np
 import pybullet as p
 
 from racecar_gym.bullet.configs import MapConfig
@@ -23,6 +24,7 @@ class World(world.World):
         rendering: bool
         time_step: float
         gravity: float
+        start_positions: str
 
     def __init__(self, config: Config, agents: List[Agent]):
         self._config = config
@@ -72,11 +74,18 @@ class World(world.World):
 
         self._objects['segments'] = dict([(objects[id], i) for i, id in enumerate(segment_ids)])
 
-
-    def initial_pose(self, position: int) -> Pose:
-        assert position <= len(self._starting_grid), f'No position {position} available'
-        position, orientation = self._starting_grid[position]
-        return tuple(position), tuple(orientation)
+    def get_starting_position(self, agent: Agent) -> Pose:
+        # assert position <= len(self._starting_grid), f'No position {position} available'
+        if self._config.start_positions == 'index':
+            position = list(map(lambda agent: agent.id, self._agents)).index(agent.id)
+            position, orientation = self._starting_grid[position]
+            return tuple(position), tuple(orientation)
+        if self._config.start_positions == 'random':
+            section = random.choice(list(self._objects['segments'].values()))
+            aabb = p.getAABB(section)
+            position = (np.array(aabb[1]) + np.array(aabb[0])) / 2
+            position[2] = 0.1
+            return tuple(position), (0, 0, random.uniform(0, 2 * math.pi))
 
     def update(self):
         p.stepSimulation()

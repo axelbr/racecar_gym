@@ -1,5 +1,6 @@
 world:
   name: straight
+  start_positions: index
 agents:
   - id: A
     vehicle:

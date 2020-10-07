@@ -42,8 +42,8 @@ class MultiAgentRaceCarEnv(gym.Env):
         else:
             self._scenario.world.reset()
         observations = {}
-        for i, agent in enumerate(self._scenario.agents.values()):
-            obs = agent.reset(self._scenario.world.initial_pose(i))
+        for agent in self._scenario.agents.values():
+            obs = agent.reset(self._scenario.world.get_starting_position(agent))
             obs['time'] = 0
             observations[agent.id] = obs
         return observations
