@@ -58,6 +58,7 @@ class World(world.World):
         #self._load_scene(self._config.map_config.sdf_file)
         p.setTimeStep(self._config.time_step)
         p.setGravity(0, 0, self._config.gravity)
+        p.stepSimulation()
         self._time = 0.0
         self._collisions = dict([(a.id, False) for a in self._agents])
         self._progress = dict([(a.id, (0, 0)) for a in self._agents])
