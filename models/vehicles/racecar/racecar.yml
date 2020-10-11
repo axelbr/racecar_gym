@@ -40,7 +40,7 @@ sensors:
     name: lidar
     frequency: 25
     params:
-      rays: 100
+      rays: 1080
       range: 5.0
       min_range: 0.25
 
