@@ -76,7 +76,6 @@ class World(world.World):
         self._objects['segments'] = dict([(objects[id], i) for i, id in enumerate(segment_ids)])
 
     def get_starting_position(self, agent: Agent) -> Pose:
-        # assert position <= len(self._starting_grid), f'No position {position} available'
         if self._config.start_positions == 'index':
             position = list(map(lambda agent: agent.id, self._agents)).index(agent.id)
             position, orientation = self._starting_grid[position]
@@ -87,6 +86,7 @@ class World(world.World):
             position = (np.array(aabb[1]) + np.array(aabb[0])) / 2
             position[2] = 0.1
             return tuple(position), (0, 0, random.uniform(0, 2 * math.pi))
+        raise NotImplementedError(self._config.start_positions)
 
     def update(self):
         p.stepSimulation()
