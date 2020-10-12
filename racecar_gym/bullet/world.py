@@ -61,7 +61,7 @@ class World(world.World):
         p.stepSimulation()
         self._time = 0.0
         self._collisions = dict([(a.id, False) for a in self._agents])
-        self._progress = dict([(a.id, (0, 0)) for a in self._agents])
+        self._progress = dict([(a.id, (None, 0)) for a in self._agents])
         self._laps = dict([(a.id, 0) for a in self._agents])
 
     def _load_scene(self, sdf_file: str):
@@ -140,8 +140,11 @@ class World(world.World):
 
         if len(contact_points) > 0:
             current_progress = self._progress[agent.id][0]
-            if segment == 1 and current_progress == len(self._objects['segments']):
-                self._laps[agent.id] += 1
-                self._progress[agent.id] = (1, self._time)
-            elif segment == current_progress + 1:
-                self._progress[agent.id] = (current_progress + 1, self._time)
+            if current_progress is not None:
+                if segment == 1 and current_progress == len(self._objects['segments']):
+                    self._laps[agent.id] += 1
+                    self._progress[agent.id] = (1, self._time)
+                elif segment > current_progress:
+                    self._progress[agent.id] = (current_progress + 1, self._time)
+            else:
+                self._progress[agent.id] = (segment, self._time)

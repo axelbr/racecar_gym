@@ -54,8 +54,8 @@ class RaceCar(Vehicle):
 
         for sensor in self.sensors:
             joint_index = None
-            if sensor.name in self._sensor_indices:
-                joint_index = self._sensor_indices[sensor.name]
+            if sensor.type in self._sensor_indices:
+                joint_index = self._sensor_indices[sensor.type]
             sensor.reset(body_id=self._id, joint_index=joint_index)
 
         for name, actuator in self.actuators.items():

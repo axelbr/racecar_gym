@@ -15,8 +15,8 @@ T = TypeVar('T')
 
 class BulletSensor(Sensor[T], ABC):
 
-    def __init__(self, name: str):
-        super().__init__(name)
+    def __init__(self, name: str, type: str):
+        super().__init__(name, type)
         self._body_id = None
         self._joint_index = None
 
@@ -36,7 +36,7 @@ class BulletSensor(Sensor[T], ABC):
 class FixedTimestepSensor(BulletSensor[T], ABC):
 
     def __init__(self, sensor: BulletSensor, frequency: float, time_step: float):
-        super().__init__(sensor.name)
+        super().__init__(sensor.name, sensor.type)
         self._sensor = sensor
         self._frequency = 1.0 / frequency
         self._time_step = time_step
@@ -65,8 +65,8 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
         min_range: float
         debug: bool = False
 
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
+    def __init__(self, name: str, type: str, config: Config):
+        super().__init__(name, type)
         self._config = config
         self._min_range = config.min_range
         self._rays = self._config.rays
@@ -151,8 +151,8 @@ class RGBCamera(BulletSensor[NDArray[(Any, Any, 3), np.int]]):
         near_plane: float
         far_plane: float
 
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
+    def __init__(self, name: str, type: str, config: Config):
+        super().__init__(name, type)
         self._config = config
         self._up_vector = [0, 0, 1]
         self._camera_vector = [1, 0, 0]
@@ -196,8 +196,8 @@ class IMU(BulletSensor[NDArray[(6,), np.float]]):
         max_acceleration: float
         max_angular_velocity: float
 
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
+    def __init__(self, name: str, type: str, config: Config):
+        super().__init__(name, type)
         self._config = config
         self._last_velocity = np.zeros(shape=6)
 
@@ -223,8 +223,8 @@ class Tachometer(BulletSensor[NDArray[(6,), np.float]]):
         max_linear_velocity: float
         max_angular_velocity: float
 
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
+    def __init__(self, name: str, type: str, config: Config):
+        super().__init__(name, type)
         self._config = config
 
     def _get_velocity(self):
@@ -248,8 +248,8 @@ class GPS(BulletSensor[NDArray[(6,), np.float]]):
         max_y: float
         max_z: float
 
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
+    def __init__(self, name: str, type: str, config: Config):
+        super().__init__(name, type)
         self._config = config
 
     def space(self) -> gym.Space:
@@ -268,8 +268,8 @@ class LapCounter(BulletSensor[int]):
         max_laps: int
         margin: float
 
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
+    def __init__(self, name: str, type: str, config: Config):
+        super().__init__(name, type)
         self._config = config
         self._on_finish = False
         self._lap = 0

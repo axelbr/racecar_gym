@@ -50,7 +50,7 @@ class Motor(BulletActuator[Tuple[float, float]]):
                                            force=force)
 
     def space(self) -> gym.Space:
-        return gym.spaces.Box(low=np.array([-self._config.max_velocity, 0.0]),
+        return gym.spaces.Box(low=np.array([0.0, 0.0]),
                               high=np.array([self._config.max_velocity, self._config.max_force]),
                               shape=(2,))
 

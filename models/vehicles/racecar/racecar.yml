@@ -45,11 +45,22 @@ sensors:
       min_range: 0.25
 
   - type: rgb_camera
-    name: rgb_camera
+    name: hd_camera
     frequency: 30
     params:
       width: 320
       height: 240
+      fov: 90
+      distance: 1
+      near_plane: 0.01
+      far_plane: 100
+
+  - type: rgb_camera
+    name: low_res_camera
+    frequency: 100
+    params:
+      width: 64
+      height: 64
       fov: 90
       distance: 1
       near_plane: 0.01
