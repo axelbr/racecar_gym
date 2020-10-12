@@ -81,11 +81,18 @@ class World(world.World):
             position, orientation = self._starting_grid[position]
             return tuple(position), tuple(orientation)
         if self._config.start_positions == 'random':
-            section = random.choice(list(self._objects['segments'].values()))
-            aabb = p.getAABB(section)
-            position = (np.array(aabb[1]) + np.array(aabb[0])) / 2
+            segments = list(self._objects['segments'].values())
+            section = random.choice(segments)
+            next_section = section + 1 if section < max(segments) else min(segments)
+            section = p.getAABB(section)
+            next_section = p.getAABB(next_section)
+            position = (np.array(section[1]) + np.array(section[0])) / 2
+            next_position = (np.array(next_section[1]) + np.array(next_section[0])) / 2
+            diff = next_position - position
+            angle = np.arctan2(diff[1], diff[0])
+            angle = np.random.normal(loc=angle, scale=0.15)
             position[2] = 0.1
-            return tuple(position), (0, 0, random.uniform(0, 2 * math.pi))
+            return tuple(position), (0, 0, angle)
         raise NotImplementedError(self._config.start_positions)
 
     def update(self):
