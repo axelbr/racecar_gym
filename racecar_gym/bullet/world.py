@@ -140,7 +140,7 @@ class World(world.World):
 
         if len(contact_points) > 0:
             current_progress = self._progress[agent.id][0]
-            if current_progress is not None:
+            if current_progress is not None and segment is not None:
                 if segment == 1 and current_progress == len(self._objects['segments']):
                     self._laps[agent.id] += 1
                     self._progress[agent.id] = (1, self._time)
