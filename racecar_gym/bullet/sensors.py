@@ -62,8 +62,10 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
     class Config:
         rays: int
         range: float
+        angle_start: float
+        angle: float
         min_range: float
-        debug: bool = False
+        debug: bool = True
 
     def __init__(self, name: str, type: str, config: Config):
         super().__init__(name, type)
@@ -83,18 +85,21 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
         start = min_distance
         end = min_distance + scan_range
         from_points, to_points = [], []
+        angle = self._config.angle_start + np.pi / 2.0
+        increment = self._config.angle / self._config.rays
         for i in range(rays):
             from_points.append([
-                start * np.sin(-0.5 * 0.25 * 2. * np.pi + 0.75 * 2. * np.pi * float(i) / rays),
-                start * np.cos(-0.5 * 0.25 * 2. * np.pi + 0.75 * 2. * np.pi * float(i) / rays),
+                start * np.sin(angle),
+                start * np.cos(angle),
                 0
             ])
 
             to_points.append([
-                end * np.sin(-0.5 * 0.25 * 2. * np.pi + 0.75 * 2. * np.pi * float(i) / rays),
-                end * np.cos(-0.5 * 0.25 * 2. * np.pi + 0.75 * 2. * np.pi * float(i) / rays),
+                end * np.sin(angle),
+                end * np.cos(angle),
                 0
             ])
+            angle += increment
 
         return np.array(from_points), np.array(to_points)
 

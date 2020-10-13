@@ -43,6 +43,9 @@ sensors:
       rays: 1080
       range: 5.0
       min_range: 0.25
+      angle_start: -2.36
+      angle: 4.71
+      debug: False
 
   - type: rgb_camera
     name: hd_camera
