@@ -264,6 +264,7 @@ class GPS(BulletSensor[NDArray[(6,), np.float]]):
 
     def observe(self) -> NDArray[(6,), np.float]:
         position, orientation = p.getBasePositionAndOrientation(self.body_id)
+        orientation = p.getEulerFromQuaternion(orientation)
         return np.append(position, orientation)
 
 
