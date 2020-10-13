@@ -200,6 +200,7 @@ class IMU(BulletSensor[NDArray[(6,), np.float]]):
     class Config:
         max_acceleration: float
         max_angular_velocity: float
+        debug: bool = True
 
     def __init__(self, name: str, type: str, config: Config):
         super().__init__(name, type)
@@ -213,12 +214,19 @@ class IMU(BulletSensor[NDArray[(6,), np.float]]):
 
     def _get_velocity(self):
         v_linear, v_rotation = p.getBaseVelocity(self.body_id)
-        return v_linear + v_rotation
+        position, orientation = p.getBasePositionAndOrientation(self.body_id)
+        rot = p.getMatrixFromQuaternion(orientation)
+        rot = np.reshape(rot, (-1, 3)).transpose()
+        v_linear = rot.dot(v_linear)
+        v_rotation = rot.dot(v_rotation)
+        return np.append(v_linear, v_rotation)
 
     def observe(self) -> NDArray[(6,), np.float]:
-        velocity = np.array(self._get_velocity())
+        velocity = self._get_velocity()
         linear_acceleration = (velocity[:3] - self._last_velocity[:3]) / 0.01
         self._last_velocity = velocity
+        if self._config.debug:
+            print(f'[DEBUG][imu] acceleration: {[round(v, 2) for v in linear_acceleration]}')
         return np.append(linear_acceleration, velocity[3:])
 
 
@@ -227,6 +235,7 @@ class Tachometer(BulletSensor[NDArray[(6,), np.float]]):
     class Config:
         max_linear_velocity: float
         max_angular_velocity: float
+        debug: bool = True
 
     def __init__(self, name: str, type: str, config: Config):
         super().__init__(name, type)
@@ -234,7 +243,12 @@ class Tachometer(BulletSensor[NDArray[(6,), np.float]]):
 
     def _get_velocity(self):
         v_linear, v_rotation = p.getBaseVelocity(self.body_id)
-        return v_linear + v_rotation
+        position, orientation = p.getBasePositionAndOrientation(self.body_id)
+        rot = p.getMatrixFromQuaternion(orientation)
+        rot = np.reshape(rot, (-1, 3)).transpose()
+        v_linear = rot.dot(v_linear)
+        v_rotation = rot.dot(v_rotation)
+        return np.append(v_linear, v_rotation)
 
     def space(self) -> gym.Space:
         high = np.array(3 * [self._config.max_linear_velocity] + 3 * [self._config.max_angular_velocity])
@@ -243,7 +257,9 @@ class Tachometer(BulletSensor[NDArray[(6,), np.float]]):
 
     def observe(self) -> NDArray[(6,), np.float]:
         velocity = self._get_velocity()
-        return np.array(velocity)
+        if self._config.debug:
+            print(f'[DEBUG][tacho] velocity: {[round(v, 2) for v in velocity]}')
+        return velocity
 
 
 class GPS(BulletSensor[NDArray[(6,), np.float]]):
@@ -266,31 +282,3 @@ class GPS(BulletSensor[NDArray[(6,), np.float]]):
         position, orientation = p.getBasePositionAndOrientation(self.body_id)
         orientation = p.getEulerFromQuaternion(orientation)
         return np.append(position, orientation)
-
-
-class LapCounter(BulletSensor[int]):
-    @dataclass
-    class Config:
-        max_laps: int
-        margin: float
-
-    def __init__(self, name: str, type: str, config: Config):
-        super().__init__(name, type)
-        self._config = config
-        self._on_finish = False
-        self._lap = 0
-
-    def space(self) -> gym.Space:
-        return gym.spaces.Discrete(self._config.max_laps)
-
-    def observe(self) -> int:
-        closest_points = p.getClosestPoints(self.body_id, World.FINISH_ID, self._config.margin)
-        if len(closest_points) > 0:
-            if not self._on_finish:
-                self._on_finish = True
-                self._lap += 1
-        else:
-            if self._on_finish:
-                self._on_finish = False
-
-        return self._lap
