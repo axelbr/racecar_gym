@@ -21,6 +21,7 @@ sensors:
       max_x: 100.0
       max_y: 100.0
       max_z: 3.0
+      debug: False
 
   - type: imu
     name: imu
@@ -28,6 +29,7 @@ sensors:
     params:
       max_acceleration: 30.0
       max_angular_velocity: 6.0
+      debug: False
 
   - type: tacho
     name: tacho
@@ -35,6 +37,7 @@ sensors:
     params:
       max_linear_velocity: 14.0
       max_angular_velocity: 6.0
+      debug: False
 
   - type: lidar
     name: lidar

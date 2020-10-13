@@ -268,6 +268,7 @@ class GPS(BulletSensor[NDArray[(6,), np.float]]):
         max_x: float
         max_y: float
         max_z: float
+        debug: bool = True
 
     def __init__(self, name: str, type: str, config: Config):
         super().__init__(name, type)
@@ -281,4 +282,7 @@ class GPS(BulletSensor[NDArray[(6,), np.float]]):
     def observe(self) -> NDArray[(6,), np.float]:
         position, orientation = p.getBasePositionAndOrientation(self.body_id)
         orientation = p.getEulerFromQuaternion(orientation)
-        return np.append(position, orientation)
+        pose = np.append(position, orientation)
+        if self._config.debug:
+            print(f'[DEBUG][gps] pose: {[round(v, 2) for v in pose]}')
+        return pose
