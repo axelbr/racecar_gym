@@ -103,31 +103,33 @@ class RankDiscountedProgressTask(Task):
         pass
 
     def reward(self, agent_id, state, action) -> float:
-        rank = 1
-        for id in state:
-            equal_laps =  state[id]['lap'] == state[agent_id]['lap']
-            equal_sections =  state[id]['section'] == state[agent_id]['section']
-            if state[id]['lap'] > state[agent_id]['lap']:
-                rank += 1
-            elif equal_laps and state[id]['section'] > state[agent_id]['section']:
-                rank += 1
-            elif equal_laps and equal_sections and state[id]['section_time'] < state[agent_id]['section_time']:
-                rank += 1
-
-        reward = 0
         section = state[agent_id]['section']
+        if section is None:
+            return 0.0
+        else:
+            rank = 1
+            for id in state:
+                equal_laps = state[id]['lap'] == state[agent_id]['lap']
+                equal_sections = state[id]['section'] == state[agent_id]['section']
+                if state[id]['lap'] > state[agent_id]['lap']:
+                    rank += 1
+                elif equal_laps and state[id]['section'] > state[agent_id]['section']:
+                    rank += 1
+                elif equal_laps and equal_sections and state[id]['section_time'] < state[agent_id]['section_time']:
+                    rank += 1
 
-        if self._current_lap < state[agent_id]['lap']:
-            self._last_section = -1
-            self._current_lap = state[agent_id]['lap']
+            reward = 0
+            if self._current_lap < state[agent_id]['lap']:
+                self._last_section = -1
+                self._current_lap = state[agent_id]['lap']
 
-        if section > self._last_section:
-            reward += 1.0 / float(rank)
-            self._last_section = section
-        if state[agent_id]['collision']:
-            reward -= 1.0
+            if section > self._last_section:
+                reward += 1.0 / float(rank)
+                self._last_section = section
+            if state[agent_id]['collision']:
+                reward -= 1.0
 
-        return reward
+            return reward
 
 
     def done(self, agent_id, state) -> bool:

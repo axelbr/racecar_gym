@@ -21,6 +21,7 @@ sensors:
       max_x: 100.0
       max_y: 100.0
       max_z: 3.0
+      debug: False
 
   - type: imu
     name: imu
@@ -28,6 +29,7 @@ sensors:
     params:
       max_acceleration: 30.0
       max_angular_velocity: 6.0
+      debug: False
 
   - type: tacho
     name: tacho
@@ -35,21 +37,36 @@ sensors:
     params:
       max_linear_velocity: 14.0
       max_angular_velocity: 6.0
+      debug: False
 
   - type: lidar
     name: lidar
     frequency: 25
     params:
-      rays: 1000
+      rays: 1080
       range: 5.0
       min_range: 0.25
+      angle_start: -2.36
+      angle: 4.71
+      debug: False
 
   - type: rgb_camera
-    name: rgb_camera
+    name: hd_camera
     frequency: 30
     params:
       width: 320
       height: 240
+      fov: 90
+      distance: 1
+      near_plane: 0.01
+      far_plane: 100
+
+  - type: rgb_camera
+    name: low_res_camera
+    frequency: 100
+    params:
+      width: 64
+      height: 64
       fov: 90
       distance: 1
       near_plane: 0.01

@@ -8,8 +8,9 @@ T = TypeVar('T')
 
 class Sensor(Generic[T], ABC):
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, type: str):
         self._name = name
+        self._type = type
 
     @abstractmethod
     def space(self) -> gym.Space:
@@ -22,3 +23,7 @@ class Sensor(Generic[T], ABC):
     @property
     def name(self):
         return self._name
+
+    @property
+    def type(self):
+        return self._type

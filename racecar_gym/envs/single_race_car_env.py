@@ -18,6 +18,7 @@ class SingleAgentRaceCarEnv(gym.Env):
         assert self._initialized, 'Reset before calling step'
         state = self._scenario.world.state()
         observation, info = self._scenario.agent.step(action=action)
+        observation['time'] = self._time
         done = self._scenario.agent.done(state)
         reward = self._scenario.agent.reward(state, action)
         self._time = self._scenario.world.update()

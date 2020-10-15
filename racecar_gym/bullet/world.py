@@ -61,7 +61,7 @@ class World(world.World):
         p.stepSimulation()
         self._time = 0.0
         self._collisions = dict([(a.id, False) for a in self._agents])
-        self._progress = dict([(a.id, (0, 0)) for a in self._agents])
+        self._progress = dict([(a.id, (None, 0)) for a in self._agents])
         self._laps = dict([(a.id, 0) for a in self._agents])
 
     def _load_scene(self, sdf_file: str):
@@ -76,17 +76,24 @@ class World(world.World):
         self._objects['segments'] = dict([(objects[id], i) for i, id in enumerate(segment_ids)])
 
     def get_starting_position(self, agent: Agent) -> Pose:
-        # assert position <= len(self._starting_grid), f'No position {position} available'
         if self._config.start_positions == 'index':
             position = list(map(lambda agent: agent.id, self._agents)).index(agent.id)
             position, orientation = self._starting_grid[position]
             return tuple(position), tuple(orientation)
         if self._config.start_positions == 'random':
-            section = random.choice(list(self._objects['segments'].values()))
-            aabb = p.getAABB(section)
-            position = (np.array(aabb[1]) + np.array(aabb[0])) / 2
+            segments = list(self._objects['segments'].values())
+            section = random.choice(segments)
+            next_section = section + 1 if section < max(segments) else min(segments)
+            section = p.getAABB(section)
+            next_section = p.getAABB(next_section)
+            position = (np.array(section[1]) + np.array(section[0])) / 2
+            next_position = (np.array(next_section[1]) + np.array(next_section[0])) / 2
+            diff = next_position - position
+            angle = np.arctan2(diff[1], diff[0])
+            angle = np.random.normal(loc=angle, scale=0.15)
             position[2] = 0.1
-            return tuple(position), (0, 0, random.uniform(0, 2 * math.pi))
+            return tuple(position), (0, 0, angle)
+        raise NotImplementedError(self._config.start_positions)
 
     def update(self):
         p.stepSimulation()
@@ -133,8 +140,11 @@ class World(world.World):
 
         if len(contact_points) > 0:
             current_progress = self._progress[agent.id][0]
-            if segment == 1 and current_progress == len(self._objects['segments']):
-                self._laps[agent.id] += 1
-                self._progress[agent.id] = (1, self._time)
-            elif segment == current_progress + 1:
-                self._progress[agent.id] = (current_progress + 1, self._time)
+            if current_progress is not None and segment is not None:
+                if segment == 1 and current_progress == len(self._objects['segments']):
+                    self._laps[agent.id] += 1
+                    self._progress[agent.id] = (1, self._time)
+                elif segment > current_progress:
+                    self._progress[agent.id] = (current_progress + 1, self._time)
+            else:
+                self._progress[agent.id] = (segment, self._time)

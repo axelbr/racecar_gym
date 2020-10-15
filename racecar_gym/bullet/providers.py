@@ -4,8 +4,7 @@ from typing import List
 from racecar_gym import core
 from racecar_gym.bullet.actuators import BulletActuator, Motor, SteeringWheel
 from racecar_gym.bullet.configs import SensorConfig, VehicleConfig, ActuatorConfig, SceneConfig
-from racecar_gym.bullet.sensors import Lidar, GPS, IMU, Tachometer, RGBCamera, BulletSensor, FixedTimestepSensor, \
-    LapCounter
+from racecar_gym.bullet.sensors import Lidar, GPS, IMU, Tachometer, RGBCamera, BulletSensor, FixedTimestepSensor
 from racecar_gym.bullet.vehicle import RaceCar
 from .world import World
 from ..core.agent import Agent
@@ -15,17 +14,15 @@ base_path = os.path.dirname(os.path.abspath(__file__))
 
 def load_sensor(config: SensorConfig) -> BulletSensor:
     if config.type == 'lidar':
-        return Lidar(name=config.name, config=Lidar.Config(**config.params))
+        return Lidar(name=config.name, type=config.type, config=Lidar.Config(**config.params))
     if config.type == 'gps':
-        return GPS(name=config.name, config=GPS.Config(**config.params))
+        return GPS(name=config.name, type=config.type, config=GPS.Config(**config.params))
     if config.type == 'imu':
-        return IMU(name=config.name, config=IMU.Config(**config.params))
+        return IMU(name=config.name, type=config.type, config=IMU.Config(**config.params))
     if config.type == 'tacho':
-        return Tachometer(name=config.name, config=Tachometer.Config(**config.params))
+        return Tachometer(name=config.name, type=config.type, config=Tachometer.Config(**config.params))
     if config.type == 'rgb_camera':
-        return RGBCamera(name=config.name, config=RGBCamera.Config(**config.params))
-    if config.type == 'lap':
-        return LapCounter(name=config.name, config=LapCounter.Config(**config.params))
+        return RGBCamera(name=config.name, type=config.type, config=RGBCamera.Config(**config.params))
 
 
 def load_actuator(config: ActuatorConfig) -> BulletActuator:

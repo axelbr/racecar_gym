@@ -15,8 +15,8 @@ T = TypeVar('T')
 
 class BulletSensor(Sensor[T], ABC):
 
-    def __init__(self, name: str):
-        super().__init__(name)
+    def __init__(self, name: str, type: str):
+        super().__init__(name, type)
         self._body_id = None
         self._joint_index = None
 
@@ -36,7 +36,7 @@ class BulletSensor(Sensor[T], ABC):
 class FixedTimestepSensor(BulletSensor[T], ABC):
 
     def __init__(self, sensor: BulletSensor, frequency: float, time_step: float):
-        super().__init__(sensor.name)
+        super().__init__(sensor.name, sensor.type)
         self._sensor = sensor
         self._frequency = 1.0 / frequency
         self._time_step = time_step
@@ -62,11 +62,13 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
     class Config:
         rays: int
         range: float
+        angle_start: float
+        angle: float
         min_range: float
-        debug: bool = False
+        debug: bool = True
 
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
+    def __init__(self, name: str, type: str, config: Config):
+        super().__init__(name, type)
         self._config = config
         self._min_range = config.min_range
         self._rays = self._config.rays
@@ -83,18 +85,21 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
         start = min_distance
         end = min_distance + scan_range
         from_points, to_points = [], []
+        angle = self._config.angle_start + np.pi / 2.0
+        increment = self._config.angle / self._config.rays
         for i in range(rays):
             from_points.append([
-                start * np.sin(-0.5 * 0.25 * 2. * np.pi + 0.75 * 2. * np.pi * float(i) / rays),
-                start * np.cos(-0.5 * 0.25 * 2. * np.pi + 0.75 * 2. * np.pi * float(i) / rays),
+                start * np.sin(angle),
+                start * np.cos(angle),
                 0
             ])
 
             to_points.append([
-                end * np.sin(-0.5 * 0.25 * 2. * np.pi + 0.75 * 2. * np.pi * float(i) / rays),
-                end * np.cos(-0.5 * 0.25 * 2. * np.pi + 0.75 * 2. * np.pi * float(i) / rays),
+                end * np.sin(angle),
+                end * np.cos(angle),
                 0
             ])
+            angle += increment
 
         return np.array(from_points), np.array(to_points)
 
@@ -151,8 +156,8 @@ class RGBCamera(BulletSensor[NDArray[(Any, Any, 3), np.int]]):
         near_plane: float
         far_plane: float
 
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
+    def __init__(self, name: str, type: str, config: Config):
+        super().__init__(name, type)
         self._config = config
         self._up_vector = [0, 0, 1]
         self._camera_vector = [1, 0, 0]
@@ -195,9 +200,10 @@ class IMU(BulletSensor[NDArray[(6,), np.float]]):
     class Config:
         max_acceleration: float
         max_angular_velocity: float
+        debug: bool = True
 
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
+    def __init__(self, name: str, type: str, config: Config):
+        super().__init__(name, type)
         self._config = config
         self._last_velocity = np.zeros(shape=6)
 
@@ -208,12 +214,19 @@ class IMU(BulletSensor[NDArray[(6,), np.float]]):
 
     def _get_velocity(self):
         v_linear, v_rotation = p.getBaseVelocity(self.body_id)
-        return v_linear + v_rotation
+        position, orientation = p.getBasePositionAndOrientation(self.body_id)
+        rot = p.getMatrixFromQuaternion(orientation)
+        rot = np.reshape(rot, (-1, 3)).transpose()
+        v_linear = rot.dot(v_linear)
+        v_rotation = rot.dot(v_rotation)
+        return np.append(v_linear, v_rotation)
 
     def observe(self) -> NDArray[(6,), np.float]:
-        velocity = np.array(self._get_velocity())
+        velocity = self._get_velocity()
         linear_acceleration = (velocity[:3] - self._last_velocity[:3]) / 0.01
         self._last_velocity = velocity
+        if self._config.debug:
+            print(f'[DEBUG][imu] acceleration: {[round(v, 2) for v in linear_acceleration]}')
         return np.append(linear_acceleration, velocity[3:])
 
 
@@ -222,14 +235,20 @@ class Tachometer(BulletSensor[NDArray[(6,), np.float]]):
     class Config:
         max_linear_velocity: float
         max_angular_velocity: float
+        debug: bool = True
 
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
+    def __init__(self, name: str, type: str, config: Config):
+        super().__init__(name, type)
         self._config = config
 
     def _get_velocity(self):
         v_linear, v_rotation = p.getBaseVelocity(self.body_id)
-        return v_linear + v_rotation
+        position, orientation = p.getBasePositionAndOrientation(self.body_id)
+        rot = p.getMatrixFromQuaternion(orientation)
+        rot = np.reshape(rot, (-1, 3)).transpose()
+        v_linear = rot.dot(v_linear)
+        v_rotation = rot.dot(v_rotation)
+        return np.append(v_linear, v_rotation)
 
     def space(self) -> gym.Space:
         high = np.array(3 * [self._config.max_linear_velocity] + 3 * [self._config.max_angular_velocity])
@@ -238,7 +257,9 @@ class Tachometer(BulletSensor[NDArray[(6,), np.float]]):
 
     def observe(self) -> NDArray[(6,), np.float]:
         velocity = self._get_velocity()
-        return np.array(velocity)
+        if self._config.debug:
+            print(f'[DEBUG][tacho] velocity: {[round(v, 2) for v in velocity]}')
+        return velocity
 
 
 class GPS(BulletSensor[NDArray[(6,), np.float]]):
@@ -247,9 +268,10 @@ class GPS(BulletSensor[NDArray[(6,), np.float]]):
         max_x: float
         max_y: float
         max_z: float
+        debug: bool = True
 
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
+    def __init__(self, name: str, type: str, config: Config):
+        super().__init__(name, type)
         self._config = config
 
     def space(self) -> gym.Space:
@@ -259,32 +281,8 @@ class GPS(BulletSensor[NDArray[(6,), np.float]]):
 
     def observe(self) -> NDArray[(6,), np.float]:
         position, orientation = p.getBasePositionAndOrientation(self.body_id)
-        return np.append(position, orientation)
-
-
-class LapCounter(BulletSensor[int]):
-    @dataclass
-    class Config:
-        max_laps: int
-        margin: float
-
-    def __init__(self, name: str, config: Config):
-        super().__init__(name)
-        self._config = config
-        self._on_finish = False
-        self._lap = 0
-
-    def space(self) -> gym.Space:
-        return gym.spaces.Discrete(self._config.max_laps)
-
-    def observe(self) -> int:
-        closest_points = p.getClosestPoints(self.body_id, World.FINISH_ID, self._config.margin)
-        if len(closest_points) > 0:
-            if not self._on_finish:
-                self._on_finish = True
-                self._lap += 1
-        else:
-            if self._on_finish:
-                self._on_finish = False
-
-        return self._lap
+        orientation = p.getEulerFromQuaternion(orientation)
+        pose = np.append(position, orientation)
+        if self._config.debug:
+            print(f'[DEBUG][gps] pose: {[round(v, 2) for v in pose]}')
+        return pose

@@ -1,6 +1,8 @@
 import os
+
 from gym.envs.registration import register
-from racecar_gym.envs.scenarios import MultiAgentScenario, SingleAgentScenario
+
+from .envs import MultiAgentRaceCarEnv, SingleAgentRaceCarEnv, MultiAgentScenario, SingleAgentScenario
 
 base_path = os.path.dirname(__file__)
 
