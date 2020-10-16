@@ -43,6 +43,8 @@ class GapFollower:
 
     def action(self, observation: Dict[str, np.ndarray]) -> Tuple[float, float]:
         scan = observation['lidar']
+        if len(scan.shape) > 1:
+            scan = scan.reshape(scan.shape[1])
         proc_ranges = self.preprocess_lidar(scan, kernel_size=3)
         min_index, max_index = 0, 1079
         proc_ranges = proc_ranges[min_index:max_index]
@@ -66,3 +68,6 @@ class GapFollower:
         return np.random.normal(loc=2.0, scale=0.01), \
                np.random.normal(loc=0.3, scale=0.01), \
                np.random.normal(loc=angle, scale=0.0),
+
+    def __call__(self, obs, *args):
+        return np.expand_dims(np.array(self.action(obs)), 0), obs
