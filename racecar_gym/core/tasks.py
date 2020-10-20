@@ -111,6 +111,11 @@ class RankDiscountedProgressTask(Task):
             for id in state:
                 equal_laps = state[id]['lap'] == state[agent_id]['lap']
                 equal_sections = state[id]['section'] == state[agent_id]['section']
+                other_section = state[id]['section']
+                if not other_section:
+                    rank += 1
+                    continue
+
                 if state[id]['lap'] > state[agent_id]['lap']:
                     rank += 1
                 elif equal_laps and state[id]['section'] > state[agent_id]['section']:

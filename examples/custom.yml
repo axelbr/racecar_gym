@@ -1,5 +1,6 @@
 world:
   name: track1
+  start_positions: index
 agents:
   - id: A
     vehicle:

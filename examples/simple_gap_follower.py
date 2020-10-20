@@ -5,7 +5,7 @@ from agents.gap_follower import GapFollower
 
 from time import sleep
 from racecar_gym import SingleAgentScenario
-from racecar_gym.envs.single_race_car_env import SingleAgentRaceCarEnv
+from racecar_gym.envs.single_agent_race import SingleAgentRaceEnv
 import numpy as np
 
 class SingleWrapper(gym.Env):
@@ -32,7 +32,7 @@ scenario = SingleAgentScenario.from_spec(
                  path='custom_single_car.yml',
                  rendering=True
              )
-env = SingleAgentRaceCarEnv(scenario=scenario)
+env = SingleAgentRaceEnv(scenario=scenario)
 env = SingleWrapper(env)
 agent = GapFollower()
 

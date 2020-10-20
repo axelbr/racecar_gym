@@ -2,13 +2,13 @@ from time import sleep
 
 from agents.gap_follower import GapFollower
 from racecar_gym import MultiAgentScenario
-from racecar_gym.envs.multi_race_car_env import MultiAgentRaceCarEnv
+from racecar_gym.envs.multi_agent_race import MultiAgentRaceEnv
 
 scenario = MultiAgentScenario.from_spec(
     path='random_starts.yml',
     rendering=True
 )
-env = MultiAgentRaceCarEnv(scenario=scenario)
+env = MultiAgentRaceEnv(scenario=scenario)
 
 print(env.observation_space)
 print(env.action_space)

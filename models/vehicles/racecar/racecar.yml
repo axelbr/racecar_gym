@@ -51,6 +51,17 @@ sensors:
       debug: False
 
   - type: rgb_camera
+    name: rgb_camera
+    frequency: 30
+    params:
+      width: 128
+      height: 128
+      fov: 90
+      distance: 1
+      near_plane: 0.01
+      far_plane: 100
+
+  - type: rgb_camera
     name: hd_camera
     frequency: 30
     params:

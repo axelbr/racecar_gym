@@ -6,7 +6,7 @@ import gym
 from racecar_gym.envs.scenarios import MultiAgentScenario
 
 
-class MultiAgentRaceCarEnv(gym.Env):
+class MultiAgentRaceEnv(gym.Env):
 
     def __init__(self, scenario: MultiAgentScenario):
         self._scenario = scenario

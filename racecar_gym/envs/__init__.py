@@ -1,2 +1,2 @@
-from .multi_race_car_env import MultiAgentRaceCarEnv, MultiAgentScenario
-from .single_race_car_env import SingleAgentRaceCarEnv, SingleAgentScenario
+from .multi_agent_race import MultiAgentRaceEnv, MultiAgentScenario
+from .single_agent_race import SingleAgentRaceEnv, SingleAgentScenario
