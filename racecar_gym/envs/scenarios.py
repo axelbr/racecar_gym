@@ -21,8 +21,7 @@ class MultiAgentScenario:
             spec.world.rendering = rendering
         agents = dict([
             (s.id, Agent(id=s.id, vehicle=load_vehicle(s.vehicle), task=task_from_spec(s.task)))
-            for s
-            in spec.agents
+            for s in spec.agents
         ])
 
         return MultiAgentScenario(world=load_world(spec.world, agents=list(agents.values())), agents=agents)
