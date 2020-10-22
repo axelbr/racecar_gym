@@ -75,7 +75,7 @@ class ForkedMultiAgentRaceEnv(gym.Env):
 
     def close(self):
         conn = self._env_connection
-        conn.send(self.action_space.spaces.sample())
+        conn.send(self.action_space.sample())
         conn.send(False)
         conn.send(True)
         conn.close()
