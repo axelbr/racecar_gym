@@ -148,9 +148,56 @@ class RankDiscountedProgressTask(Task):
         self._current_lap = 0
 
 
+class ProgressTaskWtPenalty(Task):
+
+    def __init__(self, time_limit: float, laps: int, terminate_on_collision: bool,
+                 segment_reward: float = 1000, collision_penalty: float = 100, frame_penalty: float = 0.01):
+        self._last_section = -1
+        self._current_lap = 0
+        self._laps = laps
+        self._time_limit = time_limit
+        self._terminate_on_collision = terminate_on_collision
+        self.leading = []
+        self._collision_penalty = collision_penalty
+        self._segment_progress_reward = segment_reward
+        self._frame_penalty = frame_penalty
+
+    def reward_range(self) -> RewardRange:
+        pass
+
+    def reward(self, agent_id, state, action) -> float:
+        section = state[agent_id]['section']
+        n_segments = state[agent_id]['n_segments']
+        reward = 0.0
+        if section is not None:
+            reward -= self._frame_penalty       # for each new frame, add penalty to learn the agent to be fast
+            if self._current_lap < state[agent_id]['lap']:
+                self._last_section = -1
+                self._current_lap = state[agent_id]['lap']
+            if section > self._last_section:
+                reward += self._segment_progress_reward / n_segments
+                self._last_section = section
+            if state[agent_id]['collision']:
+                reward -= self._collision_penalty
+        return reward
+
+
+    def done(self, agent_id, state) -> bool:
+        if self._terminate_on_collision and state[agent_id]['collision']:
+            return True
+        if state[agent_id]['lap'] > self._laps or self._time_limit < state[agent_id]['time']:
+            return True
+        return False
+
+    def reset(self):
+        self._last_section = -1
+        self._current_lap = 0
+
+
 tasks = {
     'time_based': TimeBasedRacingTask,
-    'rank_discounted': RankDiscountedProgressTask
+    'rank_discounted': RankDiscountedProgressTask,
+    'segment_progress': ProgressTaskWtPenalty
 }
 
 

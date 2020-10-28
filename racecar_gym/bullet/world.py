@@ -112,7 +112,8 @@ class World(world.World):
                 'section': self._progress[agent.id][0],
                 'section_time': self._progress[agent.id][1],
                 'lap': self._laps[agent.id],
-                'time': self._time
+                'time': self._time,
+                'n_segments': len(self._objects["segments"])
             }
 
             state[agent.id] = agent_state
