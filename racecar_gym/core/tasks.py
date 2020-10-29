@@ -106,13 +106,14 @@ class RankDiscountedProgressTask(Task):
         agents = [(agent, states['lap'], states['progress']) for agent, states in state.items()]
         ranked = [item[0] for item in sorted(agents, key=lambda item: (item[1], item[2]), reverse=True)]
         rank = ranked.index(agent_id) + 1
-
+        section = state[agent_id]['section']
         reward = 0.0
         if not state[agent_id]['collision']:
-            reward += 1.0 / float(rank)
+            if section > self._last_section:
+                self._last_section = section
+                reward += 1.0 / float(rank)
         else:
             reward -= 5.0
-
         return reward
 
 
