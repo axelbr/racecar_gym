@@ -161,7 +161,7 @@ class SimpleProgressTask(Task):
 
     def reset(self):
         self._current_lap = 0
-
+        self._last_progress = 0
 
 class ProgressTaskWtPenalty(Task):
 
