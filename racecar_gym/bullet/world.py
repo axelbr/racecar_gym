@@ -20,6 +20,7 @@ class World(world.World):
 
     @dataclass
     class Config:
+        sdf: str
         map_config: MapConfig
         rendering: bool
         time_step: float
@@ -31,15 +32,12 @@ class World(world.World):
         self._map_id = None
         self._time = 0.0
         self._agents = agents
-        self._collisions = dict([(a.id, False) for a in agents])
-        self._progress = dict([(a.id, (0, 0)) for a in agents])
-        self._laps = dict([(a.id, 0) for a in agents])
+        self._state = dict([(a.id, {}) for a in agents])
         self._objects = {}
-        self._starting_grid = [
-            ((pose['x'], pose['y'], 0.25), (0.0, 0.0, pose['yaw']))
-            for pose
-            in config.map_config.starting_grid
-        ]
+        self._progress_map = np.load(config.map_config.maps)['norm_distance_from_start']
+        self._drivable_area = np.load(config.map_config.maps)['drivable_area']
+        self._distance_to_obstacle = np.load(config.map_config.maps)['norm_distance_to_obstacle']
+        self._starting_grid = np.load(config.map_config.starting_grid)['data']
 
     def init(self) -> None:
         if self._config.rendering:
@@ -49,50 +47,62 @@ class World(world.World):
         else:
             p.connect(p.DIRECT)
 
-        self._load_scene(self._config.map_config.sdf_file)
+        self._load_scene(self._config.sdf)
         p.setTimeStep(self._config.time_step)
         p.setGravity(0, 0, self._config.gravity)
 
     def reset(self):
-        #p.resetSimulation()
-        #self._load_scene(self._config.map_config.sdf_file)
         p.setTimeStep(self._config.time_step)
         p.setGravity(0, 0, self._config.gravity)
         p.stepSimulation()
         self._time = 0.0
-        self._collisions = dict([(a.id, False) for a in self._agents])
-        self._progress = dict([(a.id, (None, 0)) for a in self._agents])
-        self._laps = dict([(a.id, 0) for a in self._agents])
+        self._state = dict([(a.id, {}) for a in self._agents])
+
+
 
     def _load_scene(self, sdf_file: str):
         ids = p.loadSDF(sdf_file)
         objects = dict([(p.getBodyInfo(i)[1].decode('ascii'), i) for i in ids])
-        self._objects['wall'] = objects[self._config.map_config.wall_name]
-        segment_ids = filter(
-            lambda name: name.startswith(self._config.map_config.segment_prefix),
-            objects.keys()
-        )
-
-        self._objects['segments'] = dict([(objects[id], i) for i, id in enumerate(segment_ids)])
+        self._objects = objects
 
     def get_starting_position(self, agent: Agent) -> Pose:
+        def to_meter(px, py):
+            resolution = self._config.map_config.resolution
+            height = self._distance_to_obstacle.shape[0]
+            origin_x = self._config.map_config.origin[0]
+            origin_y = self._config.map_config.origin[1]
+            y = origin_y - (px - height) * resolution
+            x = py * resolution + origin_x
+            return x, y
+
         if self._config.start_positions == 'index':
             position = list(map(lambda agent: agent.id, self._agents)).index(agent.id)
-            position, orientation = self._starting_grid[position]
-            return tuple(position), tuple(orientation)
+            pose = self._starting_grid[position]
+            return tuple(pose[:3]), tuple(pose[3:])
         if self._config.start_positions == 'random':
-            segments = list(self._objects['segments'].values())
-            section = random.choice(segments)
-            next_section = section + 1 if section < max(segments) else min(segments)
-            section = p.getAABB(section)
-            next_section = p.getAABB(next_section)
-            position = (np.array(section[1]) + np.array(section[0])) / 2
-            next_position = (np.array(next_section[1]) + np.array(next_section[0])) / 2
-            diff = next_position - position
+            center_corridor = np.argwhere(self._distance_to_obstacle > 0.4)
+            position = random.choice(center_corridor)
+
+            progress = self._progress_map[position[0], position[1]]
+            checkpoints = 1.0 / float(self._config.map_config.checkpoints)
+            checkpoint = int(progress / checkpoints)
+            next_checkpoint = (checkpoint + 1) % self._config.map_config.checkpoints
+            progress_area = next_checkpoint * checkpoints
+            checkpoint_area = np.argwhere(np.logical_and(
+                self._progress_map > progress_area,
+                self._progress_map <= progress_area + checkpoints
+            ))
+            next_position = random.choice(checkpoint_area)
+            px = position[0]
+            py = position[1]
+            x, y = to_meter(px, py)
+            next_position = to_meter(next_position[0], next_position[1])
+
+
+            diff = np.array(next_position) - np.array([x, y])
             angle = np.arctan2(diff[1], diff[0])
-            angle = np.random.normal(loc=angle, scale=0.15)
-            position[2] = 0.1
-            return tuple(position), (0, 0, angle)
+            #angle = np.random.normal(loc=angle, scale=0.15)
+            return (x, y, 0.05), (0, 0, angle)
         raise NotImplementedError(self._config.start_positions)
 
     def update(self):
@@ -100,25 +110,9 @@ class World(world.World):
         self._time += self._config.time_step
 
     def state(self) -> Dict[str, Any]:
-
         for agent in self._agents:
             self._update_race_info(agent=agent)
-
-        state = {}
-
-        for agent in self._agents:
-            agent_state = {
-                'collision': self._collisions[agent.id],
-                'section': self._progress[agent.id][0],
-                'section_time': self._progress[agent.id][1],
-                'lap': self._laps[agent.id],
-                'time': self._time,
-                'n_segments': len(self._objects["segments"])
-            }
-
-            state[agent.id] = agent_state
-
-        return state
+        return self._state
 
     def space(self) -> gym.Space:
         return gym.spaces.Dict({
@@ -127,25 +121,42 @@ class World(world.World):
 
     def _update_race_info(self, agent):
         contact_points = set([c[2] for c in p.getContactPoints(agent.vehicle_id)])
-        segment = None
+
         collision = False
         for contact in contact_points:
-            if self._objects['wall'] == contact:
+            if self._objects['walls'] == contact:
                 collision = True
-            elif contact in self._objects['segments']:
-                segment = min(segment, contact) if segment else contact
-            else:
+            elif contact != self._objects['floor']:
                 collision = True
+        self._state[agent.id]['collision'] = collision
 
-        self._collisions[agent.id] = collision
+        position, orientation = p.getBasePositionAndOrientation(agent.vehicle_id)
+        orientation = p.getEulerFromQuaternion(orientation)
+        self._state[agent.id]['pose'] = np.array(position + orientation)
 
-        if len(contact_points) > 0:
-            current_progress = self._progress[agent.id][0]
-            if current_progress is not None and segment is not None:
-                if segment == 1 and current_progress == len(self._objects['segments']):
-                    self._laps[agent.id] += 1
-                    self._progress[agent.id] = (1, self._time)
-                elif segment > current_progress:
-                    self._progress[agent.id] = (current_progress + 1, self._time)
-            else:
-                self._progress[agent.id] = (segment, self._time)
+        resolution = self._config.map_config.resolution
+        x, y = position[0], position[1]
+        origin_x, origin_y = self._config.map_config.origin[0], self._config.map_config.origin[1]
+        width, height = self._progress_map.shape[1], self._progress_map.shape[0]
+
+        px = int(height - (y - origin_y) / resolution)
+        py = int((x - origin_x) / resolution)
+
+        self._state[agent.id]['progress'] = self._progress_map[px, py]
+        self._state[agent.id]['time'] = self._time
+
+        progress = self._state[agent.id]['progress']
+        checkpoints = 1.0 / float(self._config.map_config.checkpoints)
+
+        checkpoint = int(progress / checkpoints)
+
+        if 'checkpoint' in self._state[agent.id]:
+            last_checkpoint = self._state[agent.id]['checkpoint']
+            if last_checkpoint + 1 == checkpoint:
+                self._state[agent.id]['checkpoint'] = checkpoint
+                if progress == 1.0:
+                    self._state[agent.id]['lap'] += 1
+        else:
+            self._state[agent.id]['checkpoint'] = checkpoint
+            self._state[agent.id]['lap'] = 0
+

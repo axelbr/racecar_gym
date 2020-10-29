@@ -2,7 +2,7 @@ from time import sleep
 import gym
 import racecar_gym
 
-env = gym.make('MultiAgentAustria_Gui-v0')
+env = gym.make('MultiAgentBerlin_Gui-v0')
 
 done = False
 obs = env.reset()

@@ -103,38 +103,17 @@ class RankDiscountedProgressTask(Task):
         pass
 
     def reward(self, agent_id, state, action) -> float:
-        section = state[agent_id]['section']
-        if section is None:
-            return 0.0
+        agents = [(agent, states['lap'], states['progress']) for agent, states in state.items()]
+        ranked = [item[0] for item in sorted(agents, key=lambda item: (item[1], item[2]), reverse=True)]
+        rank = ranked.index(agent_id) + 1
+
+        reward = 0.0
+        if not state[agent_id]['collision']:
+            reward += 1.0 / float(rank)
         else:
-            rank = 1
-            for id in state:
-                equal_laps = state[id]['lap'] == state[agent_id]['lap']
-                equal_sections = state[id]['section'] == state[agent_id]['section']
-                other_section = state[id]['section']
-                if not other_section:
-                    rank += 1
-                    continue
+            reward -= 5.0
 
-                if state[id]['lap'] > state[agent_id]['lap']:
-                    rank += 1
-                elif equal_laps and state[id]['section'] > state[agent_id]['section']:
-                    rank += 1
-                elif equal_laps and equal_sections and state[id]['section_time'] < state[agent_id]['section_time']:
-                    rank += 1
-
-            reward = 0
-            if self._current_lap < state[agent_id]['lap']:
-                self._last_section = -1
-                self._current_lap = state[agent_id]['lap']
-
-            if section > self._last_section:
-                reward += 1.0 / float(rank)
-                self._last_section = section
-            if state[agent_id]['collision']:
-                reward -= 1.0
-
-            return reward
+        return reward
 
 
     def done(self, agent_id, state) -> bool:

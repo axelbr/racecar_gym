@@ -63,11 +63,24 @@ def load_world(spec: WorldSpec, agents: List[Agent]) -> core.World:
     config = SceneConfig()
     config.load(config_file)
     config.simulation.rendering = spec.rendering
-    config.map.sdf_file = f'{os.path.dirname(config_file)}/{config.map.sdf_file}'
-    world_config = World.Config(map_config=config.map,
-                                time_step=config.simulation.time_step,
-                                gravity=config.physics.gravity,
-                                rendering=config.simulation.rendering,
-                                start_positions=spec.start_positions
-                                )
+
+    config.sdf = resolve_path(file=config_file, relative_path=config.sdf)
+    config.map.maps = resolve_path(file=config_file, relative_path=config.map.maps)
+    config.map.starting_grid = resolve_path(file=config_file, relative_path=config.map.starting_grid)
+
+
+    world_config = World.Config(
+        sdf=config.sdf,
+        map_config=config.map,
+        time_step=config.simulation.time_step,
+        gravity=config.physics.gravity,
+        rendering=config.simulation.rendering,
+        start_positions=spec.start_positions
+    )
+
     return World(config=world_config, agents=agents)
+
+
+def resolve_path(file: str, relative_path: str) -> str:
+    file_dir = os.path.dirname(file)
+    return f'{file_dir}/{relative_path}'

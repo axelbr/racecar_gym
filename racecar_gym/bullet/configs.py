@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 
 from yamldataclassconfig.config import YamlDataClassConfig
 
@@ -29,10 +29,12 @@ class VehicleConfig(YamlDataClassConfig):
 
 @dataclass
 class MapConfig(YamlDataClassConfig):
-    sdf_file: str = None
-    wall_name: str = None
-    segment_prefix: str = None
-    starting_grid: List[Dict[str, float]] = None
+    occupancy_grid: str = None
+    resolution: float = None
+    origin: Tuple[float, float, float] = None
+    maps: str = None
+    starting_grid: str = None
+    checkpoints: int = None
 
 
 @dataclass
@@ -49,6 +51,7 @@ class PhysicsConfig(YamlDataClassConfig):
 @dataclass
 class SceneConfig(YamlDataClassConfig):
     name: str = None
+    sdf: str = None
     map: MapConfig = None
     physics: PhysicsConfig = None
     simulation: SimulationConfig = None
