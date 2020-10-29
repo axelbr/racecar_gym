@@ -106,11 +106,12 @@ class RankDiscountedProgressTask(Task):
         agents = [(agent, states['lap'], states['progress']) for agent, states in state.items()]
         ranked = [item[0] for item in sorted(agents, key=lambda item: (item[1], item[2]), reverse=True)]
         rank = ranked.index(agent_id) + 1
-        section = state[agent_id]['section']
+        #section = state[agent_id]['progress']
+        section = 0
         reward = 0.0
         if not state[agent_id]['collision']:
             if section > self._last_section:
-                self._last_section = section
+            #    self._last_section = section
                 reward += 1.0 / float(rank)
         else:
             reward -= 5.0
@@ -125,6 +126,40 @@ class RankDiscountedProgressTask(Task):
 
     def reset(self):
         self._last_section = -1
+        self._current_lap = 0
+
+class SimpleProgressTask(Task):
+
+    def __init__(self, time_limit: float, laps: int, terminate_on_collision: bool):
+        self._last_progress = 0
+        self._current_lap = 0
+        self._laps = laps
+        self._time_limit = time_limit
+        self._terminate_on_collision = terminate_on_collision
+        self.leading = []
+
+    def reward_range(self) -> RewardRange:
+        pass
+
+    def reward(self, agent_id, state, action) -> float:
+        reward = 0.0
+        if not state[agent_id]['collision']:
+            progress = state[agent_id]['progress']
+            if progress > self._last_progress:
+                reward += progress - self._last_progress
+                self._last_progress = progress
+        else:
+            reward -= 1.0
+        return reward
+
+
+    def done(self, agent_id, state) -> bool:
+        if self._terminate_on_collision and state[agent_id]['collision']:
+            return True
+
+        return state[agent_id]['lap'] > self._laps or self._time_limit < state[agent_id]['time']
+
+    def reset(self):
         self._current_lap = 0
 
 
@@ -177,7 +212,8 @@ class ProgressTaskWtPenalty(Task):
 tasks = {
     'time_based': TimeBasedRacingTask,
     'rank_discounted': RankDiscountedProgressTask,
-    'segment_progress': ProgressTaskWtPenalty
+    'segment_progress': ProgressTaskWtPenalty,
+    'progress_based': SimpleProgressTask
 }
 
 
