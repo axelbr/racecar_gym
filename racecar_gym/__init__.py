@@ -41,3 +41,21 @@ register(id='MultiAgentTorino-v0',
                  rendering=False
              )
          })
+
+register(id='MultiAgentMontreal_Gui-v0',
+         entry_point='racecar_gym.envs:MultiAgentRaceEnv',
+         kwargs={
+             'scenario': MultiAgentScenario.from_spec(
+                 path=f'{base_path}/../scenarios/montreal.yml',
+                 rendering=True
+             )
+         })
+
+register(id='MultiAgentMontreal-v0',
+         entry_point='racecar_gym.envs:MultiAgentRaceEnv',
+         kwargs={
+             'scenario': MultiAgentScenario.from_spec(
+                 path=f'{base_path}/../scenarios/montreal.yml',
+                 rendering=False
+             )
+         })

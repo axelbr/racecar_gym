@@ -1,0 +1,15 @@
+name: montreal
+sdf: montreal.sdf
+map:
+  resolution: 0.050000
+  origin: [-12.381815, -18.843172, 0.000000]
+  maps: maps/maps.npz
+  starting_grid: maps/starts.npz
+  checkpoints: 5
+
+physics:
+  gravity: -9.81
+
+simulation:
+  time_step: 0.01
+  rendering: True

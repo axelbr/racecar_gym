@@ -1,8 +1,8 @@
 name: torino
 sdf: torino.sdf
 map:
-  resolution: 0.05
-  origin: [-11.606540, -26.520793, 0.0]
+  resolution: 0.050000
+  origin: [-17, -17, 0]
   maps: maps/maps.npz
   starting_grid: maps/starts.npz
   checkpoints: 5
