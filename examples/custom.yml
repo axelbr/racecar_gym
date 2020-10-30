@@ -1,5 +1,5 @@
 world:
-  name: berlin
+  name: austria
   start_positions: index
 agents:
   - id: A
@@ -8,4 +8,4 @@ agents:
       sensors: [lidar, gps, imu, tacho]
     task:
       task_name: rank_discounted
-      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
+      params: {laps: 1, time_limit: 120.0, terminate_on_collision: False}
