@@ -97,8 +97,6 @@ class World(world.World):
             py = position[1]
             x, y = to_meter(px, py)
             next_position = to_meter(next_position[0], next_position[1])
-
-
             diff = np.array(next_position) - np.array([x, y])
             angle = np.arctan2(diff[1], diff[0])
             #angle = np.random.normal(loc=angle, scale=0.15)
