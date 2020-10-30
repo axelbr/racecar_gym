@@ -43,6 +43,8 @@ init = time.time()
 last_progress = -1
 progress_mult = 100
 ret = 0
+reward_list = []
+progress_list = []
 while not done:
     agent_action = agent.action(obs)
     #agent_action = env.action_space.sample()
@@ -50,16 +52,19 @@ while not done:
     #print(random_action)
     #print()
     obs, rewards, done, states = env.step(agent_action)
-    if last_progress < 0:
-        last_progress = states["progress"]
-    delta_progress = states["progress"] - last_progress
-    r = 0
-    if delta_progress > 0:
-        last_progress = states["progress"]
-        r = progress_mult * delta_progress
-    print(f'Time: {states["time"]}, Lap: {states["lap"]}, Progress: {states["progress"]}, Reward: {r}')
+    print(f'Time: {states["time"]}, Lap: {states["lap"]}, Progress: {states["progress"]}, Reward: {rewards}')
     sleep(0.0005)
-    ret += r
+    reward_list.append(rewards)
+    progress_list.append(states["progress"])
 print("[Info] Track completed in {:.3f} seconds".format(time.time() - init))
-print("[Info] Return Value: {:.3f}".format(ret))
+print("[Info] Return Value: {:.3f}".format(sum(reward_list)))
+
+import matplotlib.pyplot as plt
+plt.subplot(2, 1, 1)
+plt.plot(range(len(reward_list)), reward_list, label="reward")
+plt.legend()
+plt.subplot(2, 1, 2)
+plt.plot(range(len(progress_list)), progress_list, label="progress")
+plt.legend()
+plt.show()
 env.close()

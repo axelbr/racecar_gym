@@ -8,4 +8,4 @@ agents:
       sensors: [lidar, gps, imu, tacho]
     task:
       task_name: progress_based
-      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
+      params: {laps: 2, time_limit: 180.0, terminate_on_collision: True}

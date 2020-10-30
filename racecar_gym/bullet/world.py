@@ -160,5 +160,5 @@ class World(world.World):
 
         else:
             self._state[agent.id]['checkpoint'] = checkpoint
-            self._state[agent.id]['lap'] = 0
+            self._state[agent.id]['lap'] = 1
 

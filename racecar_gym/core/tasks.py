@@ -132,7 +132,7 @@ class SimpleProgressTask(Task):
 
     def __init__(self, time_limit: float, laps: int, terminate_on_collision: bool):
         self._last_progress = -1
-        self._current_lap = 0
+        self._current_lap = 1
         self._laps = laps
         self._time_limit = time_limit
         self._terminate_on_collision = terminate_on_collision
@@ -166,7 +166,7 @@ class SimpleProgressTask(Task):
         return state[agent_id]['lap'] > self._laps or self._time_limit < state[agent_id]['time']
 
     def reset(self):
-        self._current_lap = 0
+        self._current_lap = 1
         self._last_progress = -1
 
 class ProgressTaskWtPenalty(Task):
