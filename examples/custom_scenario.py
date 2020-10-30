@@ -3,7 +3,7 @@ from racecar_gym import MultiAgentScenario
 from racecar_gym.envs.multi_agent_race import MultiAgentRaceEnv
 
 scenario = MultiAgentScenario.from_spec(
-                 path='custom.yml',
+                 path='scenarios/austria.yml',
                  rendering=True
              )
 env = MultiAgentRaceEnv(scenario=scenario)
