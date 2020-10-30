@@ -145,7 +145,7 @@ class SimpleProgressTask(Task):
         progress = state[agent_id]['progress']
         if self._last_progress < 0:             # first call
             self._last_progress = progress
-        reward = 0.0
+        reward = -0.001     # small penalty for each frame
         if not state[agent_id]['collision']:
             if progress > self._last_progress:                  # regular proceeding
                 reward += progress - self._last_progress
