@@ -8,6 +8,12 @@ from racecar_gym import SingleAgentScenario
 from racecar_gym.envs.single_agent_race import SingleAgentRaceEnv
 import numpy as np
 
+from racecar_gym.core import Task, register_task
+from racecar_gym.core.tasks import RewardRange
+from racecar_gym.rewards.maximize_progress_reward import MaximizeProgressTask
+
+register_task(name='maximize_progress', task=MaximizeProgressTask)
+
 class SingleWrapper(gym.Env):
     def __init__(self, env):
         self.env = env
@@ -45,6 +51,7 @@ progress_mult = 100
 ret = 0
 reward_list = []
 progress_list = []
+progress_plus_list = []
 while not done:
     agent_action = agent.action(obs)
     #agent_action = env.action_space.sample()
@@ -56,6 +63,7 @@ while not done:
     sleep(0.0005)
     reward_list.append(rewards)
     progress_list.append(states["progress"])
+    progress_plus_list.append(states["lap"] + states["progress"])
 print("[Info] Track completed in {:.3f} seconds".format(time.time() - init))
 print("[Info] Return Value: {:.3f}".format(sum(reward_list)))
 
@@ -65,6 +73,7 @@ plt.plot(range(len(reward_list)), reward_list, label="reward")
 plt.legend()
 plt.subplot(2, 1, 2)
 plt.plot(range(len(progress_list)), progress_list, label="progress")
+plt.plot(range(len(progress_list)), progress_plus_list, label="progress +  lap")
 plt.legend()
 plt.show()
 env.close()
