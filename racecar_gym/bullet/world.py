@@ -154,8 +154,10 @@ class World(world.World):
             last_checkpoint = self._state[agent.id]['checkpoint']
             if last_checkpoint + 1 == checkpoint:
                 self._state[agent.id]['checkpoint'] = checkpoint
-                if progress == 1.0:
-                    self._state[agent.id]['lap'] += 1
+            elif last_checkpoint == self._config.map_config.checkpoints and checkpoint == 0:
+                self._state[agent.id]['lap'] += 1
+                self._state[agent.id]['checkpoint'] = checkpoint
+
         else:
             self._state[agent.id]['checkpoint'] = checkpoint
             self._state[agent.id]['lap'] = 0

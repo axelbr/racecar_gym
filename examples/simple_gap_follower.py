@@ -29,7 +29,7 @@ class SingleWrapper(gym.Env):
         pass
 
 scenario = SingleAgentScenario.from_spec(
-                 path='custom_single_car.yml',
+                 path='custom.yml',
                  rendering=True
              )
 env = SingleAgentRaceEnv(scenario=scenario)
@@ -47,6 +47,7 @@ while not done:
     #print(random_action)
     #print()
     obs, rewards, done, states = env.step(agent_action)
-    sleep(0.0001)
+    print(f'Lap: {states["lap"]}, Progress: {states["progress"]}, Reward: {rewards}')
+    sleep(0.0005)
 print("[Info] Track completed in {:.3f} seconds".format(time.time() - init))
 env.close()

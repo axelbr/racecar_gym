@@ -22,7 +22,7 @@ class SingleAgentRaceEnv(gym.Env):
         done = self._scenario.agent.done(state)
         reward = self._scenario.agent.reward(state, action)
         self._time = self._scenario.world.update()
-        return observation, reward, done, state
+        return observation, reward, done, state[self._scenario.agent.id]
 
     def reset(self):
         if not self._initialized:
@@ -30,6 +30,6 @@ class SingleAgentRaceEnv(gym.Env):
             self._initialized = True
         else:
             self._scenario.world.reset()
-        obs = self._scenario.agent.reset(self._scenario.world.get_starting_position(0))
+        obs = self._scenario.agent.reset(self._scenario.world.get_starting_position(self._scenario.agent))
         obs['time'] = 0
         return obs
