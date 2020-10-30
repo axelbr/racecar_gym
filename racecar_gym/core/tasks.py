@@ -131,7 +131,7 @@ class RankDiscountedProgressTask(Task):
 class SimpleProgressTask(Task):
 
     def __init__(self, time_limit: float, laps: int, terminate_on_collision: bool):
-        self._last_progress = 0
+        self._last_progress = -1
         self._current_lap = 0
         self._laps = laps
         self._time_limit = time_limit
@@ -142,11 +142,17 @@ class SimpleProgressTask(Task):
         pass
 
     def reward(self, agent_id, state, action) -> float:
+        progress = state[agent_id]['progress']
+        if self._last_progress < 0:             # first call
+            self._last_progress = progress
         reward = 0.0
         if not state[agent_id]['collision']:
-            progress = state[agent_id]['progress']
-            if progress > self._last_progress:
+            if progress > self._last_progress:                  # regular proceeding
                 reward += progress - self._last_progress
+                self._last_progress = progress
+            elif state[agent_id]['lap'] > self._current_lap:    # crossing the starting line
+                reward += progress + (1 - self._last_progress)
+                self._current_lap = state[agent_id]['lap']
                 self._last_progress = progress
         else:
             reward -= 1.0
@@ -161,7 +167,7 @@ class SimpleProgressTask(Task):
 
     def reset(self):
         self._current_lap = 0
-        self._last_progress = 0
+        self._last_progress = -1
 
 class ProgressTaskWtPenalty(Task):
 
