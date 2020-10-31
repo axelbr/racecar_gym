@@ -229,4 +229,5 @@ def task_from_spec(spec: TaskSpec) -> Task:
 
 
 def register_task(name: str, task: Task):
-    tasks[name] = task
+    if name not in tasks.keys():
+        tasks[name] = task
