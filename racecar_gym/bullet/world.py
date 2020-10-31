@@ -91,7 +91,13 @@ class World(world.World):
                 self._progress_map > direction_progress_min,
                 self._progress_map <= direction_progress_max,
             ))
-            next_position = random.choice(direction_area)
+            if direction_area.shape[0]>0:
+                next_position = random.choice(direction_area)
+            else:
+                # TODO: solve this bug, for now, simply return starting grid position
+                position = list(map(lambda agent: agent.id, self._agents)).index(agent.id)
+                pose = self._starting_grid[position]
+                return tuple(pose[:3]), tuple(pose[3:])
             px, py = position[0], position[1]
             npx, npy = next_position[0], next_position[1]
             diff = np.array(to_meter(npx, npy)) - np.array(to_meter(px, py))
