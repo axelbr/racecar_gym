@@ -85,6 +85,9 @@ def plot_reward(reward_list, progress_list=None, progress_plus_list=None):
     plt.show()
 
 
-for ep in range(50):
-    run(env, agent)
+for ep in range(5):
+    rewards, progresses, prog_plus = run(env, agent)
+    if len(rewards) > 10:
+        pass
+    plot_reward(rewards, progresses, prog_plus)
 env.close()

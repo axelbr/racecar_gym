@@ -80,16 +80,16 @@ class World(world.World):
             pose = self._starting_grid[position]
             return tuple(pose[:3]), tuple(pose[3:])
         if self._config.start_positions == 'random':
-            center_corridor = np.argwhere(self._distance_to_obstacle > 0.4)
+            center_corridor = np.argwhere(self._distance_to_obstacle > 0.5)
             position = random.choice(center_corridor)
 
             progress = self._progress_map[position[0], position[1]]
             delta_progress = 0.025
-            direction_progress_min, direction_progress_max = progress + delta_progress, progress + 2 * delta_progress
+            direction_progress_min = (progress + delta_progress) % 1
+            direction_progress_max = (progress + 2 * delta_progress) % 1
             direction_area = np.argwhere(np.logical_and(
                 self._progress_map > direction_progress_min,
                 self._progress_map <= direction_progress_max,
-                self._distance_to_obstacle > 0.4,
             ))
             next_position = random.choice(direction_area)
             px, py = position[0], position[1]
