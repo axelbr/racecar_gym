@@ -8,4 +8,5 @@ agents:
       sensors: [lidar, gps, imu, tacho]
     task:
       task_name: maximize_progress
-      params: {laps: 2, time_limit: 180.0, terminate_on_collision: True}
+      params: {laps: 2, time_limit: 180.0, terminate_on_collision: True,
+               delta_progress: 0.01, collision_reward: -100, frame_reward: -0.1, progress_reward: 10}
