@@ -84,22 +84,20 @@ class World(world.World):
             position = random.choice(center_corridor)
 
             progress = self._progress_map[position[0], position[1]]
-            checkpoints = 1.0 / float(self._config.map_config.checkpoints)
-            checkpoint = int(progress / checkpoints)
-            next_checkpoint = (checkpoint + 1) % self._config.map_config.checkpoints
-            progress_area = next_checkpoint * checkpoints
-            checkpoint_area = np.argwhere(np.logical_and(
-                self._progress_map > progress_area,
-                self._progress_map <= progress_area + checkpoints
+            delta_progress = 0.025
+            direction_progress_min, direction_progress_max = progress + delta_progress, progress + 2 * delta_progress
+            direction_area = np.argwhere(np.logical_and(
+                self._progress_map > direction_progress_min,
+                self._progress_map <= direction_progress_max,
+                self._distance_to_obstacle > 0.4,
             ))
-            next_position = random.choice(checkpoint_area)
-            px = position[0]
-            py = position[1]
-            x, y = to_meter(px, py)
-            next_position = to_meter(next_position[0], next_position[1])
-            diff = np.array(next_position) - np.array([x, y])
+            next_position = random.choice(direction_area)
+            px, py = position[0], position[1]
+            npx, npy = next_position[0], next_position[1]
+            diff = np.array(to_meter(npx, npy)) - np.array(to_meter(px, py))
             angle = np.arctan2(diff[1], diff[0])
             #angle = np.random.normal(loc=angle, scale=0.15)
+            x, y = to_meter(px, py)
             return (x, y, 0.05), (0, 0, angle)
         raise NotImplementedError(self._config.start_positions)
 

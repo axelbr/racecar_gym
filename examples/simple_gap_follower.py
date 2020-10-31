@@ -11,6 +11,7 @@ import numpy as np
 from racecar_gym.core import Task, register_task
 from racecar_gym.core.tasks import RewardRange
 from racecar_gym.rewards.maximize_progress_reward import MaximizeProgressTask
+import matplotlib.pyplot as plt
 
 register_task(name='maximize_progress', task=MaximizeProgressTask)
 
@@ -42,38 +43,48 @@ env = SingleAgentRaceEnv(scenario=scenario)
 env = SingleWrapper(env)
 agent = GapFollower()
 
-done = False
-obs = env.reset()
+def run(env, agent):
+    done = False
+    obs = env.reset()
 
-init = time.time()
-last_progress = -1
-progress_mult = 100
-ret = 0
-reward_list = []
-progress_list = []
-progress_plus_list = []
-while not done:
-    agent_action = agent.action(obs)
-    #agent_action = env.action_space.sample()
-    #print(agent_action)
-    #print(random_action)
-    #print()
-    obs, rewards, done, states = env.step(agent_action)
-    print(f'Time: {states["time"]}, Lap: {states["lap"]}, Progress: {states["progress"]}, Reward: {rewards}')
-    sleep(0.0005)
-    reward_list.append(rewards)
-    progress_list.append(states["progress"])
-    progress_plus_list.append(states["lap"] + states["progress"])
-print("[Info] Track completed in {:.3f} seconds".format(time.time() - init))
-print("[Info] Return Value: {:.3f}".format(sum(reward_list)))
+    init = time.time()
+    last_progress = -1
+    progress_mult = 100
+    ret = 0
+    reward_list = []
+    progress_list = []
+    progress_plus_list = []
+    while not done:
+        agent_action = agent.action(obs)
+        #agent_action = env.action_space.sample()
+        #print(agent_action)
+        #print(random_action)
+        #print()
+        obs, rewards, done, states = env.step(agent_action)
+        print(f'Time: {states["time"]}, Lap: {states["lap"]}, Progress: {states["progress"]}, Reward: {rewards}')
+        sleep(0.0005)
+        reward_list.append(rewards)
+        progress_list.append(states["progress"])
+        progress_plus_list.append(states["lap"] + states["progress"])
+    print("[Info] Track completed in {:.3f} seconds".format(time.time() - init))
+    print("[Info] Return Value: {:.3f}".format(sum(reward_list)))
+    return reward_list, progress_list, progress_plus_list
 
-import matplotlib.pyplot as plt
-plt.subplot(2, 1, 1)
-plt.plot(range(len(reward_list)), reward_list, label="reward")
-plt.legend()
-plt.subplot(2, 1, 2)
-plt.plot(range(len(progress_list)), progress_list, label="progress")
-plt.plot(range(len(progress_list)), progress_plus_list, label="progress +  lap")
-plt.legend()
-plt.show()
+def plot_reward(reward_list, progress_list=None, progress_plus_list=None):
+    if progress_list or progress_plus_list:
+        plt.subplot(2, 1, 1)
+    plt.plot(range(len(reward_list)), reward_list, label="reward")
+    plt.legend()
+    if progress_list or progress_plus_list:
+        plt.subplot(2, 1, 2)
+        if progress_list:
+            plt.plot(range(len(progress_list)), progress_list, label="progress")
+        else:
+            plt.plot(range(len(progress_list)), progress_plus_list, label="progress +  lap")
+        plt.legend()
+    plt.show()
+
+
+for ep in range(50):
+    run(env, agent)
 env.close()
