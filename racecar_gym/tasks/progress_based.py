@@ -17,7 +17,8 @@ class MaximizeContinuousProgressTask(Task):
     if self._last_progress is None:
       self._last_progress = progress
     delta = progress - self._last_progress
-
+    if delta > .5:  # the agent is crossing the starting line in the wrong direction
+      delta = -delta
     reward = self._frame_reward
     collision = agent_state['wall_collision'] or len(agent_state['opponent_collisions']) > 0
     if collision:
