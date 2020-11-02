@@ -124,13 +124,18 @@ class World(world.World):
     def _update_race_info(self, agent):
         contact_points = set([c[2] for c in p.getContactPoints(agent.vehicle_id)])
 
-        collision = False
+        collision_with_wall = False
+        opponent_collisions = []
+        opponents = dict([(a.vehicle_id, a.id) for a in self._agents])
         for contact in contact_points:
             if self._objects['walls'] == contact:
-                collision = True
-            elif contact != self._objects['floor']:
-                collision = True
-        self._state[agent.id]['collision'] = collision
+                collision_with_wall = True
+            elif contact in opponents:
+                opponent_collisions.append(opponents[contact])
+
+
+        self._state[agent.id]['wall_collision'] = collision_with_wall
+        self._state[agent.id]['opponent_collisions'] = opponent_collisions
 
         position, orientation = p.getBasePositionAndOrientation(agent.vehicle_id)
         orientation = p.getEulerFromQuaternion(orientation)
