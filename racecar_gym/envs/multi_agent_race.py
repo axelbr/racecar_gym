@@ -26,6 +26,7 @@ class MultiAgentRaceEnv(gym.Env):
         state = self._scenario.world.state()
         for id, agent in self._scenario.agents.items():
             observation, info = agent.step(action=action[id])
+            state[id]['observations'] = observation
             done = agent.done(state)
             reward = agent.reward(state, action[id])
             observation['time'] = state[id]['time']

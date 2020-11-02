@@ -108,7 +108,7 @@ class RankDiscountedProgressTask(Task):
         rank = ranked.index(agent_id) + 1
 
         reward = 0.0
-        if not state[agent_id]['collision']:
+        if not state[agent_id]['wall_collision']:
             reward += 1.0 / float(rank)
         else:
             reward -= 5.0
@@ -117,7 +117,7 @@ class RankDiscountedProgressTask(Task):
 
 
     def done(self, agent_id, state) -> bool:
-        if self._terminate_on_collision and state[agent_id]['collision']:
+        if self._terminate_on_collision and state[agent_id]['wall_collision']:
             return True
 
         return state[agent_id]['lap'] > self._laps or self._time_limit < state[agent_id]['time']
