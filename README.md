@@ -79,21 +79,29 @@ Currently, the state looks like this:
 
 |Key|Type|Description|
 |---|---|---|
-|collision|`bool`|Whether the vehicle is in a collision with another agent or the wall.|
-|section|`int`|Current section passed by the vehicle.|
-|section_time|`float`|Simulation time when the vehicle entered the current section.|
-|lap|`int`|Current lap in which the vehicle is.|
+|wall_collision|`bool`|True if the vehicle collided with the wall.|
+|opponent_collisions|`List[str]`|List of opponent id's which are involved in a collision with the agent.|
+|pose|`NDArrray[6]`|Ground truth pose of the vehicle (x, y, z, roll, pitch, yaw).|
+|progress|`float`|Current progress in this lap. Interval: [0, 1]|
 |time|`float`|Simulation time.|
+|checkpoint|`int`|Tracks are subdivided into checkpoints to make sure agents are racing in clockwise direction. Starts at 0.|
+|lap|`int`|Current lap.|
+|rank|`float`|Current rank of the agent, based on lap and progress.|
 
 ## Scenes
 
-Currently two maps are available and a total of four scenarios are specified. Each scenario is also available with a GUI
+Currently four maps are available. Each scenario is also available with a GUI
 server. To launch the rendering window, you can append '*_Gui*' to the environment name (e.g. *MultiAgentTrack1-v0* vs *MultiAgentTrack1_Gui-v0*).
 
 
 | Image | Name |
 | --- | --- |
-|![austria](docs/austria.png)|`MultiAgentAustria-v0`|
-|![track1](docs/track1.png)|`MultiAgentTrack1-v0`|
+|![austria](docs/tracks/austria.png)|`MultiAgentAustria-v0`|
+|![berlin](docs/tracks/berlin.png)|`MultiAgentBerlin-v0`|
+|![montreal](docs/tracks/montreal.png)|`MultiAgentMontreal-v0`|
+|![torino](docs/tracks/torino.png)|`MultiAgentTorino-v0`|
+
+Scenarios can also be customized. Have a look at the examples.
+
 ## Notes
 Please note that this is work in progress, and interfaces might change. Also more detailed documentation and additional scenarios will follow.

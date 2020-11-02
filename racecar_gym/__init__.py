@@ -1,18 +1,38 @@
 import os
+
 from gym.envs.registration import register
+
 from .envs import MultiAgentRaceEnv, SingleAgentRaceEnv, MultiAgentScenario, SingleAgentScenario
 from .tasks import get_task, register_task, Task
 
 base_path = os.path.dirname(__file__)
 
+register(id='MultiAgentAustria_Gui-v0',
+    entry_point='racecar_gym.envs:MultiAgentRaceEnv',
+    kwargs={
+        'scenario': MultiAgentScenario.from_spec(
+            path=f'{base_path}/../scenarios/austria.yml',
+            rendering=True
+        )
+    })
+
+register(id='MultiAgentAustria-v0',
+    entry_point='racecar_gym.envs:MultiAgentRaceEnv',
+    kwargs={
+        'scenario': MultiAgentScenario.from_spec(
+            path=f'{base_path}/../scenarios/austria.yml',
+            rendering=False
+        )
+    })
+
 register(id='MultiAgentBerlin_Gui-v0',
-         entry_point='racecar_gym.envs:MultiAgentRaceEnv',
-         kwargs={
-             'scenario': MultiAgentScenario.from_spec(
-                 path=f'{base_path}/../scenarios/berlin.yml',
-                 rendering=True
-             )
-         })
+    entry_point='racecar_gym.envs:MultiAgentRaceEnv',
+    kwargs={
+        'scenario': MultiAgentScenario.from_spec(
+            path=f'{base_path}/../scenarios/berlin.yml',
+            rendering=True
+        )
+    })
 
 register(id='MultiAgentBerlin-v0',
          entry_point='racecar_gym.envs:MultiAgentRaceEnv',
