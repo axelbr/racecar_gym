@@ -1,13 +1,12 @@
 from abc import ABC
 from dataclasses import dataclass
-from typing import Any, TypeVar
+from typing import Any, TypeVar, Tuple, Union
 
 import gym
 import numpy as np
 import pybullet as p
 from nptyping import NDArray
 
-from racecar_gym.bullet.world import World
 from racecar_gym.core import Sensor
 
 T = TypeVar('T')
@@ -60,6 +59,7 @@ class FixedTimestepSensor(BulletSensor[T], ABC):
 class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
     @dataclass
     class Config:
+        accuracy: float
         rays: int
         range: float
         angle_start: float
@@ -111,38 +111,44 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
 
     def observe(self) -> NDArray[(Any,), np.float]:
         results = p.rayTestBatch(self._from, self._to, 0,
-                                 parentObjectUniqueId=self.body_id,
-                                 parentLinkIndex=self.joint_index)
-        scan = np.full(self._rays, self._range)
+            parentObjectUniqueId=self.body_id,
+            parentLinkIndex=self.joint_index)
+        hit_fractions = np.array(results)[:, 2]
+        ranges = self._config.range * hit_fractions
+        noise = np.random.uniform(1.0 - self._config.accuracy, 1.0 + self._config.accuracy, size=ranges.shape)
+        scan = ranges * noise
 
-        for i in range(self._rays):
-            hit_fraction = results[i][2]
-            scan[i] = self._range * hit_fraction
-
-            if self._config.debug:
+        if self._config.debug:
+            angle = self._config.angle_start + np.pi / 2.0
+            increment = self._config.angle / self._config.rays
+            for i in range(self._rays):
                 if len(self._ray_ids) < self._rays:
                     ray_id = p.addUserDebugLine(self._from[i], self._to[i], self._miss_color,
-                                                parentObjectUniqueId=self.body_id,
-                                                parentLinkIndex=self.joint_index)
+                        parentObjectUniqueId=self.body_id,
+                        parentLinkIndex=self.joint_index)
                     self._ray_ids.append(ray_id)
 
-                if (hit_fraction == 1.):
-                    p.addUserDebugLine(self._from[i], self._to[i], self._miss_color,
-                                       replaceItemUniqueId=self._ray_ids[i],
-                                       parentObjectUniqueId=self.body_id,
-                                       parentLinkIndex=self.joint_index)
+                if (hit_fractions[i] == 1.):
+                    color = self._miss_color
                 else:
-                    localHitTo = [
-                        self._from[i][0] + hit_fraction * (self._to[i][0] - self._from[i][0]),
-                        self._from[i][1] + hit_fraction * (self._to[i][1] - self._from[i][1]),
-                        self._from[i][2] + hit_fraction * (self._to[i][2] - self._from[i][2])]
+                    color = self._hit_color
 
-                    p.addUserDebugLine(self._from[i],
-                                       localHitTo,
-                                       self._hit_color,
-                                       replaceItemUniqueId=self._ray_ids[i],
-                                       parentObjectUniqueId=self.body_id,
-                                       parentLinkIndex=self.joint_index)
+                localHitTo = [
+                    self._from[i][0] + scan[i] * np.sin(angle),
+                    self._from[i][1] + scan[i] * np.cos(angle),
+                    self._from[i][2]
+                ]
+
+                p.addUserDebugLine(
+                    self._from[i],
+                    localHitTo,
+                    color,
+                    replaceItemUniqueId=self._ray_ids[i],
+                    parentObjectUniqueId=self.body_id,
+                    parentLinkIndex=self.joint_index
+                )
+
+                angle += increment
         return scan
 
 
@@ -195,7 +201,7 @@ class RGBCamera(BulletSensor[NDArray[(Any, Any, 3), np.int]]):
         return rgb_array
 
 
-class IMU(BulletSensor[NDArray[(6,), np.float]]):
+class AccelerationSensor(BulletSensor[NDArray[(6,), np.float]]):
     @dataclass
     class Config:
         max_acceleration: float
@@ -230,9 +236,10 @@ class IMU(BulletSensor[NDArray[(6,), np.float]]):
         return np.append(linear_acceleration, velocity[3:])
 
 
-class Tachometer(BulletSensor[NDArray[(6,), np.float]]):
+class VelocitySensor(BulletSensor[NDArray[(6,), np.float]]):
     @dataclass
     class Config:
+        gaussian_noise: float
         max_linear_velocity: float
         max_angular_velocity: float
         debug: bool = True
@@ -248,7 +255,10 @@ class Tachometer(BulletSensor[NDArray[(6,), np.float]]):
         rot = np.reshape(rot, (-1, 3)).transpose()
         v_linear = rot.dot(v_linear)
         v_rotation = rot.dot(v_rotation)
-        return np.append(v_linear, v_rotation)
+        velocity = np.append(v_linear, v_rotation)
+        scale = np.abs(velocity * self._config.gaussian_noise + self._config.gaussian_noise)
+        velocity = np.random.normal(loc=velocity, scale=scale)
+        return velocity
 
     def space(self) -> gym.Space:
         high = np.array(3 * [self._config.max_linear_velocity] + 3 * [self._config.max_angular_velocity])
@@ -262,12 +272,11 @@ class Tachometer(BulletSensor[NDArray[(6,), np.float]]):
         return velocity
 
 
-class GPS(BulletSensor[NDArray[(6,), np.float]]):
+class PoseSensor(BulletSensor[NDArray[(6,), np.float]]):
     @dataclass
     class Config:
-        max_x: float
-        max_y: float
-        max_z: float
+        bounds: Tuple[float, float, float]
+        gaussian_noise: Union[Tuple[float, float, float], float]
         debug: bool = True
 
     def __init__(self, name: str, type: str, config: Config):
@@ -275,7 +284,7 @@ class GPS(BulletSensor[NDArray[(6,), np.float]]):
         self._config = config
 
     def space(self) -> gym.Space:
-        high = np.array([self._config.max_x, self._config.max_y, self._config.max_z] + 3 * [np.pi])
+        high = np.array(self._config.bounds + 3 * [np.pi])
         low = -high
         return gym.spaces.Box(low=low, high=high)
 
@@ -283,6 +292,7 @@ class GPS(BulletSensor[NDArray[(6,), np.float]]):
         position, orientation = p.getBasePositionAndOrientation(self.body_id)
         orientation = p.getEulerFromQuaternion(orientation)
         pose = np.append(position, orientation)
+        pose = np.random.normal(loc=pose, scale=self._config.gaussian_noise)
         if self._config.debug:
             print(f'[DEBUG][gps] pose: {[round(v, 2) for v in pose]}')
         return pose

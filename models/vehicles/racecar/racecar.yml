@@ -14,27 +14,27 @@ actuators:
       max_force: 0.5
 
 sensors:
-  - type: gps
-    name: gps
+  - type: pose
+    name: pose
     frequency: 100
     params:
-      max_x: 100.0
-      max_y: 100.0
-      max_z: 3.0
+      gaussian_noise: 0.01
+      bounds: [ 100.0, 100.0, 3.0 ]
       debug: False
 
-  - type: imu
-    name: imu
+  - type: acceleration
+    name: acceleration
     frequency: 100
     params:
       max_acceleration: 30.0
       max_angular_velocity: 6.0
       debug: False
 
-  - type: tacho
-    name: tacho
+  - type: velocity
+    name: velocity
     frequency: 100
     params:
+      gaussian_noise: 0.01
       max_linear_velocity: 14.0
       max_angular_velocity: 6.0
       debug: False
@@ -43,12 +43,13 @@ sensors:
     name: lidar
     frequency: 25
     params:
+      accuracy: 0.03 # maximum deviation from true scan range (percentage)
       rays: 1080
       range: 5.0
       min_range: 0.25
       angle_start: -2.36
       angle: 4.71
-      debug: False
+      debug: True
 
   - type: rgb_camera
     name: rgb_camera
