@@ -49,9 +49,7 @@ class RankDiscountedMaximizeProgressTask(MaximizeProgressTask):
                          progress_reward)
 
     def reward(self, agent_id, state, action) -> float:
-        agents = [(agent, states['lap'], states['progress']) for agent, states in state.items()]
-        ranked = [item[0] for item in sorted(agents, key=lambda item: (item[1], item[2]), reverse=True)]
-        rank = ranked.index(agent_id) + 1
+        rank = state[agent_id]['rank']
         reward = super().reward(agent_id, state, action)
         reward = reward / float(rank)
         return reward

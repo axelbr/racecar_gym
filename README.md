@@ -31,10 +31,10 @@ agents:
   - id: A
     vehicle:
       name: racecar
-      sensors: [lidar, gps, imu, tacho]
+      sensors: [lidar, pose, velocity, acceleration]
     task:
-      task_name: rank_discounted
-      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
+      task_name: maximize_progress
+      params: {laps: 1, time_limit: 120.0, terminate_on_collision: False}
 ```
 
 This example specifies a scenario in the [Austria](models/scenes/austria/austria.yml) map. Also, you can specify the way 
@@ -54,10 +54,10 @@ GPS, IMU, Tachometer, LiDAR and RGB Camera. Further, the observation space also 
 
 |Key|Space|Defaults|Description|
 |---|---|---|---|
-|gps|`Box(6,)`| |Holds the position (`x`, `y`, `z`) and the orientation (`roll`, `pitch`, `yaw`) in that order.|
-|imu|`Box(6,)`| |Holds the `x`, `y` and `z` components of the translational and rotational acceleration.|
-|tacho|`Box(6,)`| |Holds the `x`, `y` and `z` components of the translational and rotational velocity.|
-|lidar|`Box(<scans>,)`|`scans: 100`|Lidar range scans.|
+|pose|`Box(6,)`| |Holds the position (`x`, `y`, `z`) and the orientation (`roll`, `pitch`, `yaw`) in that order.|
+|velocity|`Box(6,)`| |Holds the `x`, `y` and `z` components of the translational and rotational velocity.|
+|acceleration|`Box(6,)`| |Holds the `x`, `y` and `z` components of the translational and rotational acceleration.|
+|lidar|`Box(<scans>,)`|`scans: 1080`|Lidar range scans.|
 |rgb_camera|`Box(<height>, <width>, 3)`|`height: 240, width: 320`|RGB image of the front camera.|
 |time|`Box(1,)`| |Current simulation time.|
 

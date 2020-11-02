@@ -49,7 +49,7 @@ sensors:
       min_range: 0.25
       angle_start: -2.36
       angle: 4.71
-      debug: True
+      debug: False
 
   - type: rgb_camera
     name: rgb_camera

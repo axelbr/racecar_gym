@@ -114,6 +114,9 @@ class World(world.World):
     def state(self) -> Dict[str, Any]:
         for agent in self._agents:
             self._update_race_info(agent=agent)
+
+        self._update_ranks()
+
         return self._state
 
     def space(self) -> gym.Space:
@@ -169,3 +172,17 @@ class World(world.World):
             self._state[agent.id]['checkpoint'] = checkpoint
             self._state[agent.id]['lap'] = 1
 
+
+    def _update_ranks(self):
+
+        agents = [
+            (agent_id, self._state[agent_id]['lap'], self._state[agent_id]['progress'])
+            for agent_id, states
+            in self._state.items()
+        ]
+
+        ranked = [item[0] for item in sorted(agents, key=lambda item: (item[1], item[2]), reverse=True)]
+
+        for agent in self._agents:
+            rank = ranked.index(agent.id) + 1
+            self._state[agent.id]['rank'] = rank
