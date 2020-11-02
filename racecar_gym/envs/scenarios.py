@@ -2,10 +2,13 @@ from dataclasses import dataclass
 from typing import Dict
 
 from racecar_gym.bullet import load_world, load_vehicle
-from racecar_gym.core import World
-from racecar_gym.core.agent import Agent
-from racecar_gym.core.specs import ScenarioSpec
-from racecar_gym.core.tasks import task_from_spec
+from racecar_gym.tasks import Task, get_task
+from racecar_gym.core import World, Agent
+from .specs import ScenarioSpec, TaskSpec
+
+def task_from_spec(spec: TaskSpec) -> Task:
+    task = get_task(spec.task_name)
+    return task(**spec.params)
 
 
 @dataclass

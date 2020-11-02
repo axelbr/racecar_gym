@@ -10,7 +10,7 @@ import numpy as np
 
 from racecar_gym.core import Task, register_task
 from racecar_gym.core.tasks import RewardRange
-from racecar_gym.rewards.maximize_progress_reward import MaximizeProgressTask
+from racecar_gym.tasks.maximize_progress_reward import MaximizeProgressTask
 import matplotlib.pyplot as plt
 
 register_task(name='maximize_progress', task=MaximizeProgressTask)

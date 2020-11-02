@@ -3,7 +3,8 @@ from typing import List, Tuple, Dict
 import gym
 from multiprocessing import Pipe, Process
 from multiprocessing.connection import Connection
-from racecar_gym import MultiAgentScenario, MultiAgentRaceEnv
+from .scenarios import MultiAgentScenario
+from .multi_agent_race import MultiAgentRaceEnv
 
 
 class VectorizedMultiAgentRaceEnv(gym.Env):

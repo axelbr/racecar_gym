@@ -3,8 +3,8 @@ from typing import Any
 import gym
 
 from .definitions import Pose
-from .tasks import Task
 from .vehicles import Vehicle
+from racecar_gym.tasks import Task
 
 
 class Agent:

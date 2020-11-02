@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from typing import List, Dict, Any
-
 from yamldataclassconfig.config import YamlDataClassConfig
 
 

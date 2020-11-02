@@ -8,7 +8,7 @@ from racecar_gym.bullet.sensors import Lidar, GPS, IMU, Tachometer, RGBCamera, B
 from racecar_gym.bullet.vehicle import RaceCar
 from .world import World
 from ..core.agent import Agent
-from ..core.specs import WorldSpec, VehicleSpec
+from racecar_gym.envs.specs import WorldSpec, VehicleSpec
 
 base_path = os.path.dirname(os.path.abspath(__file__))
 

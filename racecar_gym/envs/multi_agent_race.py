@@ -1,9 +1,7 @@
 import math
 from typing import Dict
-
 import gym
-
-from racecar_gym.envs.scenarios import MultiAgentScenario
+from .scenarios import MultiAgentScenario
 
 
 class MultiAgentRaceEnv(gym.Env):
