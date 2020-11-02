@@ -3,7 +3,7 @@ from .task import Task
 
 class MaximizeContinuousProgressTask(Task):
   def __init__(self, laps: int, time_limit: float, terminate_on_collision: bool,
-               collision_reward: float = -100, frame_reward: float = -0.0):
+               collision_reward: float = -100, frame_reward: float = -0.1):
     self._laps = laps
     self._time_limit = time_limit
     self._terminate_on_collision = terminate_on_collision
