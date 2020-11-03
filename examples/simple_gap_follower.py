@@ -51,8 +51,8 @@ def run(env, agent):
     progress_list = []
     progress_plus_list = []
     while not done:
-        #agent_action = agent.action(obs)
-        agent_action = env.action_space.sample()
+        agent_action = agent.action(obs)
+        #agent_action = env.action_space.sample()
         #print(agent_action)
         #print(random_action)
         #print()
