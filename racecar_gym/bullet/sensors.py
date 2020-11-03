@@ -7,6 +7,7 @@ import numpy as np
 import pybullet as p
 from nptyping import NDArray
 
+from racecar_gym.bullet import util
 from racecar_gym.core import Sensor
 
 T = TypeVar('T')
@@ -113,43 +114,47 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
         results = p.rayTestBatch(self._from, self._to, 0,
             parentObjectUniqueId=self.body_id,
             parentLinkIndex=self.joint_index)
-        hit_fractions = np.array(results)[:, 2]
+        hit_fractions = np.array(results, dtype=np.object)[:, 2]
         ranges = self._config.range * hit_fractions
         noise = np.random.uniform(1.0 - self._config.accuracy, 1.0 + self._config.accuracy, size=ranges.shape)
         scan = ranges * noise
 
         if self._config.debug:
-            angle = self._config.angle_start + np.pi / 2.0
-            increment = self._config.angle / self._config.rays
-            for i in range(self._rays):
-                if len(self._ray_ids) < self._rays:
-                    ray_id = p.addUserDebugLine(self._from[i], self._to[i], self._miss_color,
-                        parentObjectUniqueId=self.body_id,
-                        parentLinkIndex=self.joint_index)
-                    self._ray_ids.append(ray_id)
+            self._display_rays(hit_fractions, scan)
 
-                if (hit_fractions[i] == 1.):
-                    color = self._miss_color
-                else:
-                    color = self._hit_color
-
-                localHitTo = [
-                    self._from[i][0] + scan[i] * np.sin(angle),
-                    self._from[i][1] + scan[i] * np.cos(angle),
-                    self._from[i][2]
-                ]
-
-                p.addUserDebugLine(
-                    self._from[i],
-                    localHitTo,
-                    color,
-                    replaceItemUniqueId=self._ray_ids[i],
-                    parentObjectUniqueId=self.body_id,
-                    parentLinkIndex=self.joint_index
-                )
-
-                angle += increment
         return scan
+
+    def _display_rays(self, hit_fractions, scan):
+        angle = self._config.angle_start + np.pi / 2.0
+        increment = self._config.angle / self._config.rays
+        for i in range(self._rays):
+            if len(self._ray_ids) < self._rays:
+                ray_id = p.addUserDebugLine(self._from[i], self._to[i], self._miss_color,
+                    parentObjectUniqueId=self.body_id,
+                    parentLinkIndex=self.joint_index)
+                self._ray_ids.append(ray_id)
+
+            if (hit_fractions[i] == 1.):
+                color = self._miss_color
+            else:
+                color = self._hit_color
+
+            localHitTo = [
+                self._from[i][0] + scan[i] * np.sin(angle),
+                self._from[i][1] + scan[i] * np.cos(angle),
+                self._from[i][2]
+            ]
+
+            p.addUserDebugLine(
+                self._from[i],
+                localHitTo,
+                color,
+                replaceItemUniqueId=self._ray_ids[i],
+                parentObjectUniqueId=self.body_id,
+                parentLinkIndex=self.joint_index
+            )
+
+            angle += increment
 
 
 class RGBCamera(BulletSensor[NDArray[(Any, Any, 3), np.int]]):
@@ -204,8 +209,10 @@ class RGBCamera(BulletSensor[NDArray[(Any, Any, 3), np.int]]):
 class AccelerationSensor(BulletSensor[NDArray[(6,), np.float]]):
     @dataclass
     class Config:
-        max_acceleration: float
-        max_angular_velocity: float
+        time_delta: float
+        gaussian_noise: float
+        linear_bounds: Tuple[float, float, float] = (np.inf, np.inf, np.inf)
+        angular_bounds: Tuple[float, float, float] = (np.inf, np.inf, np.inf)
         debug: bool = True
 
     def __init__(self, name: str, type: str, config: Config):
@@ -214,26 +221,19 @@ class AccelerationSensor(BulletSensor[NDArray[(6,), np.float]]):
         self._last_velocity = np.zeros(shape=6)
 
     def space(self) -> gym.Space:
-        high = np.array(3 * [self._config.max_acceleration] + 3 * [self._config.max_angular_velocity])
+        high = np.append(self._config.linear_bounds, self._config.angular_bounds).astype(dtype=np.float)
         low = -high
         return gym.spaces.Box(low=low, high=high)
 
-    def _get_velocity(self):
-        v_linear, v_rotation = p.getBaseVelocity(self.body_id)
-        position, orientation = p.getBasePositionAndOrientation(self.body_id)
-        rot = p.getMatrixFromQuaternion(orientation)
-        rot = np.reshape(rot, (-1, 3)).transpose()
-        v_linear = rot.dot(v_linear)
-        v_rotation = rot.dot(v_rotation)
-        return np.append(v_linear, v_rotation)
-
     def observe(self) -> NDArray[(6,), np.float]:
-        velocity = self._get_velocity()
-        linear_acceleration = (velocity[:3] - self._last_velocity[:3]) / 0.01
+        velocity = util.get_velocity(id=self.body_id)
+        acceleration = (velocity - self._last_velocity) / self._config.time_delta
+        scale = np.abs(velocity * self._config.gaussian_noise + 0.01)
+        acceleration = np.random.normal(loc=acceleration, scale=scale)
         self._last_velocity = velocity
         if self._config.debug:
-            print(f'[DEBUG][imu] acceleration: {[round(v, 2) for v in linear_acceleration]}')
-        return np.append(linear_acceleration, velocity[3:])
+            print(f'[DEBUG][imu] acceleration: {acceleration}')
+        return acceleration
 
 
 class VelocitySensor(BulletSensor[NDArray[(6,), np.float]]):
@@ -249,14 +249,8 @@ class VelocitySensor(BulletSensor[NDArray[(6,), np.float]]):
         self._config = config
 
     def _get_velocity(self):
-        v_linear, v_rotation = p.getBaseVelocity(self.body_id)
-        position, orientation = p.getBasePositionAndOrientation(self.body_id)
-        rot = p.getMatrixFromQuaternion(orientation)
-        rot = np.reshape(rot, (-1, 3)).transpose()
-        v_linear = rot.dot(v_linear)
-        v_rotation = rot.dot(v_rotation)
-        velocity = np.append(v_linear, v_rotation)
-        scale = np.abs(velocity * self._config.gaussian_noise + self._config.gaussian_noise)
+        velocity = util.get_velocity(id=self.body_id)
+        scale = np.abs(velocity * self._config.gaussian_noise + 0.01)
         velocity = np.random.normal(loc=velocity, scale=scale)
         return velocity
 

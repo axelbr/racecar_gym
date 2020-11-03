@@ -7,6 +7,7 @@ import gym
 import numpy as np
 import pybullet as p
 
+from racecar_gym.bullet import util
 from racecar_gym.bullet.configs import MapConfig
 from racecar_gym.core import world
 from racecar_gym.core.agent import Agent
@@ -136,16 +137,21 @@ class World(world.World):
             elif contact in opponents:
                 opponent_collisions.append(opponents[contact])
 
-
         self._state[agent.id]['wall_collision'] = collision_with_wall
         self._state[agent.id]['opponent_collisions'] = opponent_collisions
+        self._state[agent.id]['pose'] = util.get_pose(id=agent.vehicle_id)
+        velocity = util.get_velocity(id=agent.vehicle_id)
 
-        position, orientation = p.getBasePositionAndOrientation(agent.vehicle_id)
-        orientation = p.getEulerFromQuaternion(orientation)
-        self._state[agent.id]['pose'] = np.array(position + orientation)
+        if 'velocity' in self._state[agent.id]:
+            previous_velocity = self._state[agent.id]['velocity']
+            self._state[agent.id]['acceleration'] = (velocity - previous_velocity) / self._config.time_step
+        else:
+            self._state[agent.id]['acceleration'] = velocity / self._config.time_step
+
+        self._state[agent.id]['velocity'] = velocity
 
         resolution = self._config.map_config.resolution
-        x, y = position[0], position[1]
+        x, y = self._state[agent.id]['pose'][0], self._state[agent.id]['pose'][1]
         origin_x, origin_y = self._config.map_config.origin[0], self._config.map_config.origin[1]
         width, height = self._progress_map.shape[1], self._progress_map.shape[0]
 

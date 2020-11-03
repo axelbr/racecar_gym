@@ -26,8 +26,10 @@ sensors:
     name: acceleration
     frequency: 100
     params:
-      max_acceleration: 30.0
-      max_angular_velocity: 6.0
+      time_delta: 0.01
+      gaussian_noise: 0.01
+      linear_bounds: [ inf, inf, inf ]
+      angular_bounds: [ inf, inf, inf ]
       debug: False
 
   - type: velocity
