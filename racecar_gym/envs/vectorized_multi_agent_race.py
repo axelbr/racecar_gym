@@ -25,28 +25,20 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
         self.action_space = gym.spaces.Tuple(action_spaces)
 
     def _run_env(self, scenario: MultiAgentScenario, connection: Connection, id: int):
+        print('Run environment.')
         env = MultiAgentRaceEnv(scenario=scenario)
         _ = env.reset()
-        print(f'env-{id}: Send observation and action space.')
         connection.send((env.observation_space, env.action_space))
         terminate = False
         while not terminate:
-            print(f'env-{id}: Wait for action.')
             action = connection.recv()
-            print(f'env-{id}: Received action: {action} Taking step.')
             step = env.step(action)
-            print(f'env-{id}: Send step return.')
             connection.send(step)
-            print(f'env-{id}: Should reset? Wait for signal.')
             do_reset = connection.recv()
-            print(f'env-{id}: {"Do not" if not do_reset else "Do"} reset.')
             if do_reset == True:
                 obs = env.reset()
-                print(f'env-{id}: Did reset. Send reset result.')
                 connection.send(obs)
-            print(f'env-{id}: Should terminate? Wait for signal.')
             terminate = connection.recv()
-        print(f'env-{id}: Terminating.')
 
     def step(self, actions: Tuple[Dict]):
 
