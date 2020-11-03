@@ -20,14 +20,12 @@ class MaximizeProgressTask(Task):
         if self._last_stored_progress is None:
             self._last_stored_progress = progress
         delta = progress - self._last_stored_progress
-
         reward = self._frame_reward
         collision = agent_state['wall_collision'] or len(agent_state['opponent_collisions']) > 0
         if collision == True:
             reward += self._collision_reward
-        elif delta > self._delta_progress:
-            reward += self._progress_reward
-            self._last_stored_progress = progress
+        reward += delta * 10.0
+        self._last_stored_progress = progress
         return reward
 
     def done(self, agent_id, state) -> bool:
