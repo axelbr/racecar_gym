@@ -8,12 +8,11 @@ from racecar_gym import SingleAgentScenario
 from racecar_gym.envs.single_agent_race import SingleAgentRaceEnv
 import numpy as np
 
-from racecar_gym.core import Task, register_task
-from racecar_gym.core.tasks import RewardRange
-from racecar_gym.tasks.maximize_progress_reward import MaximizeProgressTask
+from racecar_gym.tasks import Task, register_task
+from racecar_gym.tasks.progress_based import MaximizeProgressTask, MaximizeContinuousProgressTask
 import matplotlib.pyplot as plt
 
-register_task(name='maximize_progress', task=MaximizeProgressTask)
+register_task(name='maximize_cont_progress', task=MaximizeContinuousProgressTask)
 
 class SingleWrapper(gym.Env):
     def __init__(self, env):
@@ -48,9 +47,6 @@ def run(env, agent):
     obs = env.reset()
 
     init = time.time()
-    last_progress = -1
-    progress_mult = 100
-    ret = 0
     reward_list = []
     progress_list = []
     progress_plus_list = []
@@ -85,9 +81,13 @@ def plot_reward(reward_list, progress_list=None, progress_plus_list=None):
     plt.show()
 
 
-for ep in range(5):
+returns = []
+for ep in range(50):
     rewards, progresses, prog_plus = run(env, agent)
-    if len(rewards) > 10:
-        pass
-    plot_reward(rewards, progresses, prog_plus)
+    if len(rewards) > 1:
+        plot_reward(rewards, progresses, prog_plus)
+    returns.append(sum(rewards))
 env.close()
+
+print("")
+print(f"AVG RETURN: {sum(returns)/len(returns)}")

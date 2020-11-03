@@ -88,17 +88,19 @@ class World(world.World):
             delta_progress = 0.025
             direction_progress_min = (progress + delta_progress) % 1
             direction_progress_max = (progress + 2 * delta_progress) % 1
-            direction_area = np.argwhere(np.logical_and(
-                self._progress_map > direction_progress_min,
-                self._progress_map <= direction_progress_max,
-            ))
+            if direction_progress_min < direction_progress_max:
+                direction_area = np.argwhere(np.logical_and(
+                    self._progress_map > direction_progress_min,
+                    self._progress_map <= direction_progress_max,
+                ))
+            else:
+                # bugfix: when min=0.99, max=0.01, the 'and' is empty
+                direction_area = np.argwhere(np.logical_or(
+                    self._progress_map <= direction_progress_min,
+                    self._progress_map > direction_progress_max,
+                ))
             if direction_area.shape[0]>0:
                 next_position = random.choice(direction_area)
-            else:
-                # TODO: solve this bug, for now, simply return starting grid position
-                position = list(map(lambda agent: agent.id, self._agents)).index(agent.id)
-                pose = self._starting_grid[position]
-                return tuple(pose[:3]), tuple(pose[3:])
             px, py = position[0], position[1]
             npx, npy = next_position[0], next_position[1]
             diff = np.array(to_meter(npx, npy)) - np.array(to_meter(px, py))
