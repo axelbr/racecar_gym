@@ -172,13 +172,19 @@ class World(world.World):
             last_checkpoint = self._state[agent.id]['checkpoint']
             if last_checkpoint + 1 == checkpoint:
                 self._state[agent.id]['checkpoint'] = checkpoint
+                self._state[agent.id]['wrong_way'] = False
+            elif last_checkpoint - 1 == checkpoint:
+                self._state[agent.id]['wrong_way'] = True
             elif last_checkpoint == self._config.map_config.checkpoints and checkpoint == 0:
                 self._state[agent.id]['lap'] += 1
                 self._state[agent.id]['checkpoint'] = checkpoint
-
+                self._state[agent.id]['wrong_way'] = False
+            elif last_checkpoint == 0 and checkpoint == self._config.map_config.checkpoints:
+                self._state[agent.id]['wrong_way'] = True
         else:
             self._state[agent.id]['checkpoint'] = checkpoint
             self._state[agent.id]['lap'] = 1
+            self._state[agent.id]['wrong_way'] = False
 
 
     def _update_ranks(self):
