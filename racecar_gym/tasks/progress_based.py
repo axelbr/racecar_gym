@@ -2,13 +2,14 @@ from .task import Task
 
 class MaximizeContinuousProgressTask(Task):
   def __init__(self, laps: int, time_limit: float, terminate_on_collision: bool,
-               collision_reward: float = -100, frame_reward: float = -0.1):
+               collision_reward: float = -25, frame_reward: float = -0.025, progress_factor: float = +100):
     self._laps = laps
     self._time_limit = time_limit
     self._terminate_on_collision = terminate_on_collision
     self._last_progress = None
     self._collision_reward = collision_reward
     self._frame_reward = frame_reward
+    self._progress_factor = progress_factor
 
   def reward(self, agent_id, state, action) -> float:
     agent_state = state[agent_id]
@@ -23,7 +24,7 @@ class MaximizeContinuousProgressTask(Task):
     if collision:
       reward += self._collision_reward
     else:
-      reward += 500 * delta
+      reward += self._progress_factor * delta
       self._last_progress = progress
     return reward
 
