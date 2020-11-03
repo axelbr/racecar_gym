@@ -4,7 +4,7 @@ import gym
 from agents.gap_follower import GapFollower
 
 from time import sleep
-from racecar_gym import SingleAgentScenario
+from racecar_gym import SingleAgentScenario, MultiAgentRaceEnv
 from racecar_gym.envs.single_agent_race import SingleAgentRaceEnv
 import numpy as np
 
@@ -51,15 +51,20 @@ def run(env, agent):
     progress_list = []
     progress_plus_list = []
     while not done:
-        agent_action = agent.action(obs)
-        #agent_action = env.action_space.sample()
+        #agent_action = agent.action(obs)
+        agent_action = env.action_space.sample()
         #print(agent_action)
         #print(random_action)
         #print()
-        obs, rewards, done, states = env.step(agent_action)
-        print(f'Time: {states["time"]}, Lap: {states["lap"]}, Progress: {states["progress"]}, Reward: {rewards}')
+        action_rewards = 0
+        for _ in range(4):
+            obs, rewards, done, states = env.step(agent_action)
+            action_rewards += rewards
+            if done:
+                break
+        print(f'Time: {states["time"]}, Lap: {states["lap"]}, Progress: {states["progress"]}, Reward: {action_rewards}')
         sleep(0.0005)
-        reward_list.append(rewards)
+        reward_list.append(action_rewards)
         progress_list.append(states["progress"])
         progress_plus_list.append(states["lap"] + states["progress"])
     print("[Info] Track completed in {:.3f} seconds".format(time.time() - init))

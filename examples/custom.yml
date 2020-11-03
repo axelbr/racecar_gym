@@ -1,11 +1,11 @@
 world:
-  name: austria
+  name: berlin
   start_positions: random
 agents:
   - id: A
     vehicle:
       name: racecar
-      sensors: [lidar, gps, imu, tacho]
+      sensors: [ lidar, pose, velocity, acceleration ]
     task:
       task_name: maximize_cont_progress
       params: {laps: 2, time_limit: 180.0, terminate_on_collision: True}

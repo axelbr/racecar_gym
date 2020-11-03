@@ -29,5 +29,6 @@ class SingleAgentRaceEnv(gym.Env):
         else:
             self._scenario.world.reset()
         obs = self._scenario.agent.reset(self._scenario.world.get_starting_position(self._scenario.agent))
+        self._scenario.world.update()
         obs['time'] = 0
         return obs

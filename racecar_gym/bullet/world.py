@@ -130,6 +130,15 @@ class World(world.World):
     def _update_race_info(self, agent):
         contact_points = set([c[2] for c in p.getContactPoints(agent.vehicle_id)])
 
+        resolution = self._config.map_config.resolution
+        self._state[agent.id]['pose'] = util.get_pose(id=agent.vehicle_id)
+        x, y = self._state[agent.id]['pose'][0], self._state[agent.id]['pose'][1]
+        origin_x, origin_y = self._config.map_config.origin[0], self._config.map_config.origin[1]
+        width, height = self._progress_map.shape[1], self._progress_map.shape[0]
+
+        px = int(height - (y - origin_y) / resolution)
+        py = int((x - origin_x) / resolution)
+
         collision_with_wall = False
         opponent_collisions = []
         opponents = dict([(a.vehicle_id, a.id) for a in self._agents])
@@ -141,7 +150,6 @@ class World(world.World):
 
         self._state[agent.id]['wall_collision'] = collision_with_wall
         self._state[agent.id]['opponent_collisions'] = opponent_collisions
-        self._state[agent.id]['pose'] = util.get_pose(id=agent.vehicle_id)
         velocity = util.get_velocity(id=agent.vehicle_id)
 
         if 'velocity' in self._state[agent.id]:
@@ -152,13 +160,7 @@ class World(world.World):
 
         self._state[agent.id]['velocity'] = velocity
 
-        resolution = self._config.map_config.resolution
-        x, y = self._state[agent.id]['pose'][0], self._state[agent.id]['pose'][1]
-        origin_x, origin_y = self._config.map_config.origin[0], self._config.map_config.origin[1]
-        width, height = self._progress_map.shape[1], self._progress_map.shape[0]
 
-        px = int(height - (y - origin_y) / resolution)
-        py = int((x - origin_x) / resolution)
 
         self._state[agent.id]['progress'] = self._progress_map[px, py]
         self._state[agent.id]['time'] = self._time
