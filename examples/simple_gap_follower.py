@@ -81,7 +81,7 @@ def plot_reward(reward_list, progress_list=None, progress_plus_list=None):
         if progress_list:
             plt.plot(range(len(progress_list)), progress_list, label="progress")
         else:
-            plt.plot(range(len(progress_list)), progress_plus_list, label="progress +  lap")
+            plt.plot(range(len(progress_plus_list)), progress_plus_list, label="progress +  lap")
         plt.legend()
     plt.show()
 
@@ -90,7 +90,7 @@ returns = []
 for ep in range(50):
     rewards, progresses, prog_plus = run(env, agent)
     if len(rewards) > 1:
-        plot_reward(rewards, progresses, prog_plus)
+        plot_reward(rewards, None, prog_plus)
     returns.append(sum(rewards))
 env.close()
 
