@@ -117,7 +117,7 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
         hit_fractions = np.array(results, dtype=np.object)[:, 2]
         ranges = self._config.range * hit_fractions
         noise = np.random.uniform(1.0 - self._config.accuracy, 1.0 + self._config.accuracy, size=ranges.shape)
-        scan = ranges * noise
+        scan = np.clip(ranges * noise, a_max=self._config.range)
 
         if self._config.debug:
             self._display_rays(hit_fractions, scan)
