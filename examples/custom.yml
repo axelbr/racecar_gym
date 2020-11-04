@@ -8,4 +8,4 @@ agents:
       sensors: [ lidar, pose, velocity, acceleration ]
     task:
       task_name: maximize_cont_progress
-      params: {laps: 2, time_limit: 180.0, terminate_on_collision: True}
+      params: {laps: 1, time_limit: 30.0, terminate_on_collision: True}
