@@ -80,7 +80,7 @@ class MaximizeProgressTask(Task):
 
 class MaximizeDiscreteProgressTask(Task):
   def __init__(self, laps: int, time_limit: float, terminate_on_collision: bool,
-               delta_progress=0.001, collision_reward=-100, frame_reward=-0.1, progress_reward=1):
+               delta_progress=0.0, collision_reward=0, frame_reward=0.0, progress_reward=1):
     self._time_limit = time_limit
     self._laps = laps
     self._terminate_on_collision = terminate_on_collision
@@ -97,7 +97,8 @@ class MaximizeDiscreteProgressTask(Task):
     if self._last_stored_progress is None:
       self._last_stored_progress = progress
     delta = progress - self._last_stored_progress
-
+    if delta > .5:  # the agent is crossing the starting line in the wrong direction
+      delta = -delta
     reward = self._frame_reward
     collision = agent_state['wall_collision'] or len(agent_state['opponent_collisions']) > 0
     if collision == True:
