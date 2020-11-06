@@ -51,9 +51,11 @@ def birds_eye(agent: Agent, width=640, height=480) -> np.ndarray:
 
 def follow_agent(agent: Agent, width=640, height=480) -> np.ndarray:
     position, orientation = pybullet.getBasePositionAndOrientation(agent.vehicle_id)
+    _, _, yaw = pybullet.getEulerFromQuaternion(orientation)
+    orientation = pybullet.getQuaternionFromEuler((0, 0, yaw))
     rot_matrix = pybullet.getMatrixFromQuaternion(orientation)
     rot_matrix = np.array(rot_matrix).reshape(3, 3)
-    camera_position = position + rot_matrix.dot([-1.0, 0, 0.7])
+    camera_position = position + rot_matrix.dot([-0.8, 0, 0.3])
     up_vector = rot_matrix.dot([0, 0, 1])
     target = position
     view_matrix = pybullet.computeViewMatrix(camera_position, target, up_vector)
