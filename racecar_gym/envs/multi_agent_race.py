@@ -48,3 +48,9 @@ class MultiAgentRaceEnv(gym.Env):
         self._scenario.world.reset()
         self._scenario.world.update()
         return observations
+
+    def render(self, mode='follow', agent: str = None):
+        if agent is None:
+            agent = list(self._scenario.agents.keys())[0]
+        return self._scenario.world.render(agent_id=agent, mode=mode)
+

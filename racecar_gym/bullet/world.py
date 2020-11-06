@@ -202,3 +202,14 @@ class World(world.World):
         for agent in self._agents:
             rank = ranked.index(agent.id) + 1
             self._state[agent.id]['rank'] = rank
+
+    def render(self, agent_id: str, mode: str) -> np.ndarray:
+        agent = list(filter(lambda a: a.id == agent_id, self._agents))
+        assert len(agent) == 1
+        agent = agent[0]
+        if mode == 'follow':
+            return util.follow_agent(agent=agent)
+        elif mode == 'birds_eye':
+            return util.birds_eye(agent=agent)
+
+
