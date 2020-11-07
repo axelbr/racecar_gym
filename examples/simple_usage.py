@@ -1,11 +1,12 @@
 from time import sleep
 import gym
 import racecar_gym
+from racecar_gym import MultiAgentRaceEnv
 
-env = gym.make('MultiAgentBerlin_Gui-v0')
+env: MultiAgentRaceEnv = gym.make('MultiAgentBerlin_Gui-v0')
 
 done = False
-obs = env.reset()
+obs = env.reset(mode='grid')
 t = 0
 while not done:
     action = env.action_space.sample()

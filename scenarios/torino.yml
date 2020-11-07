@@ -1,6 +1,5 @@
 world:
   name: torino
-  start_positions: index
 agents:
   - id: A
     vehicle:

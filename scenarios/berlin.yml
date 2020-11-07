@@ -1,6 +1,5 @@
 world:
   name: berlin
-  start_positions: index
 agents:
   - id: A
     vehicle:

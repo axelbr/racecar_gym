@@ -1,7 +1,8 @@
 import math
-from typing import Dict
+from typing import Dict, Union
 import gym
 from .scenarios import MultiAgentScenario
+from ..core.definitions import Pose, Velocity
 
 
 class MultiAgentRaceEnv(gym.Env):
@@ -35,18 +36,22 @@ class MultiAgentRaceEnv(gym.Env):
         self._time = self._scenario.world.update()
         return observations, rewards, dones, state
 
-    def reset(self):
+    def set_state(self, agent: str, pose: Pose):
+        self._scenario.agents[agent].reset(pose=pose)
+
+    def reset(self, mode: str = 'grid'):
         if not self._initialized:
             self._scenario.world.init()
             self._initialized = True
 
         observations = {}
         for agent in self._scenario.agents.values():
-            obs = agent.reset(self._scenario.world.get_starting_position(agent))
+            obs = agent.reset(self._scenario.world.get_starting_position(agent=agent, mode=mode))
             obs['time'] = 0.0
             observations[agent.id] = obs
-        self._scenario.world.reset()
-        self._scenario.world.update()
+            self._scenario.world.reset()
+            self._scenario.world.update()
+
         return observations
 
     def render(self, mode='follow', agent: str = None):

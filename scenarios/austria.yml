@@ -1,6 +1,5 @@
 world:
   name: austria
-  start_positions: index
 agents:
   - id: A
     vehicle:

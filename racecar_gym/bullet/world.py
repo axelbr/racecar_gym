@@ -26,7 +26,6 @@ class World(world.World):
         rendering: bool
         time_step: float
         gravity: float
-        start_positions: str
 
     def __init__(self, config: Config, agents: List[Agent]):
         self._config = config
@@ -66,7 +65,7 @@ class World(world.World):
         objects = dict([(p.getBodyInfo(i)[1].decode('ascii'), i) for i in ids])
         self._objects = objects
 
-    def get_starting_position(self, agent: Agent) -> Pose:
+    def get_starting_position(self, agent: Agent, mode: str) -> Pose:
         def to_meter(px, py):
             resolution = self._config.map_config.resolution
             height = self._distance_to_obstacle.shape[0]
@@ -76,11 +75,13 @@ class World(world.World):
             x = py * resolution + origin_x
             return x, y
 
-        if self._config.start_positions == 'index':
+        if mode == 'grid':
             position = list(map(lambda agent: agent.id, self._agents)).index(agent.id)
             pose = self._starting_grid[position]
             return tuple(pose[:3]), tuple(pose[3:])
-        if self._config.start_positions == 'random':
+        if mode == 'checkpoint':
+            pass
+        if mode == 'random':
             center_corridor = np.argwhere(self._distance_to_obstacle > 0.5)
             position = random.choice(center_corridor)
 
@@ -108,7 +109,7 @@ class World(world.World):
             #angle = np.random.normal(loc=angle, scale=0.15)
             x, y = to_meter(px, py)
             return (x, y, 0.05), (0, 0, angle)
-        raise NotImplementedError(self._config.start_positions)
+        raise NotImplementedError(mode)
 
     def update(self):
         p.stepSimulation()

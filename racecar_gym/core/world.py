@@ -23,7 +23,7 @@ class World(ABC):
         pass
 
     @abstractmethod
-    def get_starting_position(self, agent: Agent) -> Pose:
+    def get_starting_position(self, agent: Agent, mode: str) -> Pose:
         pass
 
     @abstractmethod
