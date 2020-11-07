@@ -12,6 +12,7 @@ from racecar_gym.bullet.configs import MapConfig
 from racecar_gym.core import world
 from racecar_gym.core.agent import Agent
 from racecar_gym.core.definitions import Pose
+from racecar_gym.core.gridmaps import GridMap
 
 
 class World(world.World):
@@ -34,10 +35,23 @@ class World(world.World):
         self._agents = agents
         self._state = dict([(a.id, {}) for a in agents])
         self._objects = {}
-        self._progress_map = np.load(config.map_config.maps)['norm_distance_from_start']
-        self._drivable_area = np.load(config.map_config.maps)['drivable_area']
-        self._distance_to_obstacle = np.load(config.map_config.maps)['norm_distance_to_obstacle']
         self._starting_grid = np.load(config.map_config.starting_grid)['data']
+        self._maps = dict([
+            (name, GridMap(
+                grid_map=np.load(config.map_config.maps)[data],
+                origin=self._config.map_config.origin,
+                resolution=self._config.map_config.resolution
+            ))
+            for name, data
+            in [
+                ('progress', 'norm_distance_from_start'),
+                ('obstacle', 'norm_distance_to_obstacle'),
+                ('occupancy', 'drivable_area')
+                ]
+        ])
+
+        self._state['maps'] = self._maps
+
 
     def init(self) -> None:
         if self._config.rendering:
@@ -58,23 +72,12 @@ class World(world.World):
         self._time = 0.0
         self._state = dict([(a.id, {}) for a in self._agents])
 
-
-
     def _load_scene(self, sdf_file: str):
         ids = p.loadSDF(sdf_file)
         objects = dict([(p.getBodyInfo(i)[1].decode('ascii'), i) for i in ids])
         self._objects = objects
 
     def get_starting_position(self, agent: Agent, mode: str) -> Pose:
-        def to_meter(px, py):
-            resolution = self._config.map_config.resolution
-            height = self._distance_to_obstacle.shape[0]
-            origin_x = self._config.map_config.origin[0]
-            origin_y = self._config.map_config.origin[1]
-            y = origin_y - (px - height) * resolution
-            x = py * resolution + origin_x
-            return x, y
-
         if mode == 'grid':
             position = list(map(lambda agent: agent.id, self._agents)).index(agent.id)
             pose = self._starting_grid[position]
@@ -82,32 +85,34 @@ class World(world.World):
         if mode == 'checkpoint':
             pass
         if mode == 'random':
-            center_corridor = np.argwhere(self._distance_to_obstacle > 0.5)
+            distance_map = self._maps['obstacle']
+            progress_map = self._maps['progress']
+            center_corridor = np.argwhere(distance_map.map > 0.5)
             position = random.choice(center_corridor)
 
-            progress = self._progress_map[position[0], position[1]]
+            progress = progress_map.map[position[0], position[1]]
             delta_progress = 0.025
             direction_progress_min = (progress + delta_progress) % 1
             direction_progress_max = (progress + 2 * delta_progress) % 1
             if direction_progress_min < direction_progress_max:
                 direction_area = np.argwhere(np.logical_and(
-                    self._progress_map > direction_progress_min,
-                    self._progress_map <= direction_progress_max,
+                    progress_map.map > direction_progress_min,
+                    progress_map.map <= direction_progress_max,
                 ))
             else:
                 # bugfix: when min=0.99, max=0.01, the 'and' is empty
                 direction_area = np.argwhere(np.logical_or(
-                    self._progress_map <= direction_progress_min,
-                    self._progress_map > direction_progress_max,
+                    progress_map.map <= direction_progress_min,
+                    progress_map.map > direction_progress_max,
                 ))
-            if direction_area.shape[0]>0:
+            if direction_area.shape[0] > 0:
                 next_position = random.choice(direction_area)
             px, py = position[0], position[1]
             npx, npy = next_position[0], next_position[1]
-            diff = np.array(to_meter(npx, npy)) - np.array(to_meter(px, py))
+            diff = np.array(progress_map.to_meter(npx, npy)) - np.array(progress_map.to_meter(px, py))
             angle = np.arctan2(diff[1], diff[0])
-            #angle = np.random.normal(loc=angle, scale=0.15)
-            x, y = to_meter(px, py)
+            # angle = np.random.normal(loc=angle, scale=0.15)
+            x, y = progress_map.to_meter(px, py)
             return (x, y, 0.05), (0, 0, angle)
         raise NotImplementedError(mode)
 
@@ -130,15 +135,8 @@ class World(world.World):
 
     def _update_race_info(self, agent):
         contact_points = set([c[2] for c in p.getContactPoints(agent.vehicle_id)])
-
-        resolution = self._config.map_config.resolution
+        progress_map = self._maps['progress']
         self._state[agent.id]['pose'] = util.get_pose(id=agent.vehicle_id)
-        x, y = self._state[agent.id]['pose'][0], self._state[agent.id]['pose'][1]
-        origin_x, origin_y = self._config.map_config.origin[0], self._config.map_config.origin[1]
-        width, height = self._progress_map.shape[1], self._progress_map.shape[0]
-
-        px = int(height - (y - origin_y) / resolution)
-        py = int((x - origin_x) / resolution)
 
         collision_with_wall = False
         opponent_collisions = []
@@ -159,11 +157,10 @@ class World(world.World):
         else:
             self._state[agent.id]['acceleration'] = velocity / self._config.time_step
 
+        pose = self._state[agent.id]['pose']
+        progress = progress_map.get_value(position=(pose[0], pose[1], 0))
         self._state[agent.id]['velocity'] = velocity
-
-
-
-        self._state[agent.id]['progress'] = self._progress_map[px, py]
+        self._state[agent.id]['progress'] = progress
         self._state[agent.id]['time'] = self._time
 
         progress = self._state[agent.id]['progress']
@@ -189,7 +186,6 @@ class World(world.World):
             self._state[agent.id]['lap'] = 1
             self._state[agent.id]['wrong_way'] = False
 
-
     def _update_ranks(self):
 
         agents = [
@@ -212,5 +208,3 @@ class World(world.World):
             return util.follow_agent(agent=agent)
         elif mode == 'birds_eye':
             return util.birds_eye(agent=agent)
-
-
