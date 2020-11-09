@@ -8,8 +8,9 @@ from .multi_agent_race import MultiAgentScenario, MultiAgentRaceEnv
 
 class ForkedMultiAgentRaceEnv(gym.Env):
 
-    def __init__(self, scenario: MultiAgentScenario, debug=False):
+    def __init__(self, scenario: MultiAgentScenario, mode: str = 'grid', debug: bool=False):
         self._env = None
+        self._mode = mode
         self._debug = debug
 
         parent_conn, child_conn = Pipe()
@@ -46,7 +47,7 @@ class ForkedMultiAgentRaceEnv(gym.Env):
             if self._debug:
                 print(f'env-{id}: {"Do not" if not do_reset else "Do"} reset.')
             if do_reset == True:
-                obs = env.reset()
+                obs = env.reset(mode=self._mode)
                 if self._debug:
                     print(f'env-{id}: Did reset. Send reset result.')
                 connection.send(obs)
