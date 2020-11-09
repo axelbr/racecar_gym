@@ -1,6 +1,5 @@
 world:
   name: berlin
-  start_positions: random
 agents:
   - id: A
     vehicle:

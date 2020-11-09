@@ -1,24 +1,19 @@
-import time
-
-import gym
 from agents.gap_follower import GapFollower
 
 from time import sleep
-from racecar_gym import SingleAgentScenario, MultiAgentRaceEnv
-from racecar_gym.envs.single_agent_race import SingleAgentRaceEnv
-import numpy as np
+from racecar_gym import MultiAgentScenario, MultiAgentRaceEnv
 
 from racecar_gym.tasks import Task, register_task
-from racecar_gym.tasks.progress_based import MaximizeProgressTask, MaximizeContinuousProgressTask
-import matplotlib.pyplot as plt
+from racecar_gym.tasks.progress_based import MaximizeContinuousProgressTask
 
 register_task(name='maximize_cont_progress', task=MaximizeContinuousProgressTask)
 
-env: MultiAgentRaceEnv = gym.make('MultiAgentAustria_Gui-v0')
+scenario = MultiAgentScenario.from_spec("custom.yml", rendering=True)
+env: MultiAgentRaceEnv = MultiAgentRaceEnv(scenario=scenario)
 agent = GapFollower()
 
 done = False
-obs = env.reset(mode='random')
+obs = env.reset(mode='grid')
 t = 0
 while not done:
     action = env.action_space.sample()
