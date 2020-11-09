@@ -32,3 +32,8 @@ class SingleAgentRaceEnv(gym.Env):
         self._scenario.world.update()
         obs['time'] = 0
         return obs
+
+    def render(self, mode='human'):
+        return self._scenario.world.render(mode=mode, agent_id=self._scenario.agent.id)
+
+

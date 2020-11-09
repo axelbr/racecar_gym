@@ -1,6 +1,5 @@
 world:
   name: montreal
-  start_positions: index
 agents:
   - id: A
     vehicle:

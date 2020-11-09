@@ -2,7 +2,7 @@ from typing import Any
 
 import gym
 
-from .definitions import Pose
+from .definitions import Pose, Velocity
 from .vehicles import Vehicle
 from racecar_gym.tasks import Task
 

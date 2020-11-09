@@ -32,7 +32,7 @@ class SingleWrapper(gym.Env):
         return obs
 
     def render(self, mode='human'):
-        pass
+        self.env.render(mode)
 
 scenario = SingleAgentScenario.from_spec(
                  path='custom.yml',
@@ -60,6 +60,7 @@ def run(env, agent):
         for _ in range(4):
             obs, rewards, done, states = env.step(agent_action)
             action_rewards += rewards
+            env.render(mode='follow')
             if done:
                 break
         print(f'Time: {states["time"]}, Lap: {states["lap"]}, Progress: {states["progress"]}, Reward: {action_rewards}')

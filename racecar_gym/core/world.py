@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any
 
 import gym
+import numpy as np
 
 from .agent import Agent
 from .definitions import Pose
@@ -22,7 +23,7 @@ class World(ABC):
         pass
 
     @abstractmethod
-    def get_starting_position(self, agent: Agent) -> Pose:
+    def get_starting_position(self, agent: Agent, mode: str) -> Pose:
         pass
 
     @abstractmethod
@@ -31,6 +32,10 @@ class World(ABC):
 
     @abstractmethod
     def state(self) -> Dict[str, Any]:
+        pass
+
+    @abstractmethod
+    def render(self, agent_id: str, mode: str) -> np.ndarray:
         pass
 
 

@@ -76,7 +76,6 @@ def load_world(spec: WorldSpec, agents: List[Agent]) -> core.World:
         time_step=config.simulation.time_step,
         gravity=config.physics.gravity,
         rendering=config.simulation.rendering,
-        start_positions=spec.start_positions
     )
 
     return World(config=world_config, agents=agents)
