@@ -22,13 +22,13 @@ class SingleAgentRaceEnv(gym.Env):
         self._time = self._scenario.world.update()
         return observation, reward, done, state[self._scenario.agent.id]
 
-    def reset(self):
+    def reset(self, mode: str = 'grid'):
         if not self._initialized:
             self._scenario.world.init()
             self._initialized = True
         else:
             self._scenario.world.reset()
-        obs = self._scenario.agent.reset(self._scenario.world.get_starting_position(self._scenario.agent))
+        obs = self._scenario.agent.reset(self._scenario.world.get_starting_position(self._scenario.agent, mode))
         self._scenario.world.update()
         obs['time'] = 0
         return obs
