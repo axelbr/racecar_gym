@@ -5,9 +5,9 @@ from racecar_gym import MultiAgentScenario
 from racecar_gym.envs import MultiAgentRaceEnv
 
 from racecar_gym.tasks import Task, register_task
-from racecar_gym.tasks.progress_based import MaximizeContinuousProgressTask
+from racecar_gym.tasks.progress_based import MaximizeProgressTask
 
-register_task(name='maximize_cont_progress', task=MaximizeContinuousProgressTask)
+register_task(name='maximize_progress', task=MaximizeProgressTask)
 
 scenario = MultiAgentScenario.from_spec("custom.yml", rendering=True)
 env: MultiAgentRaceEnv = MultiAgentRaceEnv(scenario=scenario)
