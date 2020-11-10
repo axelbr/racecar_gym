@@ -1,7 +1,6 @@
 from time import sleep
 import gym
-import racecar_gym
-from racecar_gym import MultiAgentRaceEnv
+from racecar_gym.envs import MultiAgentRaceEnv
 
 env: MultiAgentRaceEnv = gym.make('MultiAgentBerlin_Gui-v0')
 

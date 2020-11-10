@@ -1,7 +1,8 @@
 from agents.gap_follower import GapFollower
 
 from time import sleep
-from racecar_gym import MultiAgentScenario, MultiAgentRaceEnv
+from racecar_gym import MultiAgentScenario
+from racecar_gym.envs import MultiAgentRaceEnv
 
 from racecar_gym.tasks import Task, register_task
 from racecar_gym.tasks.progress_based import MaximizeContinuousProgressTask
