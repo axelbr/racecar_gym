@@ -2,8 +2,9 @@ from typing import Dict
 import gym
 from .scenarios import SingleAgentScenario
 
-
 class SingleAgentRaceEnv(gym.Env):
+
+    metadata = {'render.modes': ['follow', 'birds_eye']}
 
     def __init__(self, scenario: SingleAgentScenario):
         self._scenario = scenario
@@ -33,7 +34,7 @@ class SingleAgentRaceEnv(gym.Env):
         obs['time'] = 0
         return obs
 
-    def render(self, mode='human'):
+    def render(self, mode='follow'):
         return self._scenario.world.render(mode=mode, agent_id=self._scenario.agent.id)
 
 

@@ -190,8 +190,8 @@ class World(world.World):
 
         agents = [
             (agent_id, self._state[agent_id]['lap'], self._state[agent_id]['progress'])
-            for agent_id, states
-            in self._state.items()
+            for agent_id
+            in map(lambda a: a.id, self._agents)
         ]
 
         ranked = [item[0] for item in sorted(agents, key=lambda item: (item[1], item[2]), reverse=True)]

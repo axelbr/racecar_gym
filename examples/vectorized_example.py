@@ -25,5 +25,6 @@ for i in range(3):
         #action = env.action_space.sample()
         obs, rewards, dones, states = env.step(action)
         done = any([any(e.values()) for e in dones])
+        renderings = env.render()
         episode.append(obs)
 env.close()

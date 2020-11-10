@@ -3,21 +3,20 @@ from typing import List, Tuple, Dict
 import gym
 from multiprocessing import Pipe, Process
 from multiprocessing.connection import Connection
-from .scenarios import MultiAgentScenario
-from .multi_agent_race import MultiAgentRaceEnv
+from .scenarios import SingleAgentScenario
+from .single_agent_race import SingleAgentRaceEnv
 
-
-class VectorizedMultiAgentRaceEnv(gym.Env):
+class VectorizedSingleAgentRaceEnv(gym.Env):
 
     metadata = {'render.modes': ['follow', 'birds_eye']}
 
-    def __init__(self, scenarios: List[MultiAgentScenario]):
+    def __init__(self, scenarios: List[SingleAgentScenario]):
         self._env_connections = []
         self._envs = []
         for i, scenario in enumerate(scenarios):
             parent_conn, child_conn = Pipe()
             self._env_connections.append(parent_conn)
-            env_process = Process(target=self._run_env, args=(scenario, child_conn, i))
+            env_process = Process(target=self._run_env, args=(scenario, child_conn))
             self._envs.append(env_process)
             env_process.start()
 
@@ -26,17 +25,17 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
         self.observation_space = gym.spaces.Tuple(obs_spaces)
         self.action_space = gym.spaces.Tuple(action_spaces)
 
-    def _run_env(self, scenario: MultiAgentScenario, connection: Connection, id: int):
+    def _run_env(self, scenario: SingleAgentScenario, connection: Connection):
         print('Run environment.')
-        env = MultiAgentRaceEnv(scenario=scenario)
+        env = SingleAgentRaceEnv(scenario=scenario)
         _ = env.reset()
         connection.send((env.observation_space, env.action_space))
         terminate = False
         while not terminate:
             command = connection.recv()
             if command == 'render':
-                mode, agent = connection.recv()
-                rendering = env.render(mode, agent)
+                mode = connection.recv()
+                rendering = env.render(mode)
                 connection.send(rendering)
             elif command == 'step':
                 action = connection.recv()
@@ -49,6 +48,7 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
                 terminate = True
 
     def step(self, actions: Tuple[Dict]):
+
         for action, conn in zip(actions, self._env_connections):
             conn.send('step')
             conn.send(action)
@@ -65,29 +65,26 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
 
     def reset(self):
         observations = []
-        for i, conn in enumerate(self._env_connections):
+        for i, conn in self._env_connections:
             conn.send('reset')
             obs = conn.recv()
             observations.append(obs)
         return observations
 
     def close(self):
-        for i, conn in enumerate(self._env_connections):
+        for conn in self._env_connections:
             conn.send('close')
             conn.close()
 
-    def render(self, mode='follow', agents: List[str] = None):
+    def render(self, mode='follow'):
         renderings = []
-
-        if agents is None:
-            agents = [None for _ in range(len(self._env_connections))]
-
-        for i, conn in enumerate(self._env_connections):
+        for conn in self._env_connections:
             conn.send('render')
-            conn.send((mode, agents[i]))
+            conn.send(mode)
 
         for conn in self._env_connections:
             rendering = conn.recv()
             renderings.append(rendering)
+
         return renderings
 

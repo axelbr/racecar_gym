@@ -7,6 +7,8 @@ from ..core.definitions import Pose, Velocity
 
 class MultiAgentRaceEnv(gym.Env):
 
+    metadata = {'render.modes': ['follow', 'birds_eye']}
+
     def __init__(self, scenario: MultiAgentScenario):
         self._scenario = scenario
         self._initialized = False
