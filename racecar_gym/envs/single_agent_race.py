@@ -2,7 +2,6 @@ from typing import Dict
 import gym
 from .scenarios import SingleAgentScenario
 
-
 class SingleAgentRaceEnv(gym.Env):
 
     metadata = {'render.modes': ['follow', 'birds_eye']}

@@ -3,10 +3,8 @@ from typing import List, Tuple, Dict
 import gym
 from multiprocessing import Pipe, Process
 from multiprocessing.connection import Connection
-from .scenarios import MultiAgentScenario, SingleAgentScenario
-from .multi_agent_race import MultiAgentRaceEnv
-from .. import SingleAgentRaceEnv
-
+from .scenarios import SingleAgentScenario
+from .single_agent_race import SingleAgentRaceEnv
 
 class VectorizedSingleAgentRaceEnv(gym.Env):
 
@@ -18,7 +16,7 @@ class VectorizedSingleAgentRaceEnv(gym.Env):
         for i, scenario in enumerate(scenarios):
             parent_conn, child_conn = Pipe()
             self._env_connections.append(parent_conn)
-            env_process = Process(target=self._run_env, args=(scenario, child_conn, i))
+            env_process = Process(target=self._run_env, args=(scenario, child_conn))
             self._envs.append(env_process)
             env_process.start()
 
