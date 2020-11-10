@@ -46,7 +46,7 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
                 obs = env.reset()
                 connection.send(obs)
             elif command == 'close':
-                terminate = connection.recv()
+                terminate = True
 
     def step(self, actions: Tuple[Dict]):
         for action, conn in zip(actions, self._env_connections):

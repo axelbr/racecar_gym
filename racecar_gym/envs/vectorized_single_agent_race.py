@@ -47,7 +47,7 @@ class VectorizedSingleAgentRaceEnv(gym.Env):
                 obs = env.reset()
                 connection.send(obs)
             elif command == 'close':
-                terminate = connection.recv()
+                terminate = True
 
     def step(self, actions: Tuple[Dict]):
 
