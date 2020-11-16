@@ -136,6 +136,7 @@ class World(world.World):
     def _update_race_info(self, agent):
         contact_points = set([c[2] for c in p.getContactPoints(agent.vehicle_id)])
         progress_map = self._maps['progress']
+        obstacle_map = self._maps['obstacle']
         self._state[agent.id]['pose'] = util.get_pose(id=agent.vehicle_id)
 
         collision_with_wall = False
@@ -159,8 +160,10 @@ class World(world.World):
 
         pose = self._state[agent.id]['pose']
         progress = progress_map.get_value(position=(pose[0], pose[1], 0))
+        dist_obstacle = obstacle_map.get_value(position=(pose[0], pose[1], 0))
         self._state[agent.id]['velocity'] = velocity
         self._state[agent.id]['progress'] = progress
+        self._state[agent.id]['obstacle'] = dist_obstacle
         self._state[agent.id]['time'] = self._time
 
         progress = self._state[agent.id]['progress']
