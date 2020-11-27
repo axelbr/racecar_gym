@@ -26,7 +26,6 @@ sensors to use (note that they must be available in the vehicle configuration) a
 ```yaml
 world:
   name: austria
-  start_positions: index
 agents:
   - id: A
     vehicle:
