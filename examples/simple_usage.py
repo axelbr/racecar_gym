@@ -12,7 +12,7 @@ while not done:
     obs, rewards, dones, states = env.step(action)
     done = any(dones.values())
     sleep(0.01)
-    if t % 10 == 0:
+    if t % 100 == 0:
         image = env.render(mode='birds_eye', agent='A')
     t+=1
 

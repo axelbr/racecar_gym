@@ -12,14 +12,15 @@ register_task(name='maximize_progress', task=MaximizeProgressTask)
 scenario = MultiAgentScenario.from_spec("custom.yml", rendering=True)
 env: MultiAgentRaceEnv = MultiAgentRaceEnv(scenario=scenario)
 agent = GapFollower()
-
+print(env.action_space)
+print(env.observation_space)
 done = False
 obs = env.reset(mode='grid')
 t = 0
 while not done:
     action = env.action_space.sample()
     action_gf = agent.action(obs['A'])
-    action['A'] = {'motor': action_gf[:2], 'steering': action_gf[-1]}
+    action['A'] = {'motor': action_gf[0], 'steering': action_gf[1]}
     obs, rewards, dones, states = env.step(action)
     done = any(dones.values())
     sleep(0.01)
