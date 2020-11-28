@@ -41,9 +41,12 @@ One agent with id **A** is specified. The agent controls the differential drive 
 
 ### Observations
 
-Observations are obtained through sensors. Each agent specifies which sensor to use. The observation space is a dictionary
-where the names of the sensors are the keys which map to the actual measurements. Currently, five sensors are implemented:
-GPS, IMU, Tachometer, LiDAR and RGB Camera. Further, the observation space also includes the current simulation time.
+Observations are obtained by (possibly noisy) sensors. Parameters for the sensors as well as the level of noise, can be
+configured in the corresponding vehicle configuration (e.g.  [differential racecar](models/vehicles/racecar/racecar.yml)). 
+In the scenario specification, one can specify which of the available  sensors should be actually used. 
+The observation space is a dictionary where the names of the sensors are the keys 
+which map to the actual measurements. Currently, five sensors are implemented:
+pose, velocity, acceleration, LiDAR and RGB Camera. Further, the observation space also includes the current simulation time.
 
 |Key|Space|Defaults|Description|
 |---|---|---|---|
@@ -57,13 +60,13 @@ GPS, IMU, Tachometer, LiDAR and RGB Camera. Further, the observation space also 
 ### Actions
 The action space for a single agent is a defined by the actuators of the vehicle. For instance, [differential racecar](models/vehicles/racecar/racecar.yml)
 defines two actuators: motor and steering. The action space is therefore a dictionary with keys `motor` and `steering`.
-
+Note, that the action space of the car is normalized between -1 and 1.
 The complete action space for this vehicle looks like this:
 
-|Key|Space|Defaults|Description|
-|---|---|---|---|
-|motor|`Box(2,)`| |Motor command consisting of the target speed and the force to apply.|
-|steering|`Box(1,)`| |Steering angle.|
+|Key|Space|Description|
+|---|---|---|
+|motor|`Box(low=-1, high=1, shape=(1,))`|Throttle command. If negative, the car accelerates backwards.|
+|steering|`Box(low=-1, high=1, shape=(1,))`|Normalized steering angle.|
 
 ### State
 In addition to observations obtained by sensors, the environment passes back the true state of each vehicle in each
@@ -75,12 +78,15 @@ Currently, the state looks like this:
 |wall_collision|`bool`|True if the vehicle collided with the wall.|
 |opponent_collisions|`List[str]`|List of opponent id's which are involved in a collision with the agent.|
 |pose|`NDArrray[6]`|Ground truth pose of the vehicle (x, y, z, roll, pitch, yaw).|
+|acceleration|`NDArrray[6]`|Ground truth acceleration of the vehicle (x, y, z, roll, pitch, yaw).|
+|velocity|`NDArrray[6]`|Ground truth velocity of the vehicle (x, y, z, roll, pitch, yaw).|
 |progress|`float`|Current progress in this lap. Interval: [0, 1]|
 |time|`float`|Simulation time.|
 |checkpoint|`int`|Tracks are subdivided into checkpoints to make sure agents are racing in clockwise direction. Starts at 0.|
 |lap|`int`|Current lap.|
-|rank|`float`|Current rank of the agent, based on lap and progress.|
-
+|rank|`int`|Current rank of the agent, based on lap and progress.|
+|wrong_way|`bool`|Indicates wether the agent goes in the right or wrong direction.|
+|observations|`Dict`|The most recent observations of the agent.
 ## Scenes
 
 Currently four maps are available. Each scenario is also available with a GUI
@@ -93,6 +99,7 @@ server. To launch the rendering window, you can append '*_Gui*' to the environme
 |![berlin](docs/tracks/berlin.png)|`MultiAgentBerlin-v0`|
 |![montreal](docs/tracks/montreal.png)|`MultiAgentMontreal-v0`|
 |![torino](docs/tracks/torino.png)|`MultiAgentTorino-v0`|
+|![torino](docs/tracks/circle.png)|`MultiAgentCirce_cw-v0` `MultiAgentCirce_ccw-v0`|
 
 Scenarios can also be customized. Have a look at the examples.
 
