@@ -55,7 +55,6 @@ pose, velocity, acceleration, LiDAR and RGB Camera. Further, the observation spa
 |acceleration|`Box(6,)`| |Holds the `x`, `y` and `z` components of the translational and rotational acceleration.|
 |lidar|`Box(<scans>,)`|`scans: 1080`|Lidar range scans.|
 |rgb_camera|`Box(<height>, <width>, 3)`|`height: 240, width: 320`|RGB image of the front camera.|
-|time|`Box(1,)`| |Current simulation time.|
 
 ### Actions
 The action space for a single agent is a defined by the actuators of the vehicle. For instance, [differential racecar](models/vehicles/racecar/racecar.yml)
