@@ -77,9 +77,9 @@ Currently, the state looks like this:
 |---|---|---|
 |wall_collision|`bool`|True if the vehicle collided with the wall.|
 |opponent_collisions|`List[str]`|List of opponent id's which are involved in a collision with the agent.|
-|pose|`NDArrray[6]`|Ground truth pose of the vehicle (x, y, z, roll, pitch, yaw).|
-|acceleration|`NDArrray[6]`|Ground truth acceleration of the vehicle (x, y, z, roll, pitch, yaw).|
-|velocity|`NDArrray[6]`|Ground truth velocity of the vehicle (x, y, z, roll, pitch, yaw).|
+|pose|`NDArray[6]`|Ground truth pose of the vehicle (x, y, z, roll, pitch, yaw).|
+|acceleration|`NDArray[6]`|Ground truth acceleration of the vehicle (x, y, z, roll, pitch, yaw).|
+|velocity|`NDArray[6]`|Ground truth velocity of the vehicle (x, y, z, roll, pitch, yaw).|
 |progress|`float`|Current progress in this lap. Interval: [0, 1]|
 |time|`float`|Simulation time.|
 |checkpoint|`int`|Tracks are subdivided into checkpoints to make sure agents are racing in clockwise direction. Starts at 0.|
@@ -99,7 +99,7 @@ server. To launch the rendering window, you can append '*_Gui*' to the environme
 |![berlin](docs/tracks/berlin.png)|`MultiAgentBerlin-v0`|
 |![montreal](docs/tracks/montreal.png)|`MultiAgentMontreal-v0`|
 |![torino](docs/tracks/torino.png)|`MultiAgentTorino-v0`|
-|![torino](docs/tracks/circle.png)|`MultiAgentCirce_cw-v0` `MultiAgentCirce_ccw-v0`|
+|![torino](docs/tracks/circle.png)|`MultiAgentCircle_cw-v0` `MultiAgentCircle_ccw-v0`|
 
 Scenarios can also be customized. Have a look at the examples.
 
