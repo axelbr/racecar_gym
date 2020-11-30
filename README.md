@@ -99,7 +99,7 @@ server. To launch the rendering window, you can append '*_Gui*' to the environme
 |![montreal](docs/tracks/montreal.png)|`MultiAgentMontreal-v0`, `SingleAgentMontreal-v0`|
 |![torino](docs/tracks/torino.png)|`MultiAgentTorino-v0`, `SingleAgentTorino-v0`|
 |![torino](docs/tracks/circle.png)|`MultiAgentCircle_cw-v0`, `MultiAgentCircle_ccw-v0`, `SingleAgentCircle_cw-v0`, `SingleAgentCircle_ccw-v0`|
-|![torino](docs/tracks/circle.png)|`MultiAgentPlechaty-v0`, `SingleAgentPlechaty-v0`|
+|![torino](docs/tracks/plechaty.png)|`MultiAgentPlechaty-v0`, `SingleAgentPlechaty-v0`|
 
 Scenarios can also be customized. Have a look at the examples.
 
