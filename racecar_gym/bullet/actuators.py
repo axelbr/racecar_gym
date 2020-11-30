@@ -43,7 +43,7 @@ class Motor(BulletActuator[Tuple[float, float]]):
 
     def control(self, acceleration: float) -> None:
         if acceleration < 0:
-            velocity = -self._config.max_velocity * self._config.velocity_multiplier
+            velocity = 0
         else:
             velocity = self._config.max_velocity * self._config.velocity_multiplier
 
