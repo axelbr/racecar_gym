@@ -13,9 +13,12 @@ t = 0
 while not done:
     action = env.action_space.sample()
     action_gf = agent.action(obs['A'])
+    action['motor'] = 1.0
+    if t > 150:
+        action['motor'] = 0.0
     action['A'] = {'motor': action_gf[0], 'steering': action_gf[1]}
     obs, rewards, dones, states = env.step(action)
-    print(states['A']['progress'])
+    print(obs['A']['progress'])
     done = any(dones.values())
     sleep(0.01)
     if t % 10 == 0:
