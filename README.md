@@ -94,11 +94,12 @@ server. To launch the rendering window, you can append '*_Gui*' to the environme
 
 | Image | Name |
 | --- | --- |
-|![austria](docs/tracks/austria.png)|`MultiAgentAustria-v0`|
-|![berlin](docs/tracks/berlin.png)|`MultiAgentBerlin-v0`|
-|![montreal](docs/tracks/montreal.png)|`MultiAgentMontreal-v0`|
-|![torino](docs/tracks/torino.png)|`MultiAgentTorino-v0`|
-|![torino](docs/tracks/circle.png)|`MultiAgentCircle_cw-v0` `MultiAgentCircle_ccw-v0`|
+|![austria](docs/tracks/austria.png)|`MultiAgentAustria-v0`, `SingleAgentAustria-v0`|
+|![berlin](docs/tracks/berlin.png)|`MultiAgentBerlin-v0`, `SingleAgentBerlin-v0`|
+|![montreal](docs/tracks/montreal.png)|`MultiAgentMontreal-v0`, `SingleAgentMontreal-v0`|
+|![torino](docs/tracks/torino.png)|`MultiAgentTorino-v0`, `SingleAgentTorino-v0`|
+|![torino](docs/tracks/circle.png)|`MultiAgentCircle_cw-v0`, `MultiAgentCircle_ccw-v0`, `SingleAgentCircle_cw-v0`, `SingleAgentCircle_ccw-v0`|
+|![torino](docs/tracks/circle.png)|`MultiAgentPlechaty-v0`, `SingleAgentPlechaty-v0`|
 
 Scenarios can also be customized. Have a look at the examples.
 
