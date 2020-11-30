@@ -23,6 +23,24 @@ register(id='MultiAgentAustria-v0',
         )
     })
 
+register(id='SingleAgentAustria_Gui-v0',
+    entry_point='racecar_gym.envs:SingleAgentRaceEnv',
+    kwargs={
+        'scenario': SingleAgentScenario.from_spec(
+            path=f'{base_path}/../scenarios/austria_single.yml',
+            rendering=True
+        )
+    })
+
+register(id='SingleAgentAustria-v0',
+    entry_point='racecar_gym.envs:SingleAgentRaceEnv',
+    kwargs={
+        'scenario': SingleAgentScenario.from_spec(
+            path=f'{base_path}/../scenarios/austria_single.yml',
+            rendering=False
+        )
+    })
+
 register(id='MultiAgentBerlin_Gui-v0',
     entry_point='racecar_gym.envs:MultiAgentRaceEnv',
     kwargs={
@@ -40,6 +58,24 @@ register(id='MultiAgentBerlin-v0',
                  rendering=False
              )
          })
+
+register(id='SingleAgentBerlin_Gui-v0',
+    entry_point='racecar_gym.envs:SingleAgentRaceEnv',
+    kwargs={
+        'scenario': SingleAgentScenario.from_spec(
+            path=f'{base_path}/../scenarios/berlin_single.yml',
+            rendering=True
+        )
+    })
+
+register(id='SingleAgentBerlin-v0',
+    entry_point='racecar_gym.envs:SingleAgentRaceEnv',
+    kwargs={
+        'scenario': SingleAgentScenario.from_spec(
+            path=f'{base_path}/../scenarios/berlin_single.yml',
+            rendering=False
+        )
+    })
 
 register(id='MultiAgentTorino_Gui-v0',
          entry_point='racecar_gym.envs:MultiAgentRaceEnv',
