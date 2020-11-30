@@ -5,7 +5,6 @@ import gym
 
 T = TypeVar('T')
 
-
 class Actuator(ABC, Generic[T]):
 
     def __init__(self, name: str):

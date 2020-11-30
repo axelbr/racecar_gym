@@ -54,20 +54,21 @@ class GapFollower:
 
         # Find max length gap
         if len(proc_ranges) < 1:
-            return (0, 0, 0)
+            return (0, 0)
         gap = self.find_max_gap(free_space_ranges=proc_ranges, min_distance=min_distance)
 
         if len(gap) < 1:
-            return (0, 0, 0)
+            return (0, 0)
         # Find the best point in the gap
         best_point = min_index + self.find_best_point(start_i=gap[0], end_i=gap[1], ranges=proc_ranges)
 
         # Publish Drive message
         angle = (-math.pi/2 + best_point * math.pi / 1080)
         angle = math.copysign(min(1, abs(angle)), angle)
-        return np.random.normal(loc=2.0, scale=0.01), \
-               np.random.normal(loc=0.3, scale=0.01), \
-               np.random.normal(loc=angle, scale=0.0),
+
+        command = angle / 0.42
+
+        return np.random.normal(loc=0.1, scale=0.0), np.random.normal(loc=command, scale=0.0)
 
     def __call__(self, obs, *args):
         return np.expand_dims(np.array(self.action(obs)), 0), obs

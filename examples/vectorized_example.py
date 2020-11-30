@@ -19,7 +19,7 @@ for i in range(3):
             multi_action = dict()
             for agent_id in obs[i].keys():
                 act = gfollow.action(obs[i][agent_id])
-                act = {'motor': (act[0], act[1]), 'steering': act[2]}
+                act = {'motor': act[0], 'steering': act[1]}
                 multi_action[agent_id] = act
             action.append(multi_action)
         #action = env.action_space.sample()

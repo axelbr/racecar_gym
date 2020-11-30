@@ -2,9 +2,13 @@ from time import sleep
 import gym
 from racecar_gym.envs import MultiAgentRaceEnv
 
-env: MultiAgentRaceEnv = gym.make('MultiAgentBerlin_Gui-v0')
+env = gym.make('MultiAgentBerlin_Gui-v0')
 
 done = False
+
+# Currently, there are two reset modes available: 'grid' and 'random'.
+# Grid: Place agents on predefined starting position.
+# Random: Random poses on the track.
 obs = env.reset(mode='grid')
 t = 0
 while not done:
@@ -12,7 +16,10 @@ while not done:
     obs, rewards, dones, states = env.step(action)
     done = any(dones.values())
     sleep(0.01)
-    if t % 10 == 0:
+    if t % 100 == 0:
+        # Currently, two rendering modes are available: 'birds_eye' and 'follow'
+        # birds_eye: Follow an agent in birds eye perspective.
+        # follow: Follow an agent in a 3rd person view.
         image = env.render(mode='birds_eye', agent='A')
     t+=1
 
