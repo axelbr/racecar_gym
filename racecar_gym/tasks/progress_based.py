@@ -52,19 +52,6 @@ class MaximizeProgressMaskObstacleTask(MaximizeProgressTask):
     return progress_reward * distance_to_obstacle
 
 
-class MaximizeFastProgressTask(MaximizeProgressTask):
-  def __init__(self, laps: int, time_limit: float, terminate_on_collision: bool, delta_progress=0.001,
-               collision_reward=0, frame_reward=0, progress_reward=100, velocity_reward=0.01):
-    super().__init__(laps, time_limit, terminate_on_collision, delta_progress, collision_reward, frame_reward,
-                     progress_reward)
-    self._velocity_reward = velocity_reward
-
-  def reward(self, agent_id, state, action) -> float:
-    progress_reward = super().reward(agent_id, state, action)
-    velocity_reward = self._velocity_reward * np.linalg.norm(state[agent_id]['velocity'])
-    return progress_reward + velocity_reward
-
-
 class RankDiscountedMaximizeProgressTask(MaximizeProgressTask):
   def __init__(self, laps: int, time_limit: float, terminate_on_collision: bool, delta_progress=0.001,
                collision_reward=-100, frame_reward=-0.1, progress_reward=1):
