@@ -2,7 +2,7 @@ from time import sleep
 import gym
 from racecar_gym.envs import MultiAgentRaceEnv
 
-env = gym.make('SingleAgentPlechaty_Gui-v0')
+env = gym.make('SingleAgentAustria_Gui-v0')
 
 done = False
 

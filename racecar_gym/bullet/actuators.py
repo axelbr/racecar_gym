@@ -58,7 +58,7 @@ class Motor(BulletActuator[Tuple[float, float]]):
             )
 
     def space(self) -> gym.Space:
-        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,))
+        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float64)
 
 
 class SteeringWheel(BulletActuator[float]):
@@ -82,4 +82,4 @@ class SteeringWheel(BulletActuator[float]):
             )
 
     def space(self) -> gym.Space:
-        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,))
+        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float64)
