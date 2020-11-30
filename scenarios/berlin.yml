@@ -1,0 +1,31 @@
+world:
+  name: berlin
+agents:
+  - id: A
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+    task:
+      task_name: maximize_progress
+      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
+  - id: B
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+    task:
+      task_name: maximize_progress
+      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
+  - id: C
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+    task:
+      task_name: maximize_progress
+      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}
+  - id: D
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+    task:
+      task_name: maximize_progress
+      params: {laps: 1, time_limit: 120.0, terminate_on_collision: True}

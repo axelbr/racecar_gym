@@ -1,0 +1,15 @@
+name: plechaty
+sdf: plechaty.sdf
+map:
+  resolution: 0.05
+  origin: [-9.143440, -14.392532, 0.000000]
+  maps: maps/maps.npz
+  starting_grid: maps/starts.npz
+  checkpoints: 5
+
+physics:
+  gravity: -9.81
+
+simulation:
+  time_step: 0.01
+  rendering: True
