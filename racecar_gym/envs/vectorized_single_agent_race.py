@@ -66,7 +66,7 @@ class VectorizedSingleAgentRaceEnv(gym.Env):
 
     def reset(self, mode: str = 'grid'):
         observations = []
-        for i, conn in self._env_connections:
+        for i, conn in enumerate(self._env_connections):
             conn.send('reset')
             conn.send(mode)
             obs = conn.recv()
