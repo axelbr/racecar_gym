@@ -42,7 +42,8 @@ class VectorizedSingleAgentRaceEnv(gym.Env):
                 step = env.step(action)
                 connection.send(step)
             elif command == 'reset':
-                obs = env.reset()
+                mode = connection.recv()
+                obs = env.reset(mode=mode)
                 connection.send(obs)
             elif command == 'close':
                 terminate = True
@@ -63,10 +64,11 @@ class VectorizedSingleAgentRaceEnv(gym.Env):
 
         return observations, rewards, dones, states
 
-    def reset(self):
+    def reset(self, mode: str = 'grid'):
         observations = []
         for i, conn in self._env_connections:
             conn.send('reset')
+            conn.send(mode)
             obs = conn.recv()
             observations.append(obs)
         return observations
