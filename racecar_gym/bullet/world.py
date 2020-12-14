@@ -93,7 +93,7 @@ class World(world.World):
         if mode == 'biased_random':
             distance_map = self._maps['obstacle']
             progress_map = self._maps['progress']
-            if random.random() < 0.5:
+            if random.random() < 0.3:
                 sampling_area = np.argwhere((distance_map.map > 0.5) &
                                             (0.25 <= progress_map.map) & (progress_map.map <= 0.30))
             else:
