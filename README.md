@@ -12,7 +12,7 @@ cd racecar_gym
 pip install -e .
 ```
 
-In order to use the predefined maps described below, download a maps package release and unzip its contents
+In order to use the predefined tracks described below, download a tracks package release and unzip its contents
 to *models/scenes/*. 
 
 Here is how you can do this from the command line:
