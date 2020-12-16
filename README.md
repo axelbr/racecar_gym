@@ -19,8 +19,8 @@ Here is how you can do this from the command line:
 ```shell_script
 cd ./models/scenes
 VERSION=v1.0.0
-wget https://github.com/axelbr/racecar_gym/releases/download/tracks-${VERSION}/maps.zip
-unzip maps.zip
+wget https://github.com/axelbr/racecar_gym/releases/download/tracks-${VERSION}/tracks.zip
+unzip tracks.zip
 ```
 
 
