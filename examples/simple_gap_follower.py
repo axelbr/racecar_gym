@@ -15,7 +15,7 @@ while not done:
     action_gf = agent.action(obs['A'])
     action['A'] = {'motor': action_gf[0], 'steering': action_gf[1]}
     obs, rewards, dones, states = env.step(action)
-    print(obs['A']['progress'])
+    print(states['A']['progress'])
     done = any(dones.values())
     sleep(0.01)
     if t % 10 == 0:
