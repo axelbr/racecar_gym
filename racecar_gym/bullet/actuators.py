@@ -41,18 +41,24 @@ class Motor(BulletActuator[Tuple[float, float]]):
         super().__init__(name)
         self._config = config
 
-    def control(self, command: Tuple[float, float]) -> None:
-        velocity, force = command
+    def control(self, acceleration: float) -> None:
+        if acceleration < 0:
+            velocity = 0
+        else:
+            velocity = self._config.max_velocity * self._config.velocity_multiplier
+
+        force = abs(acceleration) * self._config.max_force
+
         for index in self.joint_indices:
-            pybullet.setJointMotorControl2(self.body_id,
-                                           index, pybullet.VELOCITY_CONTROL,
-                                           targetVelocity=velocity * self._config.velocity_multiplier,
-                                           force=force)
+            pybullet.setJointMotorControl2(
+                self.body_id, index,
+                pybullet.VELOCITY_CONTROL,
+                targetVelocity=velocity,
+                force=force
+            )
 
     def space(self) -> gym.Space:
-        return gym.spaces.Box(low=np.array([0.0, 0.0]),
-                              high=np.array([self._config.max_velocity, self._config.max_force]),
-                              shape=(2,))
+        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float64)
 
 
 class SteeringWheel(BulletActuator[float]):
@@ -66,13 +72,14 @@ class SteeringWheel(BulletActuator[float]):
         self._config = config
 
     def control(self, command: float) -> None:
+        angle = command * self._config.max_steering_angle * self._config.steering_multiplier
         for joint in self.joint_indices:
-            pybullet.setJointMotorControl2(self.body_id,
-                                           joint,
-                                           pybullet.POSITION_CONTROL,
-                                           targetPosition=-command * self._config.steering_multiplier)
+            pybullet.setJointMotorControl2(
+                self.body_id,
+                joint,
+                pybullet.POSITION_CONTROL,
+                targetPosition=-angle
+            )
 
     def space(self) -> gym.Space:
-        return gym.spaces.Box(low=-self._config.max_steering_angle,
-                              high=self._config.max_steering_angle,
-                              shape=(1,))
+        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float64)

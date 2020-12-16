@@ -3,9 +3,10 @@ from racecar_gym import MultiAgentScenario
 from racecar_gym.envs.multi_agent_race import MultiAgentRaceEnv
 
 scenario = MultiAgentScenario.from_spec(
-                 path='scenarios/austria.yml',
-                 rendering=True
-             )
+    path='custom.yml',
+    rendering=True
+)
+
 env = MultiAgentRaceEnv(scenario=scenario)
 
 print(env.observation_space)

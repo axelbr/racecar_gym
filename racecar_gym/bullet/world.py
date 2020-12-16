@@ -88,33 +88,51 @@ class World(world.World):
             distance_map = self._maps['obstacle']
             progress_map = self._maps['progress']
             center_corridor = np.argwhere(distance_map.map > 0.5)
-            position = random.choice(center_corridor)
-
-            progress = progress_map.map[position[0], position[1]]
-            delta_progress = 0.025
-            direction_progress_min = (progress + delta_progress) % 1
-            direction_progress_max = (progress + 2 * delta_progress) % 1
-            if direction_progress_min < direction_progress_max:
-                direction_area = np.argwhere(np.logical_and(
-                    progress_map.map > direction_progress_min,
-                    progress_map.map <= direction_progress_max,
-                ))
+            x, y, angle = self._random_position(progress_map, center_corridor)
+            return (x, y, 0.05), (0, 0, angle)
+        if mode == 'biased_random':
+            distance_map = self._maps['obstacle']
+            progress_map = self._maps['progress']
+            if random.random() < 0.3:
+                sampling_area = np.argwhere((distance_map.map > 0.5) &
+                                            (0.25 <= progress_map.map) & (progress_map.map <= 0.30))
             else:
-                # bugfix: when min=0.99, max=0.01, the 'and' is empty
-                direction_area = np.argwhere(np.logical_or(
-                    progress_map.map <= direction_progress_min,
-                    progress_map.map > direction_progress_max,
-                ))
-            if direction_area.shape[0] > 0:
-                next_position = random.choice(direction_area)
-            px, py = position[0], position[1]
-            npx, npy = next_position[0], next_position[1]
-            diff = np.array(progress_map.to_meter(npx, npy)) - np.array(progress_map.to_meter(px, py))
-            angle = np.arctan2(diff[1], diff[0])
-            # angle = np.random.normal(loc=angle, scale=0.15)
-            x, y = progress_map.to_meter(px, py)
+                sampling_area = np.argwhere(distance_map.map > 0.5)
+            x, y, angle = self._random_position(progress_map, sampling_area)
             return (x, y, 0.05), (0, 0, angle)
         raise NotImplementedError(mode)
+
+    def _random_position(self, progress_map, sampling_map, delta_progress_next_pos=0.025):
+        position = random.choice(sampling_map)
+        progress = progress_map.map[position[0], position[1]]
+
+        # next position is a random point in the map which has progress greater than the current `position`
+        # note: this approach suffers in "wide" tracks
+        direction_progress_min = (progress + delta_progress_next_pos) % 1
+        direction_progress_max = (progress + 2 * delta_progress_next_pos) % 1
+        if direction_progress_min < direction_progress_max:
+            direction_area = np.argwhere(np.logical_and(
+                progress_map.map > direction_progress_min,
+                progress_map.map <= direction_progress_max,
+            ))
+        else:
+            # bugfix: when min=0.99, max=0.01, the 'and' is empty
+            direction_area = np.argwhere(np.logical_or(
+                progress_map.map <= direction_progress_min,
+                progress_map.map > direction_progress_max,
+            ))
+        if direction_area.shape[0] == 0:
+            raise ValueError(f"starting position not exist, consider to change `delta_progress`={delta_progress_next_pos}")
+        next_position = random.choice(direction_area)
+        px, py = position[0], position[1]
+        npx, npy = next_position[0], next_position[1]
+        diff = np.array(progress_map.to_meter(npx, npy)) - np.array(progress_map.to_meter(px, py))
+        angle = np.arctan2(diff[1], diff[0])
+        x, y = progress_map.to_meter(px, py)
+        return x, y, angle
+
+
+
 
     def update(self):
         p.stepSimulation()

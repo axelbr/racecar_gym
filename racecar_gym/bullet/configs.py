@@ -29,9 +29,8 @@ class VehicleConfig(YamlDataClassConfig):
 
 @dataclass
 class MapConfig(YamlDataClassConfig):
-    occupancy_grid: str = None
     resolution: float = None
-    origin: Tuple[float, float, float] = None
+    origin: List[float] = None
     maps: str = None
     starting_grid: str = None
     checkpoints: int = None

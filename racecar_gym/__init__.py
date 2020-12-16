@@ -5,74 +5,28 @@ from .tasks import get_task, register_task, Task
 
 base_path = os.path.dirname(__file__)
 
-register(id='MultiAgentAustria_Gui-v0',
-    entry_point='racecar_gym.envs:MultiAgentRaceEnv',
-    kwargs={
-        'scenario': MultiAgentScenario.from_spec(
-            path=f'{base_path}/../scenarios/austria.yml',
-            rendering=True
-        )
-    })
+def _register_multi_agent(name: str, file: str, rendering: bool):
+    scenario = MultiAgentScenario.from_spec(path=f'{base_path}/../scenarios/{file}', rendering=rendering)
+    register(
+        id=name,
+        entry_point='racecar_gym.envs:MultiAgentRaceEnv',
+        kwargs={'scenario': scenario}
+    )
 
-register(id='MultiAgentAustria-v0',
-    entry_point='racecar_gym.envs:MultiAgentRaceEnv',
-    kwargs={
-        'scenario': MultiAgentScenario.from_spec(
-            path=f'{base_path}/../scenarios/austria.yml',
-            rendering=False
-        )
-    })
+def _register_single_agent(name: str, file: str, rendering: bool):
+    scenario = SingleAgentScenario.from_spec(path=f'{base_path}/../scenarios/{file}', rendering=rendering)
+    register(
+        id=name,
+        entry_point='racecar_gym.envs:SingleAgentRaceEnv',
+        kwargs={'scenario': scenario}
+    )
 
-register(id='MultiAgentBerlin_Gui-v0',
-    entry_point='racecar_gym.envs:MultiAgentRaceEnv',
-    kwargs={
-        'scenario': MultiAgentScenario.from_spec(
-            path=f'{base_path}/../scenarios/berlin.yml',
-            rendering=True
-        )
-    })
+for scenario_file in os.listdir(f'{base_path}/../scenarios'):
+    track_name = os.path.basename(scenario_file).split('.')[0]
+    name = f'{track_name.capitalize()}'
+    _register_multi_agent(name=f'MultiAgent{name}-v0', file=scenario_file, rendering=False)
+    _register_multi_agent(name=f'MultiAgent{name}_Gui-v0', file=scenario_file, rendering=True)
+    _register_single_agent(name=f'SingleAgent{name}-v0', file=scenario_file, rendering=False)
+    _register_single_agent(name=f'SingleAgent{name}_Gui-v0', file=scenario_file, rendering=True)
 
-register(id='MultiAgentBerlin-v0',
-         entry_point='racecar_gym.envs:MultiAgentRaceEnv',
-         kwargs={
-             'scenario': MultiAgentScenario.from_spec(
-                 path=f'{base_path}/../scenarios/berlin.yml',
-                 rendering=False
-             )
-         })
 
-register(id='MultiAgentTorino_Gui-v0',
-         entry_point='racecar_gym.envs:MultiAgentRaceEnv',
-         kwargs={
-             'scenario': MultiAgentScenario.from_spec(
-                 path=f'{base_path}/../scenarios/torino.yml',
-                 rendering=True
-             )
-         })
-
-register(id='MultiAgentTorino-v0',
-         entry_point='racecar_gym.envs:MultiAgentRaceEnv',
-         kwargs={
-             'scenario': MultiAgentScenario.from_spec(
-                 path=f'{base_path}/../scenarios/torino.yml',
-                 rendering=False
-             )
-         })
-
-register(id='MultiAgentMontreal_Gui-v0',
-         entry_point='racecar_gym.envs:MultiAgentRaceEnv',
-         kwargs={
-             'scenario': MultiAgentScenario.from_spec(
-                 path=f'{base_path}/../scenarios/montreal.yml',
-                 rendering=True
-             )
-         })
-
-register(id='MultiAgentMontreal-v0',
-         entry_point='racecar_gym.envs:MultiAgentRaceEnv',
-         kwargs={
-             'scenario': MultiAgentScenario.from_spec(
-                 path=f'{base_path}/../scenarios/montreal.yml',
-                 rendering=False
-             )
-         })

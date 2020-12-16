@@ -107,7 +107,7 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
     def space(self) -> gym.Space:
         return gym.spaces.Box(low=self._min_range,
                               high=self._min_range + self._range,
-                              dtype=np.float32,
+                              dtype=np.float64,
                               shape=(self._rays,))
 
     def observe(self) -> NDArray[(Any,), np.float]:
@@ -223,7 +223,7 @@ class AccelerationSensor(BulletSensor[NDArray[(6,), np.float]]):
     def space(self) -> gym.Space:
         high = np.append(self._config.linear_bounds, self._config.angular_bounds).astype(dtype=np.float)
         low = -high
-        return gym.spaces.Box(low=low, high=high)
+        return gym.spaces.Box(low=low, high=high, dtype=np.float64)
 
     def observe(self) -> NDArray[(6,), np.float]:
         velocity = util.get_velocity(id=self.body_id)
@@ -257,7 +257,7 @@ class VelocitySensor(BulletSensor[NDArray[(6,), np.float]]):
     def space(self) -> gym.Space:
         high = np.array(3 * [self._config.max_linear_velocity] + 3 * [self._config.max_angular_velocity])
         low = -high
-        return gym.spaces.Box(low=low, high=high)
+        return gym.spaces.Box(low=low, high=high, dtype=np.float64)
 
     def observe(self) -> NDArray[(6,), np.float]:
         velocity = self._get_velocity()
@@ -280,7 +280,7 @@ class PoseSensor(BulletSensor[NDArray[(6,), np.float]]):
     def space(self) -> gym.Space:
         high = np.array(self._config.bounds + 3 * [np.pi])
         low = -high
-        return gym.spaces.Box(low=low, high=high)
+        return gym.spaces.Box(low=low, high=high, dtype=np.float64)
 
     def observe(self) -> NDArray[(6,), np.float]:
         position, orientation = p.getBasePositionAndOrientation(self.body_id)
