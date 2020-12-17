@@ -78,6 +78,7 @@ class World(world.World):
         self._objects = objects
 
     def get_starting_position(self, agent: Agent, mode: str) -> Pose:
+        distance_margin = .7
         if mode == 'grid':
             position = list(map(lambda agent: agent.id, self._agents)).index(agent.id)
             pose = self._starting_grid[position]
@@ -87,17 +88,17 @@ class World(world.World):
         if mode == 'random':
             distance_map = self._maps['obstacle']
             progress_map = self._maps['progress']
-            center_corridor = np.argwhere(distance_map.map > 0.5)
+            center_corridor = np.argwhere(distance_map.map > distance_margin)
             x, y, angle = self._random_position(progress_map, center_corridor)
             return (x, y, 0.05), (0, 0, angle)
         if mode == 'biased_random':
             distance_map = self._maps['obstacle']
             progress_map = self._maps['progress']
             if random.random() < 0.3:
-                sampling_area = np.argwhere((distance_map.map > 0.5) &
+                sampling_area = np.argwhere((distance_map.map > distance_margin) &
                                             (0.25 <= progress_map.map) & (progress_map.map <= 0.30))
             else:
-                sampling_area = np.argwhere(distance_map.map > 0.5)
+                sampling_area = np.argwhere(distance_map.map > distance_margin)
             x, y, angle = self._random_position(progress_map, sampling_area)
             return (x, y, 0.05), (0, 0, angle)
         raise NotImplementedError(mode)
