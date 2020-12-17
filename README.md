@@ -12,6 +12,19 @@ cd racecar_gym
 pip install -e .
 ```
 
+In order to use the predefined tracks described below, download a tracks package release and unzip its contents
+to *models/scenes/*. 
+
+Here is how you can do this from the command line:
+```shell_script
+cd ./models/scenes
+VERSION=v1.0.0
+wget https://github.com/axelbr/racecar_gym/releases/download/tracks-${VERSION}/tracks.zip
+unzip tracks.zip
+```
+
+
+
 ## Environments
 
 The observation and action space is a `Dict` holding the agents and their id's. The observation and action space for a single agent 
