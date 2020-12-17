@@ -13,9 +13,7 @@ obs = env.reset(mode='grid')
 t = 0
 while not done:
     action = env.action_space.sample()
-    obs, rewards, dones, states = env.step(action)
-
-    done = done#any(dones.values())
+    obs, rewards, done, states = env.step(action)
     sleep(0.01)
     if t % 30 == 0:
         # Currently, two rendering modes are available: 'birds_eye' and 'follow'
