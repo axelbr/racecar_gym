@@ -1,4 +1,6 @@
 import os
+import urllib.request
+import zipfile
 from typing import List
 
 from racecar_gym import core
@@ -57,9 +59,20 @@ def load_vehicle(spec: VehicleSpec) -> core.Vehicle:
 
 
 def load_world(spec: WorldSpec, agents: List[Agent]) -> core.World:
-    config_file = f'{base_path}/../../models/scenes/{spec.name}/{spec.name}.yml'
+    scene_path = f'{base_path}/../../models/scenes'
+    config_file = f'{scene_path}/{spec.name}/{spec.name}.yml'
+
     if not os.path.exists(config_file):
-        raise NotImplementedError(f'No scene with name {spec.name} implemented.')
+        try:
+            print(f'Downloading {spec.name} track.')
+            urllib.request.urlretrieve(
+                f'https://github.com/axelbr/racecar_gym/releases/download/tracks-v1.0.0/{spec.name}.zip',
+                f'{scene_path}/{spec.name}.zip'
+            )
+            with zipfile.ZipFile(f'{scene_path}/{spec.name}.zip', 'r') as zip:
+                zip.extractall(f'{scene_path}/')
+        except:
+            raise NotImplementedError(f'No scene with name {spec.name} implemented.')
 
     config = SceneConfig()
     config.load(config_file)
