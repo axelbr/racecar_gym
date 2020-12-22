@@ -91,16 +91,6 @@ class World(world.World):
             center_corridor = np.argwhere(distance_map.map > distance_margin)
             x, y, angle = self._random_position(progress_map, center_corridor)
             return (x, y, 0.05), (0, 0, angle)
-        if mode == 'biased_random':
-            distance_map = self._maps['obstacle']
-            progress_map = self._maps['progress']
-            if random.random() < 0.3:
-                sampling_area = np.argwhere((distance_map.map > distance_margin) &
-                                            (0.25 <= progress_map.map) & (progress_map.map <= 0.30))
-            else:
-                sampling_area = np.argwhere(distance_map.map > distance_margin)
-            x, y, angle = self._random_position(progress_map, sampling_area)
-            return (x, y, 0.05), (0, 0, angle)
         raise NotImplementedError(mode)
 
     def _random_position(self, progress_map, sampling_map, delta_progress_next_pos=0.025):
