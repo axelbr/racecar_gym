@@ -1,6 +1,7 @@
 from .task import Task
 import numpy as np
 
+
 class MaximizeProgressTask(Task):
   def __init__(self, laps: int, time_limit: float, terminate_on_collision: bool,
                delta_progress: float = 0.0, collision_reward: float = 0.0,
@@ -41,8 +42,9 @@ class MaximizeProgressTask(Task):
   def reset(self):
     self._last_stored_progress = None
 
+
 class MaximizeProgressMaskObstacleTask(MaximizeProgressTask):
-  def __init__(self, laps: int, time_limit: float, terminate_on_collision: bool, delta_progress=0.001,
+  def __init__(self, laps: int, time_limit: float, terminate_on_collision: bool, delta_progress=0.0,
                collision_reward=0, frame_reward=0, progress_reward=100):
     super().__init__(laps, time_limit, terminate_on_collision, delta_progress, collision_reward, frame_reward,
                      progress_reward)
@@ -50,7 +52,10 @@ class MaximizeProgressMaskObstacleTask(MaximizeProgressTask):
   def reward(self, agent_id, state, action) -> float:
     progress_reward = super().reward(agent_id, state, action)
     distance_to_obstacle = state[agent_id]['obstacle']
-    return progress_reward * distance_to_obstacle
+    if distance_to_obstacle < .5:   # max distance = 1, meaning perfectly centered in the widest point of the track
+      return 0.0
+    else:
+      return progress_reward
 
 
 class RankDiscountedMaximizeProgressTask(MaximizeProgressTask):
