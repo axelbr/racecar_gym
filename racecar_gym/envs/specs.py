@@ -20,6 +20,7 @@ class TaskSpec(YamlDataClassConfig):
 class VehicleSpec(YamlDataClassConfig):
     name: str = None
     sensors: List[str] = field(default_factory=lambda: [])
+    color: str = 'blue' # either red, blue, green, magenta or random
 
 
 @dataclass

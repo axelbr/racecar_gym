@@ -1,7 +1,8 @@
 import os
+import random
 import urllib.request
 import zipfile
-from typing import List
+from typing import List, Tuple
 
 from racecar_gym import core
 from racecar_gym.bullet.actuators import BulletActuator, Motor, SteeringWheel
@@ -34,6 +35,14 @@ def load_actuator(config: ActuatorConfig) -> BulletActuator:
     if config.type == 'steering':
         return SteeringWheel(name=config.name, config=SteeringWheel.Config(**config.params))
 
+def _compute_color(name: str) -> Tuple[float, float, float, float]:
+    return dict(
+        red=(1.0, 0.0, 0.0, 1.0),
+        green=(0.0, 1.0, 0.0, 1.0),
+        blue=(0.0, 0.0, 1.0, 1.0),
+        yellow=(1.0, 1.0, 0.0, 1.0),
+        magenta=(1.0, 0.0, 1.0, 1.0)
+    ).get(name, (random.random(), random.random(), random.random(), 1.0))
 
 def load_vehicle(spec: VehicleSpec) -> core.Vehicle:
     config_file = f'{base_path}/../../models/vehicles/{spec.name}/{spec.name}.yml'
@@ -43,7 +52,7 @@ def load_vehicle(spec: VehicleSpec) -> core.Vehicle:
     config = VehicleConfig()
     config.load(config_file)
     config.urdf_file = f'{os.path.dirname(config_file)}/{config.urdf_file}'
-
+    config.color = spec.color
     requested_sensors = set(spec.sensors)
     available_sensors = set([sensor.name for sensor in config.sensors])
 
@@ -53,7 +62,7 @@ def load_vehicle(spec: VehicleSpec) -> core.Vehicle:
     sensors = [FixedTimestepSensor(sensor=load_sensor(config=c), frequency=c.frequency, time_step=0.01) for c in
                sensors]
     actuators = [load_actuator(config=c) for c in config.actuators]
-    car_config = RaceCar.Config(urdf_file=config.urdf_file)
+    car_config = RaceCar.Config(urdf_file=config.urdf_file, color=_compute_color(config.color))
     vehicle = RaceCar(sensors=sensors, actuators=actuators, config=car_config)
     return vehicle
 
