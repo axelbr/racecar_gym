@@ -1,0 +1,77 @@
+import random
+from abc import ABC
+
+from racecar_gym.core.definitions import Pose
+from racecar_gym.core.gridmaps import GridMap
+import numpy as np
+
+
+class PositioningStrategy(ABC):
+
+    def get_pose(self, agent_index: int) -> Pose:
+        pass
+
+
+class AutomaticGridStrategy(PositioningStrategy):
+    def __init__(self, obstacle_map: GridMap, number_of_agents: int):
+        self._distance_map = obstacle_map
+        self._number_of_agents = number_of_agents
+
+    def get_pose(self, agent_index: int) -> Pose:
+        px, py = self._distance_map.to_pixel(position=(0, 0, 0))
+        starting_area = self._distance_map.map[px:px + 20, py - 20:py + 20]
+        center = np.argmax(starting_area)
+        max_index = np.unravel_index(center, shape=starting_area.shape)
+        center_position = self._distance_map.to_meter(px + max_index[0], py + max_index[1])
+        if agent_index % 2 == 0:
+            y = center_position[1] + 0.4
+        else:
+            y = center_position[1] - 0.4
+
+        x = center_position[0] + 0.7 * (self._number_of_agents - agent_index) / 2
+
+        return (x, y, 0.05), (0.0, 0.0, 0.0)
+
+
+class RandomPositioningStrategy(PositioningStrategy):
+
+    def __init__(self, progress_map: GridMap, obstacle_map: GridMap, min_distance_to_obstacle: float = 0.7):
+        self._progress = progress_map
+        self._obstacles = obstacle_map
+        self._distance_to_obstacle = min_distance_to_obstacle
+
+    def get_pose(self, agent_index: int) -> Pose:
+        center_corridor = np.argwhere(self._obstacles.map > self._distance_to_obstacle)
+        x, y, angle = self._random_position(self._progress, center_corridor)
+        return (x, y, 0.05), (0, 0, angle)
+
+    def _random_position(self, progress_map, sampling_map, delta_progress_next_pos=0.025):
+        position = random.choice(sampling_map)
+        progress = progress_map.map[position[0], position[1]]
+
+        # next position is a random point in the map which has progress greater than the current `position`
+        # note: this approach suffers in "wide" tracks
+        direction_progress_min = (progress + delta_progress_next_pos) % 1
+        direction_progress_max = (progress + 2 * delta_progress_next_pos) % 1
+        if direction_progress_min < direction_progress_max:
+            direction_area = np.argwhere(np.logical_and(
+                progress_map.map > direction_progress_min,
+                progress_map.map <= direction_progress_max,
+            ))
+        else:
+            # bugfix: when min=0.99, max=0.01, the 'and' is empty
+            direction_area = np.argwhere(np.logical_or(
+                progress_map.map <= direction_progress_min,
+                progress_map.map > direction_progress_max,
+            ))
+        if direction_area.shape[0] == 0:
+            raise ValueError(
+                f"starting position not exist, consider to change `delta_progress`={delta_progress_next_pos}")
+        next_position = random.choice(direction_area)
+        px, py = position[0], position[1]
+        npx, npy = next_position[0], next_position[1]
+        diff = np.array(progress_map.to_meter(npx, npy)) - np.array(progress_map.to_meter(px, py))
+        angle = np.arctan2(diff[1], diff[0])
+        x, y = progress_map.to_meter(px, py)
+        return x, y, angle
+

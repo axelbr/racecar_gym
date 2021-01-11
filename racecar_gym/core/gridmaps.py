@@ -15,10 +15,7 @@ class GridMap:
         self._width = grid_map.shape[1]
 
     def get_value(self, position: Position):
-        origin_x, origin_y = self._origin[0], self._origin[1]
-        x, y = position[0], position[1]
-        px = int(self._height - (y - origin_y) / self._resolution)
-        py = int((x - origin_x) / self._resolution)
+        px, py = self.to_pixel(position)
         return self._map[px, py]
 
     def to_meter(self, px: int, py: int) -> Tuple[float, float]:
@@ -26,6 +23,13 @@ class GridMap:
         y = origin_y - (px - self._height) * self._resolution
         x = py * self._resolution + origin_x
         return x, y
+
+    def to_pixel(self, position: Position) -> Tuple[int, int]:
+        origin_x, origin_y = self._origin[0], self._origin[1]
+        x, y = position[0], position[1]
+        px = int(self._height - (y - origin_y) / self._resolution)
+        py = int((x - origin_x) / self._resolution)
+        return px, py
 
     @property
     def map(self):
