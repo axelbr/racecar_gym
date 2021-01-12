@@ -35,7 +35,7 @@ class World(ABC):
         pass
 
     @abstractmethod
-    def render(self, agent_id: str, mode: str) -> np.ndarray:
+    def render(self, agent_id: str, mode: str, width: int = 640, height: int = 480) -> np.ndarray:
         pass
 
 

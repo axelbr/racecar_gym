@@ -34,8 +34,8 @@ class VectorizedSingleAgentRaceEnv(gym.Env):
         while not terminate:
             command = connection.recv()
             if command == 'render':
-                mode = connection.recv()
-                rendering = env.render(mode)
+                mode, kwargs = connection.recv()
+                rendering = env.render(mode=mode, **kwargs)
                 connection.send(rendering)
             elif command == 'step':
                 action = connection.recv()
@@ -78,11 +78,11 @@ class VectorizedSingleAgentRaceEnv(gym.Env):
             conn.send('close')
             conn.close()
 
-    def render(self, mode='follow'):
+    def render(self, mode: str ='follow', **kwargs):
         renderings = []
         for conn in self._env_connections:
             conn.send('render')
-            conn.send(mode)
+            conn.send((mode, kwargs))
 
         for conn in self._env_connections:
             rendering = conn.recv()

@@ -9,6 +9,7 @@ import pybullet as p
 
 from racecar_gym.bullet import util
 from racecar_gym.bullet.configs import MapConfig
+from racecar_gym.bullet.positioning import AutomaticGridStrategy, RandomPositioningStrategy
 from racecar_gym.core import world
 from racecar_gym.core.agent import Agent
 from racecar_gym.core.definitions import Pose
@@ -78,52 +79,14 @@ class World(world.World):
         self._objects = objects
 
     def get_starting_position(self, agent: Agent, mode: str) -> Pose:
-        distance_margin = .7
         if mode == 'grid':
-            position = list(map(lambda agent: agent.id, self._agents)).index(agent.id)
-            pose = self._starting_grid[position]
-            return tuple(pose[:3]), tuple(pose[3:])
-        if mode == 'checkpoint':
-            pass
-        if mode == 'random':
-            distance_map = self._maps['obstacle']
-            progress_map = self._maps['progress']
-            center_corridor = np.argwhere(distance_map.map > distance_margin)
-            x, y, angle = self._random_position(progress_map, center_corridor)
-            return (x, y, 0.05), (0, 0, angle)
-        raise NotImplementedError(mode)
-
-    def _random_position(self, progress_map, sampling_map, delta_progress_next_pos=0.025):
-        position = random.choice(sampling_map)
-        progress = progress_map.map[position[0], position[1]]
-
-        # next position is a random point in the map which has progress greater than the current `position`
-        # note: this approach suffers in "wide" tracks
-        direction_progress_min = (progress + delta_progress_next_pos) % 1
-        direction_progress_max = (progress + 2 * delta_progress_next_pos) % 1
-        if direction_progress_min < direction_progress_max:
-            direction_area = np.argwhere(np.logical_and(
-                progress_map.map > direction_progress_min,
-                progress_map.map <= direction_progress_max,
-            ))
+            strategy = AutomaticGridStrategy(obstacle_map=self._maps['obstacle'], number_of_agents=len(self._agents))
+        elif mode == 'random':
+            strategy = RandomPositioningStrategy(progress_map=self._maps['progress'], obstacle_map=self._maps['obstacle'])
         else:
-            # bugfix: when min=0.99, max=0.01, the 'and' is empty
-            direction_area = np.argwhere(np.logical_or(
-                progress_map.map <= direction_progress_min,
-                progress_map.map > direction_progress_max,
-            ))
-        if direction_area.shape[0] == 0:
-            raise ValueError(f"starting position not exist, consider to change `delta_progress`={delta_progress_next_pos}")
-        next_position = random.choice(direction_area)
-        px, py = position[0], position[1]
-        npx, npy = next_position[0], next_position[1]
-        diff = np.array(progress_map.to_meter(npx, npy)) - np.array(progress_map.to_meter(px, py))
-        angle = np.arctan2(diff[1], diff[0])
-        x, y = progress_map.to_meter(px, py)
-        return x, y, angle
-
-
-
+            raise NotImplementedError(mode)
+        start_index = list(map(lambda agent: agent.id, self._agents)).index(agent.id)
+        return strategy.get_pose(agent_index=start_index)
 
     def update(self):
         p.stepSimulation()
@@ -212,11 +175,11 @@ class World(world.World):
             rank = ranked.index(agent.id) + 1
             self._state[agent.id]['rank'] = rank
 
-    def render(self, agent_id: str, mode: str) -> np.ndarray:
+    def render(self, agent_id: str, mode: str, width=640, height=480) -> np.ndarray:
         agent = list(filter(lambda a: a.id == agent_id, self._agents))
         assert len(agent) == 1
         agent = agent[0]
         if mode == 'follow':
-            return util.follow_agent(agent=agent)
+            return util.follow_agent(agent=agent, width=width, height=height)
         elif mode == 'birds_eye':
-            return util.birds_eye(agent=agent)
+            return util.birds_eye(agent=agent, width=width, height=height)

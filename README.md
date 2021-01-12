@@ -46,13 +46,18 @@ agents:
     vehicle:
       name: racecar
       sensors: [lidar, pose, velocity, acceleration]
+      color: blue # default is blue, one of red, green, blue, yellow, magenta or random
     task:
       task_name: maximize_progress
       params: {laps: 1, time_limit: 120.0, terminate_on_collision: False}
 ```
 
-This example specifies a scenario in the [Austria](models/scenes/austria/austria.yml) map.
-One agent with id **A** is specified. The agent controls the differential drive racecar defined in [differential racecar](models/vehicles/racecar/racecar.yml), identified by its name. The task which is assigned to this agent is also identified by name (implementations can be found in [tasks.py](racecar_gym/core/tasks.py)). Task parameters are passed by the dict *params*.
+This example specifies a scenario on the [Austria](models/scenes/austria/austria.yml) track.
+One agent with id **A** is specified. The agent controls the differential drive racecar defined in [differential racecar](models/vehicles/racecar/racecar.yml), identified by its name.
+The scenario tells the agent to use only the specified sensors (lidar, pose, velocity, acceleration). 
+Optionally, one can also specify a color for the car. The default color is blue. Available colors are listed above.
+
+The task which is assigned to this agent is also identified by name (implementations can be found in [tasks.py](racecar_gym/core/tasks.py)). Task parameters are passed by the dict *params*.
 
 ### Observations
 

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 
 import pybullet
 
@@ -13,6 +13,7 @@ class RaceCar(Vehicle):
     @dataclass
     class Config:
         urdf_file: str
+        color: Tuple[float, float, float, float]
 
     def __init__(self, sensors: List[BulletSensor], actuators: List[BulletActuator], config: Config):
         super().__init__()
@@ -68,6 +69,7 @@ class RaceCar(Vehicle):
         position, orientation = initial_pose
         orientation = pybullet.getQuaternionFromEuler(orientation)
         id = pybullet.loadURDF(model, position, orientation)
+        pybullet.changeVisualShape(id, -1, rgbaColor=self._config.color)
         return id
 
     def _setup_constraints(self):

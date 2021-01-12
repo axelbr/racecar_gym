@@ -53,8 +53,10 @@ class MultiAgentRaceEnv(gym.Env):
 
         return observations
 
-    def render(self, mode='follow', agent: str = None):
+    def render(self, mode='follow', agent: str = None, **kwargs):
+        if mode not in MultiAgentRaceEnv.metadata['render.modes']:
+            raise NotImplementedError(f'"{mode}" is no supported render mode. Available render modes: {MultiAgentRaceEnv.metadata["render.modes"]}')
         if agent is None:
             agent = list(self._scenario.agents.keys())[0]
-        return self._scenario.world.render(agent_id=agent, mode=mode)
+        return self._scenario.world.render(agent_id=agent, mode=mode, **kwargs)
 
