@@ -34,7 +34,7 @@ class SingleAgentRaceEnv(gym.Env):
         obs['time'] = 0
         return obs
 
-    def render(self, mode='follow'):
-        return self._scenario.world.render(mode=mode, agent_id=self._scenario.agent.id)
+    def render(self, mode: str = 'follow', **kwargs):
+        return self._scenario.world.render(mode=mode, agent_id=self._scenario.agent.id, **kwargs)
 
 

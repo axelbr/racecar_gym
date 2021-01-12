@@ -35,8 +35,8 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
         while not terminate:
             command = connection.recv()
             if command == 'render':
-                mode, agent = connection.recv()
-                rendering = env.render(mode, agent)
+                mode, agent, kwargs = connection.recv()
+                rendering = env.render(mode=mode, agent=agent, **kwargs)
                 connection.send(rendering)
             elif command == 'step':
                 action = connection.recv()
@@ -76,7 +76,7 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
             conn.send('close')
             conn.close()
 
-    def render(self, mode='follow', agents: List[str] = None):
+    def render(self, mode='follow', agents: List[str] = None, **kwargs):
         renderings = []
 
         if agents is None:
@@ -84,7 +84,7 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
 
         for i, conn in enumerate(self._env_connections):
             conn.send('render')
-            conn.send((mode, agents[i]))
+            conn.send((mode, agents[i], kwargs))
 
         for conn in self._env_connections:
             rendering = conn.recv()
