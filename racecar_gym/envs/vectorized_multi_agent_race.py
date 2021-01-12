@@ -17,7 +17,7 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
         for i, scenario in enumerate(scenarios):
             parent_conn, child_conn = Pipe()
             self._env_connections.append(parent_conn)
-            env_process = Process(target=self._run_env, args=(scenario, child_conn, i))
+            env_process = Process(target=self._run_env, args=(scenario, child_conn))
             self._envs.append(env_process)
             env_process.start()
 
@@ -26,8 +26,7 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
         self.observation_space = gym.spaces.Tuple(obs_spaces)
         self.action_space = gym.spaces.Tuple(action_spaces)
 
-    def _run_env(self, scenario: MultiAgentScenario, connection: Connection, id: int):
-        print('Run environment.')
+    def _run_env(self, scenario: MultiAgentScenario, connection: Connection):
         env = MultiAgentRaceEnv(scenario=scenario)
         _ = env.reset()
         connection.send((env.observation_space, env.action_space))
@@ -43,7 +42,8 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
                 step = env.step(action)
                 connection.send(step)
             elif command == 'reset':
-                obs = env.reset()
+                mode = connection.recv()
+                obs = env.reset(mode=mode)
                 connection.send(obs)
             elif command == 'close':
                 terminate = True
@@ -63,10 +63,11 @@ class VectorizedMultiAgentRaceEnv(gym.Env):
 
         return observations, rewards, dones, states
 
-    def reset(self):
+    def reset(self, mode: str = 'grid'):
         observations = []
         for i, conn in enumerate(self._env_connections):
             conn.send('reset')
+            conn.send(mode)
             obs = conn.recv()
             observations.append(obs)
         return observations
