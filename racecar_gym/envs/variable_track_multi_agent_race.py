@@ -20,7 +20,7 @@ class DynamicTrackMultiAgentRaceEnv(VectorizedMultiAgentRaceEnv):
         if order == 'sequential':
             self._order_fn = lambda: (self._current_track_index + 1) % len(scenarios)
         elif order == 'random':
-            self._order_fn = lambda: random.choice(set(range(0, len(scenarios))) - {self._current_track_index})
+            self._order_fn = lambda: random.choice(list(set(range(0, len(scenarios))) - {self._current_track_index}))
         self.observation_space = self.observation_space.spaces[0]
         self.action_space = self.action_space.spaces[0]
 
