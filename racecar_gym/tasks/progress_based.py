@@ -52,7 +52,7 @@ class MaximizeProgressMaskObstacleTask(MaximizeProgressTask):
   def reward(self, agent_id, state, action) -> float:
     progress_reward = super().reward(agent_id, state, action)
     distance_to_obstacle = state[agent_id]['obstacle']
-    if distance_to_obstacle < .5:   # max distance = 1, meaning perfectly centered in the widest point of the track
+    if distance_to_obstacle < .3:   # max distance = 1, meaning perfectly centered in the widest point of the track
       return 0.0
     else:
       return progress_reward
