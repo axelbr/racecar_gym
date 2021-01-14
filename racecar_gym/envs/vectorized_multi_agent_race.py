@@ -1,94 +1,30 @@
 from typing import List, Tuple, Dict
 
-import gym
-from multiprocessing import Pipe, Process
-from multiprocessing.connection import Connection
+from gym import Env
+
 from .scenarios import MultiAgentScenario
 from .multi_agent_race import MultiAgentRaceEnv
+from racecar_gym.envs.util.vectorized_race import VectorizedRaceEnv
 
 
-class VectorizedMultiAgentRaceEnv(gym.Env):
+class VectorizedMultiAgentRaceEnv(Env):
 
     metadata = {'render.modes': ['follow', 'birds_eye']}
 
     def __init__(self, scenarios: List[MultiAgentScenario]):
-        self._env_connections = []
-        self._envs = []
-        for i, scenario in enumerate(scenarios):
-            parent_conn, child_conn = Pipe()
-            self._env_connections.append(parent_conn)
-            env_process = Process(target=self._run_env, args=(scenario, child_conn))
-            self._envs.append(env_process)
-            env_process.start()
+        self._env = VectorizedRaceEnv(factories=[lambda: MultiAgentRaceEnv(s) for s in scenarios])
+        self.action_space, self.observation_space = self._env.action_space, self._env.observation_space
 
-        spaces = [c.recv() for c in self._env_connections]
-        obs_spaces, action_spaces = tuple(zip(*spaces))
-        self.observation_space = gym.spaces.Tuple(obs_spaces)
-        self.action_space = gym.spaces.Tuple(action_spaces)
-
-    def _run_env(self, scenario: MultiAgentScenario, connection: Connection):
-        env = MultiAgentRaceEnv(scenario=scenario)
-        _ = env.reset()
-        connection.send((env.observation_space, env.action_space))
-        terminate = False
-        while not terminate:
-            command = connection.recv()
-            if command == 'render':
-                mode, agent, kwargs = connection.recv()
-                rendering = env.render(mode=mode, agent=agent, **kwargs)
-                connection.send(rendering)
-            elif command == 'step':
-                action = connection.recv()
-                step = env.step(action)
-                connection.send(step)
-            elif command == 'reset':
-                mode = connection.recv()
-                obs = env.reset(mode=mode)
-                connection.send(obs)
-            elif command == 'close':
-                terminate = True
 
     def step(self, actions: Tuple[Dict]):
-        for action, conn in zip(actions, self._env_connections):
-            conn.send('step')
-            conn.send(action)
-
-        observations, rewards, dones, states = [], [], [], []
-        for conn in self._env_connections:
-            obs, reward, done, state = conn.recv()
-            observations.append(obs)
-            rewards.append(reward)
-            dones.append(done)
-            states.append(state)
-
-        return observations, rewards, dones, states
+        return self._env.step(actions=actions)
 
     def reset(self, mode: str = 'grid'):
-        observations = []
-        for i, conn in enumerate(self._env_connections):
-            conn.send('reset')
-            conn.send(mode)
-            obs = conn.recv()
-            observations.append(obs)
-        return observations
+        return self._env.reset(mode=mode)
 
     def close(self):
-        for i, conn in enumerate(self._env_connections):
-            conn.send('close')
-            conn.close()
+        self._env.close()
 
-    def render(self, mode='follow', agents: List[str] = None, **kwargs):
-        renderings = []
-
-        if agents is None:
-            agents = [None for _ in range(len(self._env_connections))]
-
-        for i, conn in enumerate(self._env_connections):
-            conn.send('render')
-            conn.send((mode, agents[i], kwargs))
-
-        for conn in self._env_connections:
-            rendering = conn.recv()
-            renderings.append(rendering)
-        return renderings
+    def render(self, mode='follow', agent: str = None, **kwargs):
+        return self._env.render(mode=mode, agent=agent, **kwargs)
 
