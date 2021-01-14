@@ -2,4 +2,4 @@ from .multi_agent_race import MultiAgentRaceEnv, MultiAgentScenario
 from .single_agent_race import SingleAgentRaceEnv, SingleAgentScenario
 from .vectorized_single_agent_race import VectorizedSingleAgentRaceEnv
 from .vectorized_multi_agent_race import VectorizedMultiAgentRaceEnv
-from .variable_track_multi_agent_race import DynamicTrackMultiAgentRaceEnv
+from .changing_track import ChangingTrackMultiAgentRaceEnv, ChangingTrackSingleAgentRaceEnv

@@ -1,11 +1,9 @@
-from typing import List, Tuple, Dict, Callable
+from typing import List, Callable
 
 import gym
 from gym import Env
 
-from .scenarios import SingleAgentScenario
-from .single_agent_race import SingleAgentRaceEnv
-from .subprocess_utils import SubprocessEnv
+from racecar_gym.envs.util.subprocess_env import SubprocessEnv
 
 class VectorizedRaceEnv(gym.Env):
 

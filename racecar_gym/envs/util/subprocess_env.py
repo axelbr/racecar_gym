@@ -14,7 +14,6 @@ class SubprocessEnv(Env):
         self.observation_space, self.action_space = self._parent_conn.recv()
 
     def _start(self, factory: Callable[[], Env], connection: Connection):
-        print('hi')
         env = factory()
         _ = env.reset()
         connection.send((env.observation_space, env.action_space))

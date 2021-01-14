@@ -3,8 +3,7 @@ from typing import List, Tuple, Dict
 import gym
 from .scenarios import SingleAgentScenario
 from .single_agent_race import SingleAgentRaceEnv
-from .subprocess_utils import SubprocessEnv
-from .vectorized_race import VectorizedRaceEnv
+from racecar_gym.envs.util.vectorized_race import VectorizedRaceEnv
 
 
 class VectorizedSingleAgentRaceEnv(gym.Env):

@@ -3,12 +3,12 @@ from time import sleep
 from racecar_gym import MultiAgentScenario
 from racecar_gym.envs import MultiAgentRaceEnv
 
-scenario = MultiAgentScenario.from_spec("custom.yml", rendering=True)
+scenario = MultiAgentScenario.from_spec("scenarios/custom.yml", rendering=True)
 env = MultiAgentRaceEnv(scenario=scenario)
 
 agent = GapFollower()
 done = False
-obs = env.reset(mode='grid')
+obs = env.reset(mode='random')
 t = 0
 while not done:
     action = env.action_space.sample()
@@ -16,7 +16,7 @@ while not done:
     action['A'] = {'motor': action_gf[0], 'steering': action_gf[1]}
     obs, rewards, dones, states = env.step(action)
     done = any(dones.values())
-    sleep(0.01)
+    #sleep(0.01)
     if t % 10 == 0:
         image = env.render(mode='follow', agent='A')
     t += 1

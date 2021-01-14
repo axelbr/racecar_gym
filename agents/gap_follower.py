@@ -68,7 +68,7 @@ class GapFollower:
 
         command = angle / 0.42
 
-        return np.random.normal(loc=0.05, scale=0.0), np.random.normal(loc=command, scale=0.0)
+        return np.random.normal(loc=0.01, scale=0.0), np.random.normal(loc=command, scale=0.0)
 
     def __call__(self, obs, *args):
         return np.expand_dims(np.array(self.action(obs)), 0), obs

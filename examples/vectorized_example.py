@@ -4,7 +4,7 @@ from agents.gap_follower import GapFollower
 
 n_parallel_instances = 2
 rendering = True
-scenarios = [SingleAgentScenario.from_spec('custom.yml', rendering=rendering) for _ in range(n_parallel_instances)]
+scenarios = [SingleAgentScenario.from_spec('scenarios/custom.yml', rendering=rendering) for _ in range(n_parallel_instances)]
 env = VectorizedSingleAgentRaceEnv(scenarios=scenarios)
 n_agents_per_instance = [len(act.spaces.keys()) for act in env.action_space]
 gfollow = GapFollower()

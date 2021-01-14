@@ -1,14 +1,10 @@
 from typing import List, Tuple, Dict
 
-import gym
-from multiprocessing import Pipe, Process
-from multiprocessing.connection import Connection
-
 from gym import Env
 
 from .scenarios import MultiAgentScenario
 from .multi_agent_race import MultiAgentRaceEnv
-from .vectorized_race import VectorizedRaceEnv
+from racecar_gym.envs.util.vectorized_race import VectorizedRaceEnv
 
 
 class VectorizedMultiAgentRaceEnv(Env):
