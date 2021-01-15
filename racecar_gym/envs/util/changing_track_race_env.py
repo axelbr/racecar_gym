@@ -15,6 +15,9 @@ class ChangingTrackRaceEnv(gym.Env):
             self._order_fn = lambda: (self._current_track_index + 1) % len(env_factories)
         elif order == 'random':
             self._order_fn = lambda: random.choice(list(set(range(0, len(env_factories))) - {self._current_track_index}))
+        elif order == 'manual':
+            self._order_fn = lambda: self._current_track_index
+
 
         self._envs = [
             SubprocessEnv(factory=factory, blocking=True)
@@ -43,3 +46,6 @@ class ChangingTrackRaceEnv(gym.Env):
 
     def _get_env(self):
         return self._envs[self._current_track_index]
+
+    def set_next_env(self):
+        self._current_track_index = (self._current_track_index + 1) % len(self._envs)
