@@ -13,7 +13,7 @@ print(env.observation_space)
 print(env.action_space)
 
 done = False
-obs = env.reset()
+obs = env.reset(mode='random_ball')
 
 while not done:
     action = env.action_space.sample()
