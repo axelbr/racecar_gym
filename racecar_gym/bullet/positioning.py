@@ -38,10 +38,10 @@ class RandomPositioningStrategy(PositioningStrategy):
     def __init__(self, progress_map: GridMap, obstacle_map: GridMap, min_distance_to_obstacle: float = 0.7):
         self._progress = progress_map
         self._obstacles = obstacle_map
-        self._distance_to_obstacle = min_distance_to_obstacle
+        self._obstacle_margin = min_distance_to_obstacle
 
     def get_pose(self, agent_index: int) -> Pose:
-        center_corridor = np.argwhere(self._obstacles.map > self._distance_to_obstacle)
+        center_corridor = np.argwhere(self._obstacles.map > self._obstacle_margin)
         x, y, angle = self._random_position(self._progress, center_corridor)
         return (x, y, 0.05), (0, 0, angle)
 
@@ -74,4 +74,24 @@ class RandomPositioningStrategy(PositioningStrategy):
         angle = np.arctan2(diff[1], diff[0])
         x, y = progress_map.to_meter(px, py)
         return x, y, angle
+
+
+class RandomPositioningWithinBallStrategy(RandomPositioningStrategy):
+
+    def __init__(self, progress_map: GridMap, obstacle_map: GridMap, drivable_map: np.ndarray,
+                 min_distance_to_obstacle: float = 0.7, progress_center: float = 0.0, progress_radius: float = 0.01):
+        self._progress = progress_map
+        self._obstacles = obstacle_map
+        self._occupancy = drivable_map
+        self._obstacle_margin = min_distance_to_obstacle
+        self._progress_center = progress_center     # the interval is centered w.r.t. a fixed progress value
+        self._progress_radius = progress_radius     # the width of the interval is +-progress_radius
+
+    def get_pose(self, agent_index: int) -> Pose:
+        progress_interval = np.logical_and(self._progress.map >= self._progress_center - self._progress_radius,
+                                           self._progress.map <= self._progress_center + self._progress_radius)
+        center_corridor = np.argwhere(np.logical_and(progress_interval,
+                                                     (self._occupancy * self._obstacles.map) >= self._obstacle_margin))
+        x, y, angle = self._random_position(self._progress, center_corridor)
+        return (x, y, 0.05), (0, 0, angle)
 

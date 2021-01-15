@@ -35,3 +35,7 @@ class GridMap:
     def map(self):
         return self._map
 
+    @property
+    def resolution(self):
+        return self._resolution
+
