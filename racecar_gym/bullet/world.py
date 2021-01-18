@@ -88,7 +88,7 @@ class World(world.World):
         elif mode == 'random':
             strategy = RandomPositioningStrategy(progress_map=self._maps['progress'], obstacle_map=self._maps['obstacle'])
         elif mode == 'random_ball':
-            progress_radius = 0.1
+            progress_radius = 0.05
             if start_index == 0:    # on first agent, compute a fix interval for sampling and copy occupancy map
                 self._progress_center = progress_radius + random.random() * (1 - progress_radius)  # center+-radius in [0,1]
                 self._tmp_occupancy_map = self._maps['occupancy'].map.copy()
@@ -102,7 +102,7 @@ class World(world.World):
         position, orientation = strategy.get_pose(agent_index=start_index)
         if mode == 'random_ball':   # mark surrounding pixels as occupied
             px, py = self._maps['obstacle'].to_pixel(position)
-            neigh_sz = int(0.5 / self._maps['obstacle'].resolution)     # mark 0.5 meters around the car
+            neigh_sz = int(1.0 / self._maps['obstacle'].resolution)     # mark 1 meter around the car
             self._tmp_occupancy_map[px-neigh_sz:px+neigh_sz, py-neigh_sz:py+neigh_sz] = False
         return position, orientation
 

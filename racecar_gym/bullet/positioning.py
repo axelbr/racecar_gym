@@ -28,7 +28,7 @@ class AutomaticGridStrategy(PositioningStrategy):
         else:
             y = center_position[1] - 0.4
 
-        x = center_position[0] + 0.7 * (self._number_of_agents - agent_index) / 2
+        x = center_position[0] + 1.0 * (self._number_of_agents - agent_index) / 2
 
         return (x, y, 0.05), (0.0, 0.0, 0.0)
 
