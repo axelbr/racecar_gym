@@ -90,14 +90,20 @@ class World(world.World):
             strategy = RandomPositioningStrategy(progress_map=self._maps['progress'], obstacle_map=self._maps['obstacle'])
         elif mode == 'random_ball':
             progress_radius = 0.05
-            if start_index == 0:    # on first agent, compute a fix interval for sampling and copy occupancy map
-                self._progress_center = progress_radius + random.random() * (1 - progress_radius)  # center+-radius in [0,1]
+            min_distance_to_wall = 0.5
+            progress_map = self._maps['progress'].map
+            obstacle_map = self._maps['obstacle'].map
+            if start_index == 0:    # on first agent, compute a fixed interval for sampling and copy occupancy map
+                progresses = progress_map[obstacle_map > min_distance_to_wall]                                  # center has enough distance from the walls
+                progresses = progresses[(progresses > progress_radius) & (progresses < (1-progress_radius))]    # center+-radius in [0,1]
+                self._progress_center = np.random.choice(progresses)
                 self._tmp_occupancy_map = self._maps['occupancy'].map.copy()
             strategy = RandomPositioningWithinBallStrategy(progress_map=self._maps['progress'],
                                                            obstacle_map=self._maps['obstacle'],
                                                            drivable_map=self._tmp_occupancy_map,
                                                            progress_center=self._progress_center,
-                                                           progress_radius=progress_radius)
+                                                           progress_radius=progress_radius,
+                                                           min_distance_to_obstacle=min_distance_to_wall)
         else:
             raise NotImplementedError(mode)
         position, orientation = strategy.get_pose(agent_index=start_index)
