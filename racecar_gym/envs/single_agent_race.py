@@ -37,4 +37,5 @@ class SingleAgentRaceEnv(gym.Env):
     def render(self, mode: str = 'follow', **kwargs):
         return self._scenario.world.render(mode=mode, agent_id=self._scenario.agent.id, **kwargs)
 
-
+    def seed(self, seed=None):
+        self._scenario.world.seed(seed)
