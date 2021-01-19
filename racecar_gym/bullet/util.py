@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 import pybullet
 from nptyping import NDArray
@@ -14,8 +16,10 @@ def get_velocity(id: int) -> NDArray[(6,), np.float]:
     return np.append(linear, angular)
 
 
-def get_pose(id: int) -> NDArray[(6,), np.float]:
+def get_pose(id: int) -> Optional[NDArray[(6,), np.float]]:
     position, orientation = pybullet.getBasePositionAndOrientation(id)
+    if any(np.isnan(position)) or any(np.isnan(orientation)):
+        return None
     orientation = pybullet.getEulerFromQuaternion(orientation)
     pose = np.append(position, orientation)
     return pose

@@ -6,6 +6,7 @@ from typing import Dict, Any, List
 import gym
 import numpy as np
 import pybullet as p
+from gym import logger
 
 from racecar_gym.bullet import util
 from racecar_gym.bullet.configs import MapConfig
@@ -127,8 +128,12 @@ class World(world.World):
         contact_points = set([c[2] for c in p.getContactPoints(agent.vehicle_id)])
         progress_map = self._maps['progress']
         obstacle_map = self._maps['obstacle']
-        self._state[agent.id]['pose'] = util.get_pose(id=agent.vehicle_id)
-
+        pose = util.get_pose(id=agent.vehicle_id)
+        if pose is None:
+            logger.warn('Could not obtain pose.')
+            self._state[agent.id]['pose'] = np.append((0,0,0), (0,0,0))
+        else:
+            self._state[agent.id]['pose'] = pose
         collision_with_wall = False
         opponent_collisions = []
         opponents = dict([(a.vehicle_id, a.id) for a in self._agents])
@@ -201,3 +206,10 @@ class World(world.World):
             return util.follow_agent(agent=agent, width=width, height=height)
         elif mode == 'birds_eye':
             return util.birds_eye(agent=agent, width=width, height=height)
+
+    def seed(self, seed: int = None):
+        if self is None:
+            seed = 0
+        np.random.seed(seed)
+        random.seed(seed)
+        p.ran
