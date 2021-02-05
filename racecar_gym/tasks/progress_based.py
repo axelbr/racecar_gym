@@ -58,6 +58,29 @@ class MaximizeProgressMaskObstacleTask(MaximizeProgressTask):
       return progress_reward
 
 
+class MaximizeProgressRegularizeAction(MaximizeProgressTask):
+  def __init__(self, laps: int, time_limit: float, terminate_on_collision: bool, delta_progress=0.0,
+               collision_reward=0, frame_reward=0, progress_reward=100, action_reg=1.0):
+    super().__init__(laps, time_limit, terminate_on_collision, delta_progress, collision_reward, frame_reward,
+                     progress_reward)
+    self._action_reg = action_reg
+    self._last_action = None
+
+  def reset(self):
+    super(MaximizeProgressRegularizeAction, self).reset()
+    self._last_action = None
+
+
+  def reward(self, agent_id, state, action) -> float:
+    """ Progress-based with action regularization: penalize sharp change in control"""
+    reward = super().reward(agent_id, state, action)
+    action = np.array(list(action.values()))
+    if self._last_action is not None:
+      reward -= self._action_reg * np.linalg.norm(action - self._last_action)
+    self._last_action = action
+    return reward
+
+
 class RankDiscountedMaximizeProgressTask(MaximizeProgressTask):
   def __init__(self, laps: int, time_limit: float, terminate_on_collision: bool, delta_progress=0.001,
                collision_reward=-100, frame_reward=-0.1, progress_reward=1):
