@@ -35,7 +35,7 @@ class AutomaticGridStrategy(PositioningStrategy):
 
 class RandomPositioningStrategy(PositioningStrategy):
 
-    def __init__(self, progress_map: GridMap, obstacle_map: GridMap, min_distance_to_obstacle: float = 0.7):
+    def __init__(self, progress_map: GridMap, obstacle_map: GridMap, min_distance_to_obstacle: float = 0.5):
         self._progress = progress_map
         self._obstacles = obstacle_map
         self._obstacle_margin = min_distance_to_obstacle
@@ -79,7 +79,7 @@ class RandomPositioningStrategy(PositioningStrategy):
 class RandomPositioningWithinBallStrategy(RandomPositioningStrategy):
 
     def __init__(self, progress_map: GridMap, obstacle_map: GridMap, drivable_map: np.ndarray,
-                 min_distance_to_obstacle: float = 0.7, progress_center: float = 0.0, progress_radius: float = 0.01):
+                 min_distance_to_obstacle: float = 0.5, progress_center: float = 0.0, progress_radius: float = 0.01):
         self._progress = progress_map
         self._obstacles = obstacle_map
         self._occupancy = drivable_map
