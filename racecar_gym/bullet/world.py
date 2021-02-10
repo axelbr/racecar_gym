@@ -169,20 +169,6 @@ class World(world.World):
         self._state[agent.id]['time'] = self._time
         progress = self._state[agent.id]['progress']
         checkpoints = 1.0 / float(self._config.map_config.checkpoints)
-
-        # neigh occupancy map for reconstruction
-        pr, pc = self._maps['occupancy'].to_pixel(pose)     # center the pose
-        neigh_sz = 100                                       # 100 pixel (5 meters) to produce images of sz 128
-        from scipy import ndimage
-        map = self._maps['occupancy'].map.copy()[pr-(neigh_sz+10):pr+(neigh_sz+10),
-                                                 pc-(neigh_sz+10):pc+(neigh_sz+10)]
-        map = map.astype(np.uint8)
-        map = ndimage.rotate(map, np.rad2deg(2*np.pi - pose[-1]))     # rotate according to the car orientation (roll)
-        cr, cc = map.shape[0]//2, map.shape[1]//2
-        submap = map[cr-neigh_sz:cr+neigh_sz, cc-neigh_sz:cc+neigh_sz]
-        submap = np.array(Image.fromarray(submap).resize(size=(64, 64)))
-        self._state[agent.id]['close_occupancy'] = np.expand_dims(submap, -1)   # add channel
-
         checkpoint = int(progress / checkpoints)
 
         if 'checkpoint' in self._state[agent.id]:
