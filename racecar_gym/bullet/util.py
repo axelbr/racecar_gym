@@ -3,6 +3,7 @@ from typing import Optional
 import numpy as np
 import pybullet
 from nptyping import NDArray
+import matplotlib.pyplot as plt
 
 from racecar_gym.core import Agent
 
@@ -79,3 +80,19 @@ def follow_agent(agent: Agent, width=640, height=480) -> np.ndarray:
     rgb_array = np.reshape(rgb_image, (height, width, -1))
     rgb_array = rgb_array[:, :, :3]
     return rgb_array
+
+def lidar(agent: Agent, width=640, height=480) -> np.ndarray:
+    scan = agent._vehicle.observe()['lidar']
+    angles = np.linspace(np.pi/2 + np.deg2rad(270.0/2), np.pi/2 - np.deg2rad(270.0 / 2), scan.shape[0])
+    x = scan * np.cos(angles)
+    y = scan * np.sin(angles)
+    plt.clf()
+    plt.xlim(-15, +15)
+    plt.ylim(-15, +15)
+    img = plt.scatter(x, y, s=1, c='k')
+    canvas = plt.gca().figure.canvas
+    canvas.draw()
+    w, h = canvas.get_width_height()
+    data = np.fromstring(img.figure.canvas.tostring_rgb(), dtype=np.uint8)
+    image = data.reshape(canvas.get_width_height()[::-1] + (3,))
+    return image

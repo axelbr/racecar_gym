@@ -9,7 +9,7 @@ from racecar_gym.envs.util.vectorized_race import VectorizedRaceEnv
 
 class VectorizedMultiAgentRaceEnv(Env):
 
-    metadata = {'render.modes': ['follow', 'birds_eye']}
+    metadata = {'render.modes': ['follow', 'birds_eye', 'lidar']}
 
     def __init__(self, scenarios: List[MultiAgentScenario]):
         self._env = VectorizedRaceEnv(factories=[lambda: MultiAgentRaceEnv(s) for s in scenarios])
