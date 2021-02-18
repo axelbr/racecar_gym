@@ -13,6 +13,10 @@ class SingleAgentRaceEnv(gym.Env):
         self.observation_space = scenario.agent.observation_space
         self.action_space = scenario.agent.action_space
 
+    @property
+    def scenario(self):
+        return self._scenario
+
     def step(self, action: Dict):
         assert self._initialized, 'Reset before calling step'
         state = self._scenario.world.state()

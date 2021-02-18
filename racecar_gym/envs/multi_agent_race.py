@@ -16,6 +16,10 @@ class MultiAgentRaceEnv(gym.Env):
         self.observation_space = gym.spaces.Dict([(k, a.observation_space) for k, a in scenario.agents.items()])
         self.action_space = gym.spaces.Dict([(k, a.action_space) for k, a in scenario.agents.items()])
 
+    @property
+    def scenario(self):
+        return self._scenario
+
     def step(self, action: Dict):
 
         assert self._initialized, 'Reset before calling step'
