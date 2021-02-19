@@ -4,7 +4,7 @@ from .single_agent_race import SingleAgentRaceEnv
 from .multi_agent_race import MultiAgentRaceEnv
 from .scenarios import MultiAgentScenario, SingleAgentScenario
 from .util.changing_track_race_env import ChangingTrackRaceEnv
-
+import pathlib
 
 class ChangingTrackMultiAgentRaceEnv(ChangingTrackRaceEnv):
 
@@ -16,6 +16,11 @@ class ChangingTrackMultiAgentRaceEnv(ChangingTrackRaceEnv):
     @property
     def scenario(self):
         return self._scenarios[self._current_track_index]
+
+    @property
+    def track_name(self):
+        sdf = self._scenarios[self._current_track_index].world._config.sdf
+        return pathlib.Path(sdf).stem
 
     def _make_factory(self, scenario: MultiAgentScenario) -> Callable[[], MultiAgentRaceEnv]:
         def factory():

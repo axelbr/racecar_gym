@@ -51,3 +51,11 @@ class ChangingTrackRaceEnv(gym.Env):
     def set_next_env(self):
         assert self._order == 'manual'
         self._current_track_index = (self._current_track_index + 1) % len(self._envs)
+
+    def set_explicit_env(self, trackname):
+        assert self._order == 'manual'
+        for i in range(len(self._envs)):
+            if self._envs[i].track_name == trackname:
+                self._current_track_index = i
+                break
+        raise ValueError(f"track {trackname} not found")
