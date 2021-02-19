@@ -93,6 +93,7 @@ def load_world(spec: WorldSpec, agents: List[Agent]) -> core.World:
 
 
     world_config = World.Config(
+        name=spec.name,
         sdf=config.sdf,
         map_config=config.map,
         time_step=config.simulation.time_step,

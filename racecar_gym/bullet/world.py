@@ -26,6 +26,7 @@ class World(world.World):
 
     @dataclass
     class Config:
+        name: str
         sdf: str
         map_config: MapConfig
         rendering: bool

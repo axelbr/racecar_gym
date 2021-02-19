@@ -17,11 +17,6 @@ class ChangingTrackMultiAgentRaceEnv(ChangingTrackRaceEnv):
     def scenario(self):
         return self._scenarios[self._current_track_index]
 
-    @property
-    def track_name(self):
-        sdf = self._scenarios[self._current_track_index].world._config.sdf
-        return pathlib.Path(sdf).stem
-
     def _make_factory(self, scenario: MultiAgentScenario) -> Callable[[], MultiAgentRaceEnv]:
         def factory():
             return MultiAgentRaceEnv(scenario=scenario)
