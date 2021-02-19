@@ -42,6 +42,7 @@ class Motor(BulletActuator[Tuple[float, float]]):
         self._config = config
 
     def control(self, acceleration: float) -> None:
+        acceleration = np.clip(acceleration, -1, +1)
         if acceleration < 0:
             velocity = 0
         else:
@@ -72,6 +73,7 @@ class SteeringWheel(BulletActuator[float]):
         self._config = config
 
     def control(self, command: float) -> None:
+        command = np.clip(command, -1, +1)
         angle = command * self._config.max_steering_angle * self._config.steering_multiplier
         for joint in self.joint_indices:
             pybullet.setJointMotorControl2(
