@@ -35,14 +35,19 @@ class AutomaticGridStrategy(PositioningStrategy):
 
 class RandomPositioningStrategy(PositioningStrategy):
 
-    def __init__(self, progress_map: GridMap, obstacle_map: GridMap, min_distance_to_obstacle: float = 0.5):
+    def __init__(self, progress_map: GridMap, obstacle_map: GridMap,
+                 min_distance_to_obstacle: float = 0.5, alternate_direction=False):
         self._progress = progress_map
         self._obstacles = obstacle_map
         self._obstacle_margin = min_distance_to_obstacle
+        self._alternate_direction = alternate_direction
 
     def get_pose(self, agent_index: int) -> Pose:
         center_corridor = np.argwhere(self._obstacles.map > self._obstacle_margin)
-        x, y, angle = self._random_position(self._progress, center_corridor)
+        delta_progress_next_pos = 0.025
+        if self._alternate_direction and random.random()<0.5:
+            delta_progress_next_pos = -delta_progress_next_pos
+        x, y, angle = self._random_position(self._progress, center_corridor, delta_progress_next_pos)
         return (x, y, 0.05), (0, 0, angle)
 
     def _random_position(self, progress_map, sampling_map, delta_progress_next_pos=0.025):
@@ -51,8 +56,13 @@ class RandomPositioningStrategy(PositioningStrategy):
 
         # next position is a random point in the map which has progress greater than the current `position`
         # note: this approach suffers in "wide" tracks
-        direction_progress_min = (progress + delta_progress_next_pos) % 1
-        direction_progress_max = (progress + 2 * delta_progress_next_pos) % 1
+        if delta_progress_next_pos > 0:
+            direction_progress_min = (progress + delta_progress_next_pos) % 1
+            direction_progress_max = (progress + 2 * delta_progress_next_pos) % 1
+        else:
+            direction_progress_min = (progress + 2 * delta_progress_next_pos) % 1
+            direction_progress_max = (progress + delta_progress_next_pos) % 1
+        # consider corner cases between end of track end begin
         if direction_progress_min < direction_progress_max:
             direction_area = np.argwhere(np.logical_and(
                 progress_map.map > direction_progress_min,

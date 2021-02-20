@@ -89,7 +89,11 @@ class World(world.World):
         if mode == 'grid':
             strategy = AutomaticGridStrategy(obstacle_map=self._maps['obstacle'], number_of_agents=len(self._agents))
         elif mode == 'random':
-            strategy = RandomPositioningStrategy(progress_map=self._maps['progress'], obstacle_map=self._maps['obstacle'])
+            strategy = RandomPositioningStrategy(progress_map=self._maps['progress'],
+                                                 obstacle_map=self._maps['obstacle'], alternate_direction=False)
+        elif mode == 'random_bidirectional':
+            strategy = RandomPositioningStrategy(progress_map=self._maps['progress'],
+                                                 obstacle_map=self._maps['obstacle'], alternate_direction=True)
         elif mode == 'random_ball':
             progress_radius = 0.05
             min_distance_to_wall = 0.5
