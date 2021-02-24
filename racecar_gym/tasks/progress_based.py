@@ -5,10 +5,11 @@ import numpy as np
 class MaximizeProgressTask(Task):
     def __init__(self, laps: int, time_limit: float, terminate_on_collision: bool,
                  delta_progress: float = 0.0, collision_reward: float = 0.0,
-                 frame_reward: float = 0.0, progress_reward: float = 100.0):
+                 frame_reward: float = 0.0, progress_reward: float = 100.0, n_min_rays_termination=1080):
         self._time_limit = time_limit
         self._laps = laps
         self._terminate_on_collision = terminate_on_collision
+        self._n_min_rays_termination = n_min_rays_termination
         self._last_stored_progress = None
         # reward params
         self._delta_progress = delta_progress
@@ -43,7 +44,7 @@ class MaximizeProgressTask(Task):
         collision = agent_state['wall_collision'] or len(agent_state['opponent_collisions']) > 0
         if 'lidar' in agent_state['observations']:
             n_min_rays = sum(np.where(agent_state['observations']['lidar'] <= safe_margin, 1, 0))
-            return n_min_rays > 0 or collision
+            return n_min_rays>self._n_min_rays_termination or collision
         return collision
 
     def reset(self):
