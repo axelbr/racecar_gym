@@ -26,7 +26,6 @@ class MaximizeProgressTask(Task):
         if delta > .5:  # the agent is crossing the starting line in the wrong direction
             delta = (1 - progress) + self._last_stored_progress
         reward = self._frame_reward
-        collision = agent_state['wall_collision'] or len(agent_state['opponent_collisions']) > 0
         if self._check_collision(agent_state):
             reward += self._collision_reward
         reward += delta * self._progress_reward
@@ -42,7 +41,7 @@ class MaximizeProgressTask(Task):
     def _check_collision(self, agent_state):
         safe_margin = 0.25
         collision = agent_state['wall_collision'] or len(agent_state['opponent_collisions']) > 0
-        if 'lidar' in agent_state['observations']:
+        if 'observations' in agent_state and 'lidar' in agent_state['observations']:
             n_min_rays = sum(np.where(agent_state['observations']['lidar'] <= safe_margin, 1, 0))
             return n_min_rays>self._n_min_rays_termination or collision
         return collision
