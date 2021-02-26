@@ -44,7 +44,7 @@ class GapFollower:
         elif version=="demo":
             furthest = np.argmax(ranges[start_i:end_i]) + start_i
             center = (end_i + start_i) / 2
-            factor = 0.5
+            factor = 0.65
             target = int(np.round(factor * furthest + (1.0 - factor) * center))
         else:
             target = 0.0
@@ -52,7 +52,7 @@ class GapFollower:
 
     def _get_motor(self, angle, max_range):
         """ Compute the motor force based on the maximum frontal range """
-        if self._fixed_speed or max_range < 2.5:
+        if self._fixed_speed or max_range < 3.0:
             return 0.01
         else:
             return max_range / self._max_range * 0.5
