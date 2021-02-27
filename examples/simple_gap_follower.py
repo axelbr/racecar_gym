@@ -6,7 +6,7 @@ from racecar_gym.envs import MultiAgentRaceEnv
 scenario = MultiAgentScenario.from_spec("scenarios/custom.yml", rendering=True)
 env = MultiAgentRaceEnv(scenario=scenario)
 
-agent = GapFollower()
+agent = GapFollower(fixed_speed=False)
 done = False
 obs = env.reset(mode='random')
 t = 0
