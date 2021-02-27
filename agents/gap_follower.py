@@ -7,11 +7,11 @@ from scipy.signal import medfilt
 class GapFollower:
 
     def __init__(self, fixed_speed=True):
-        self.threshold = 0.1
         self._max_range = 15.0
         self._fixed_speed = fixed_speed
 
-    def preprocess_lidar(self, ranges, kernel_size=5):
+    @staticmethod
+    def preprocess_lidar(ranges, kernel_size=5):
         # Step 1: interpolate nan values
         proc_ranges = np.array(ranges)
         nans = np.isnan(proc_ranges)
@@ -23,7 +23,8 @@ class GapFollower:
         proc_ranges = medfilt(proc_ranges, kernel_size)
         return proc_ranges
 
-    def find_max_gap(self, free_space_ranges, min_distance):
+    @staticmethod
+    def find_max_gap(free_space_ranges, min_distance):
         """ Return the start index & end index of the max gap in free_space_ranges
         """
         gaps = np.hstack(([False], free_space_ranges >= min_distance + 0.1, [False]))
@@ -34,14 +35,14 @@ class GapFollower:
         else:
             return np.ndarray([0, free_space_ranges.size - 1])
 
-
-    def find_best_point(self, start_i, end_i, ranges, version="center"):
+    @staticmethod
+    def find_best_point(start_i, end_i, ranges, version="center"):
         """Start_i & end_i are start and end indicies of max-gap range, respectively
         Return index of best point in ranges
         """
-        if version=="center":
+        if version == "center":
             target = int((start_i + end_i) / 2)
-        elif version=="demo":
+        elif version == "demo":
             furthest = np.argmax(ranges[start_i:end_i]) + start_i
             center = (end_i + start_i) / 2
             factor = 0.65
@@ -50,10 +51,17 @@ class GapFollower:
             target = 0.0
         return target
 
-    def _get_motor(self, angle, max_range):
+    @staticmethod
+    def _get_angle(best_point):
+        angle = (-math.pi / 2 + best_point * math.pi / 1080)
+        angle = math.copysign(min(1, abs(angle)), angle)
+        angle = np.clip(angle * 2, -1, +1) * 2
+        return angle
+
+    def _get_motor(self, max_range):
         """ Compute the motor force based on the maximum frontal range """
         if self._fixed_speed or max_range < 3.0:
-            return 0.01
+            return 0.01     # very low motor force to keep low velocity (~1.5m/s)
         else:
             return max_range / self._max_range * 0.5
 
@@ -70,21 +78,17 @@ class GapFollower:
 
         # Find max length gap
         if len(proc_ranges) < 1:
-            return (0, 0)
+            return 0, 0
         gap = self.find_max_gap(free_space_ranges=proc_ranges, min_distance=min_distance)
-
         if len(gap) < 1:
-            return (0, 0)
+            return 0, 0
         # Find the best point in the gap
         best_point = min_index + self.find_best_point(start_i=gap[0], end_i=gap[1], ranges=proc_ranges, version="demo")
 
         # Publish Drive message
-        angle = (-math.pi/2 + best_point * math.pi / 1080)
-        angle = math.copysign(min(1, abs(angle)), angle)
-
-        steering = np.clip(angle * 2, -1, +1)
-        motor = self._get_motor(angle, max(proc_ranges[1080//2-50:1080//2+50]))
-        return np.random.normal(loc=motor, scale=0.0), np.random.normal(loc=steering, scale=0.0)
+        angle = self._get_angle(best_point)
+        motor = self._get_motor(max(proc_ranges[1080 // 2 - 50:1080 // 2 + 50]))
+        return np.random.normal(loc=motor, scale=0.0), np.random.normal(loc=angle, scale=0.0)
 
     def __call__(self, obs, *args):
         return np.expand_dims(np.array(self.action(obs)), 0), obs
