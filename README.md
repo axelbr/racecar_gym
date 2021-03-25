@@ -12,9 +12,6 @@ cd racecar_gym
 pip install -e .
 ```
 
-In order to use the predefined tracks described below, download a tracks package release and unzip its contents
-to *models/scenes/*. 
-
 On the first use of this gym, the tracks are downloaded automatically.
 
 Of course, you can download them manually too. Here is how you can do this from the command line:
