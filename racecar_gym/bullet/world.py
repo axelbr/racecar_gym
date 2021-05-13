@@ -113,10 +113,10 @@ class World(world.World):
         else:
             raise NotImplementedError(mode)
         position, orientation = strategy.get_pose(agent_index=start_index)
-        if mode == 'random_ball':   # mark surrounding pixels as occupied
+        if mode == 'random_ball':  # mark surrounding pixels as occupied
             px, py = self._maps['obstacle'].to_pixel(position)
-            neigh_sz = int(1.0 / self._maps['obstacle'].resolution)     # mark 1 meter around the car
-            self._tmp_occupancy_map[px-neigh_sz:px+neigh_sz, py-neigh_sz:py+neigh_sz] = False
+            neigh_sz = int(1.0 / self._maps['obstacle'].resolution)  # mark 1 meter around the car
+            self._tmp_occupancy_map[px - neigh_sz:px + neigh_sz, py - neigh_sz:py + neigh_sz] = False
         return position, orientation
 
     def update(self):
@@ -143,7 +143,7 @@ class World(world.World):
         pose = util.get_pose(id=agent.vehicle_id)
         if pose is None:
             logger.warn('Could not obtain pose.')
-            self._state[agent.id]['pose'] = np.append((0,0,0), (0,0,0))
+            self._state[agent.id]['pose'] = np.append((0, 0, 0), (0, 0, 0))
         else:
             self._state[agent.id]['pose'] = pose
         collision_with_wall = False
@@ -168,10 +168,26 @@ class World(world.World):
         pose = self._state[agent.id]['pose']
         progress = progress_map.get_value(position=(pose[0], pose[1], 0))
         dist_obstacle = obstacle_map.get_value(position=(pose[0], pose[1], 0))
+
+        # compute next waypoint
+        margin = 50
+        y, x = progress_map.to_pixel((pose[0], pose[1], 0.0))
+        progress_surround = progress_map._map[y-margin:y+margin, x-margin:x+margin]
+        # note: we have to discard too far progresses because they could be part of future sections of the map
+        # they are visible in the surrounding of the progress map, but not reachable by the current position
+        reasonable_surround = progress_surround * (progress_surround <= (progress + 0.05))
+        mask_best_progress = reasonable_surround >= np.max(reasonable_surround)
+        masked_distance_surround = obstacle_map._map[y-margin:y+margin, x-margin:x+margin] * mask_best_progress
+        rel_row, rel_col = np.unravel_index(np.argmax(masked_distance_surround), masked_distance_surround.shape)
+        waypoint = progress_map.to_meter(y-margin+rel_row, x-margin+rel_col)
+
+        self._state[agent.id]['next_waypoint'] = (*waypoint, 0.0)
+
         self._state[agent.id]['velocity'] = velocity
         self._state[agent.id]['progress'] = progress
         self._state[agent.id]['obstacle'] = dist_obstacle
         self._state[agent.id]['time'] = self._time
+
         progress = self._state[agent.id]['progress']
         checkpoints = 1.0 / float(self._config.map_config.checkpoints)
         checkpoint = int(progress / checkpoints)
