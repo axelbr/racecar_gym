@@ -15,7 +15,6 @@ for i in range(3):
     episode = []
     while not done:
         action = env.action_space.sample()
-        #action = env.action_space.sample()
         obs, rewards, dones, states = env.step(action)
         done = any([e for e in dones])
         renderings = env.render()
