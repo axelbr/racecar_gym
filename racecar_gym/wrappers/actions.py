@@ -5,6 +5,9 @@ from racecar_gym import MultiAgentRaceEnv
 
 
 class FlattenActionWrapper(gym.ActionWrapper):
+    """
+    Flattens the nested action dictionary to numpy arrays. Only Box spaces are supported.
+    """
 
     def __init__(self, env: MultiAgentRaceEnv):
         super().__init__(env)

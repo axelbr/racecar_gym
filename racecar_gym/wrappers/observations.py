@@ -2,6 +2,13 @@ import gym
 import numpy as np
 
 class MultiAgentStackingWrapper(gym.ObservationWrapper):
+    """
+    Stack observations over time. Adds a time dimension at axis 0 for each observation in the observation dict.
+    The latest observation can be retrieved at the last time index. If not enough observations are available to fill
+    the whole horizon, zeros are appended.
+    Example: lidar scans with shape (1080,) are stacked to arrays of shape (horizon, 1080). Latest scan: obs[-1, :]
+    :except NotImplementedError is thrown when env contains any other space type than Box at the observation level.
+    """
 
     def __init__(self, env: gym.Env, horizon: int):
         super().__init__(env)
