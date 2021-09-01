@@ -114,7 +114,7 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
         results = p.rayTestBatch(self._from, self._to, 0,
             parentObjectUniqueId=self.body_id,
             parentLinkIndex=self.joint_index)
-        hit_fractions = np.array(results, dtype=np.object)[:, 2].astype(dtype=np.float)
+        hit_fractions = np.array(results, dtype=object)[:, 2].astype(dtype=float)
         ranges = self._config.range * hit_fractions + self._config.min_range
         noise = np.random.uniform(1.0 - self._config.accuracy, 1.0 + self._config.accuracy, size=ranges.shape)
         scan = np.clip(ranges * noise, a_min=self._config.min_range, a_max=self._config.range)
@@ -221,7 +221,7 @@ class AccelerationSensor(BulletSensor[NDArray[(6,), np.float]]):
         self._last_velocity = np.zeros(shape=6)
 
     def space(self) -> gym.Space:
-        high = np.append(self._config.linear_bounds, self._config.angular_bounds).astype(dtype=np.float)
+        high = np.append(self._config.linear_bounds, self._config.angular_bounds).astype(dtype=float)
         low = -high
         return gym.spaces.Box(low=low, high=high, dtype=np.float64)
 
