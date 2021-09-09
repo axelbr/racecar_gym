@@ -27,17 +27,20 @@ class MultiAgentRaceEnv(gym.Env):
         observations = {}
         dones = {}
         rewards = {}
+        state = {}
 
-        state = self._scenario.world.state()
         for id, agent in self._scenario.agents.items():
-            observation, info = agent.step(action=action[id])
-            state[id]['observations'] = observation
-            done = agent.done(state)
-            reward = agent.reward(state, action[id])
-            observations[id] = observation
-            dones[id] = done
-            rewards[id] = reward
-        self._time = self._scenario.world.update()
+            observations[id], state[id] = agent.step(action=action[id])
+
+        self._scenario.world.update()
+        state = self._scenario.world.state()
+
+        for id, agent in self._scenario.agents.items():
+            state[id]['observations'] = observations[id]
+            observations[id]['time'] = state[id]['time']
+            dones[id] = agent.done(state)
+            rewards[id] = agent.reward(state, action[id])
+
         return observations, rewards, dones, state
 
     def set_state(self, agent: str, pose: Pose):
@@ -52,8 +55,12 @@ class MultiAgentRaceEnv(gym.Env):
         for agent in self._scenario.agents.values():
             obs = agent.reset(self._scenario.world.get_starting_position(agent=agent, mode=mode))
             observations[agent.id] = obs
-            self._scenario.world.reset()
-            self._scenario.world.update()
+        self._scenario.world.reset()
+        self._scenario.world.update()
+        state = self._scenario.world.state()
+        for agent in self._scenario.agents.values():
+            observations[agent.id]['time'] = state[agent.id]['time']
+
 
         return observations
 
