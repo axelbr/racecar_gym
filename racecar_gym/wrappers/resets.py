@@ -7,5 +7,5 @@ class FixedResetMode(gym.Wrapper):
         self._mode = mode
 
     def reset(self):
-        return self._env.reset(mode=self._mode)
+        return self.env.reset(mode=self._mode)
 

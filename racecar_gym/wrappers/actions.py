@@ -40,3 +40,28 @@ class FlattenActionWrapper(gym.ActionWrapper):
             for idx, key in enumerate(mappings):
                 action_dict[agent][key] = action[agent][idx]
         return action_dict
+
+
+# class FlattenActionWrapper(gym.ActionWrapper):
+#
+#     def __init__(self, env):
+#         assert isinstance(env.action_space, gym.spaces.Dict)
+#         assert all(isinstance(space, gym.spaces.Box) for space in env.action_space.spaces.values())
+#         super().__init__(env)
+#         self.action_space = gym.spaces.Box(
+#             low=np.array([env.action_space.spaces[k].low for k in sorted(env.action_space.spaces.keys())]),
+#             high=np.array([env.action_space.spaces[k].low for k in sorted(env.action_space.spaces.keys())])
+#         )
+#
+#     def action(self, action):
+#         action = np.array([action[k] for k in sorted(action.keys())])
+#         return action
+#
+#     def reverse_action(self, action):
+#         actions = dict()
+#         offset = 0
+#         for k in sorted(self.env.action_space.spaces.keys()):
+#             shape = self.env.action_space.spaces[k].shape
+#             actions[k] = action[offset:shape[0]]
+#             offset += shape[0]
+#         return actions
