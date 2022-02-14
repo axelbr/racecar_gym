@@ -5,7 +5,7 @@ import zipfile
 from typing import List, Tuple
 
 from racecar_gym import core
-from racecar_gym.bullet.actuators import BulletActuator, Motor, SteeringWheel
+from racecar_gym.bullet.actuators import BulletActuator, Motor, SteeringWheel, Speed
 from racecar_gym.bullet.configs import SensorConfig, VehicleConfig, ActuatorConfig, SceneConfig
 from racecar_gym.bullet.sensors import Lidar, PoseSensor, AccelerationSensor, VelocitySensor, RGBCamera, BulletSensor, \
     FixedTimestepSensor
@@ -15,6 +15,7 @@ from .world import World
 from ..core.agent import Agent
 
 base_path = os.path.dirname(os.path.abspath(__file__))
+
 
 def load_sensor(config: SensorConfig) -> BulletSensor:
     if config.type == 'lidar':
@@ -32,8 +33,11 @@ def load_sensor(config: SensorConfig) -> BulletSensor:
 def load_actuator(config: ActuatorConfig) -> BulletActuator:
     if config.type == 'motor':
         return Motor(name=config.name, config=Motor.Config(**config.params))
+    if config.type == 'speed':
+        return Speed(name=config.name, config=Speed.Config(**config.params))
     if config.type == 'steering':
         return SteeringWheel(name=config.name, config=SteeringWheel.Config(**config.params))
+
 
 def _compute_color(name: str) -> Tuple[float, float, float, float]:
     return dict(
@@ -43,6 +47,7 @@ def _compute_color(name: str) -> Tuple[float, float, float, float]:
         yellow=(1.0, 1.0, 0.0, 1.0),
         magenta=(1.0, 0.0, 1.0, 1.0)
     ).get(name, (random.random(), random.random(), random.random(), 1.0))
+
 
 def load_vehicle(spec: VehicleSpec) -> core.Vehicle:
     config_file = f'{base_path}/../../models/vehicles/{spec.name}/{spec.name}.yml'
@@ -90,7 +95,6 @@ def load_world(spec: WorldSpec, agents: List[Agent]) -> core.World:
     config.sdf = resolve_path(file=config_file, relative_path=config.sdf)
     config.map.maps = resolve_path(file=config_file, relative_path=config.map.maps)
     config.map.starting_grid = resolve_path(file=config_file, relative_path=config.map.starting_grid)
-
 
     world_config = World.Config(
         name=spec.name,
