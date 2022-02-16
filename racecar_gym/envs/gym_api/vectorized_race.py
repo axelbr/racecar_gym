@@ -3,7 +3,7 @@ from typing import List, Callable
 import gym
 from gym import Env
 
-from racecar_gym.envs.util.subprocess_env import SubprocessEnv
+from .subprocess_env import SubprocessEnv
 
 class VectorizedRaceEnv(gym.Env):
 

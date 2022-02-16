@@ -232,12 +232,9 @@ class World(world.World):
             return util.follow_agent(agent=agent, width=width, height=height)
         elif mode == 'birds_eye':
             return util.birds_eye(agent=agent, width=width, height=height)
-        elif mode == 'lidar':
-            return util.lidar(agent=agent, width=width, height=height)
 
     def seed(self, seed: int = None):
         if self is None:
             seed = 0
         np.random.seed(seed)
         random.seed(seed)
-        p.ran

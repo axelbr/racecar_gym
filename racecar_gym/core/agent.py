@@ -15,6 +15,14 @@ class Agent:
         self._task = task
 
     @property
+    def vehicle(self):
+        return self._vehicle
+
+    @property
+    def task(self):
+        return self._task
+
+    @property
     def id(self) -> str:
         return self._id
 

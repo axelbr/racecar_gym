@@ -3,7 +3,7 @@ from typing import Callable, List
 
 import gym
 
-from racecar_gym.envs.util.subprocess_env import SubprocessEnv
+from .subprocess_env import SubprocessEnv
 
 
 class ChangingTrackRaceEnv(gym.Env):
