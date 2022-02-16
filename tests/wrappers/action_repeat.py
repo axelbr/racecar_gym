@@ -1,7 +1,8 @@
 import unittest
 import gym
-from racecar_gym import MultiAgentScenario, SingleAgentScenario, MultiAgentRaceEnv, SingleAgentRaceEnv, wrappers, \
+from racecar_gym import MultiAgentScenario, SingleAgentScenario, MultiAgentRaceEnv, SingleAgentRaceEnv, \
     VectorizedSingleAgentRaceEnv
+from racecar_gym.envs.gym_api import wrappers
 
 
 class SingleActionRepeatStub(gym.Wrapper):

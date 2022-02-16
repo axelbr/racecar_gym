@@ -1,9 +1,18 @@
 from time import sleep
 import gym
-from racecar_gym.envs import MultiAgentRaceEnv
+from racecar_gym.envs import gym_envs
 
-env = gym.make('SingleAgentAustria_Gui-v0')
+scenario = gym_envs.SingleAgentScenario.from_spec(
+    path='../scenarios/custom.yml',
+    rendering=True
+)
 
+env = gym_envs.VectorizedSingleAgentRaceEnv(scenarios=[scenario, scenario])
+env = gym_envs.wrappers.VectorizedSingleAgentActionRepeat(env, steps=4)
+
+
+print(env.observation_space)
+print(env.action_space)
 done = False
 
 # Currently, there are two reset modes available: 'grid' and 'random'.
@@ -21,6 +30,8 @@ while not done:
         # follow: Follow an agent in a 3rd person view.
         image = env.render(mode='follow')
     t+=1
+    done = all(done)
+    print(rewards)
 
 
 env.close()

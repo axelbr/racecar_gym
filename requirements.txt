@@ -5,3 +5,4 @@ gym
 yamldataclassconfig
 nptyping
 matplotlib
+pettingzoo

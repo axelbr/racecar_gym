@@ -1,8 +1,7 @@
-import math
-from typing import Dict, Union
+from typing import Dict
 import gym
-from .scenarios import MultiAgentScenario
-from ..core.definitions import Pose, Velocity
+from racecar_gym.envs.scenarios import MultiAgentScenario
+from racecar_gym.core.definitions import Pose
 
 
 class MultiAgentRaceEnv(gym.Env):

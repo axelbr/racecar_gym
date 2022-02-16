@@ -2,9 +2,9 @@ from typing import List, Tuple, Dict
 
 from gym import Env
 
-from .scenarios import MultiAgentScenario
+from racecar_gym.envs.scenarios import MultiAgentScenario
 from .multi_agent_race import MultiAgentRaceEnv
-from racecar_gym.envs.util.vectorized_race import VectorizedRaceEnv
+from .vectorized_race import VectorizedRaceEnv
 
 
 class VectorizedMultiAgentRaceEnv(Env):

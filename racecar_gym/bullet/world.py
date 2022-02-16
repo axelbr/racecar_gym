@@ -240,4 +240,3 @@ class World(world.World):
             seed = 0
         np.random.seed(seed)
         random.seed(seed)
-        p.ran
