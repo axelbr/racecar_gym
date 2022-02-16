@@ -1,6 +1,6 @@
 from racecar_gym.envs import pz_envs
 
-env = pz_envs.racecarenv.raw_env(scenario_path='../scenarios/austria.yml', live_rendering=True)
+env = pz_envs.racecarenv.env(scenario_path='../scenarios/austria.yml', live_rendering=True)
 
 env.reset()
 policy = lambda obs, agent: env.action_space(agent).sample()

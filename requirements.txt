@@ -4,5 +4,4 @@ numpy
 gym
 yamldataclassconfig
 nptyping
-matplotlib
 pettingzoo

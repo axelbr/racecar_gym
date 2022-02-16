@@ -7,6 +7,8 @@ from pettingzoo.utils import agent_selector
 
 from ..scenarios import MultiAgentScenario
 
+def env(scenario_path: str, reset_mode: str = 'grid', live_rendering: bool = False) -> AECEnv:
+    return raw_env(scenario_path=scenario_path, reset_mode=reset_mode, live_rendering=live_rendering)
 
 def raw_env(scenario_path: str, reset_mode: str = 'grid', live_rendering: bool = False) -> AECEnv:
     scenario = MultiAgentScenario.from_spec(path=scenario_path, rendering=live_rendering)
