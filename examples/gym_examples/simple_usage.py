@@ -1,6 +1,6 @@
 from time import sleep
 import gym
-from racecar_gym.envs import gym_envs
+from racecar_gym.envs import gym_api
 env = gym.make('SingleAgentAustria_Gui-v0')
 
 done = False

@@ -1,14 +1,14 @@
 from time import sleep
 import gym
-from racecar_gym.envs import gym_envs
+from racecar_gym.envs import gym_api
 
-scenario = gym_envs.SingleAgentScenario.from_spec(
+scenario = gym_api.SingleAgentScenario.from_spec(
     path='../scenarios/custom.yml',
     rendering=True
 )
 
-env = gym_envs.VectorizedSingleAgentRaceEnv(scenarios=[scenario, scenario])
-env = gym_envs.wrappers.VectorizedSingleAgentActionRepeat(env, steps=4)
+env = gym_api.VectorizedSingleAgentRaceEnv(scenarios=[scenario, scenario])
+env = gym_api.wrappers.VectorizedSingleAgentActionRepeat(env, steps=4)
 
 
 print(env.observation_space)

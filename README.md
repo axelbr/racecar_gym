@@ -110,12 +110,12 @@ Currently, the state looks like this:
 
 ### Gym API
 To use the *Gym API* you can either instantiate environments with the standard keys or by loading custom scenarios.
-In either case, you have to load the `gym_envs` module from this package:
+In either case, you have to load the `gym_api` module from this package:
 ```python
 import gym
-from racecar_gym.envs import gym_envs, SingleAgentScenario # import the gym_envs module
+from racecar_gym.envs import gym_api, SingleAgentScenario # import the gym_envs module
 env = gym.make('SingleAgentAustria_Gui-v0') # use a suitable env-string
-env = gym_envs.SingleAgentRaceEnv(scenario=SingleAgentScenario.from_spec('path/to/spec')) # or create env from custom config
+env = gym_api.SingleAgentRaceEnv(scenario=SingleAgentScenario.from_spec('path/to/spec')) # or create env from custom config
 ```
 The predefined env-strings are of the form
 ```
@@ -128,10 +128,10 @@ and the examples shown in [examples/gym_examples/](./examples/gym_examples).
 
 ### PettingZoo API
 For multi-agent races, we also implement the [PettingZoo API](https://www.pettingzoo.ml/). To create a PettingZoo environment,
-you can use the `pz_envs` module:
+you can use the `pettingzoo_api` module:
 ```python
-from racecar_gym.envs import pz_envs
-env = pz_envs.racecarenv.env(scenario_path='path/to/scenario')
+from racecar_gym.envs import pettingzoo_api
+env = pettingzoo_api.racecarenv.env(scenario_path='path/to/scenario')
 ```
 For further documentation on available PettingZoo environments, please refer to the [PettingZoo Documentation](./docs/pettingzoo.md) (under construction)
 and the examples shown in [examples/pettingzoo_examples/](./examples/pettingzoo_examples).
