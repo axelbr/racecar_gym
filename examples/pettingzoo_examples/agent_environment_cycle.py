@@ -1,6 +1,6 @@
-from racecar_gym.envs import pz_envs
+from racecar_gym.envs import pettingzoo_api
 
-env = pz_envs.racecarenv.env(scenario_path='../scenarios/austria.yml', live_rendering=True)
+env = pettingzoo_api.env(scenario_path='../scenarios/austria.yml', live_rendering=True)
 
 env.reset()
 policy = lambda obs, agent: env.action_space(agent).sample()

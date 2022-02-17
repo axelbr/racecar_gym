@@ -1,13 +1,13 @@
 from time import sleep
 from racecar_gym import MultiAgentScenario
-from racecar_gym.envs import gym_envs
+from racecar_gym.envs import gym_api
 
 scenario = MultiAgentScenario.from_spec(
     path='../scenarios/custom.yml',
     rendering=True
 )
 
-env = gym_envs.MultiAgentRaceEnv(scenario=scenario)
+env = gym_api.MultiAgentRaceEnv(scenario=scenario)
 
 print(env.observation_space)
 print(env.action_space)
