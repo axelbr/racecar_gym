@@ -119,8 +119,8 @@ env = gym_api.SingleAgentRaceEnv(scenario=SingleAgentScenario.from_spec('path/to
 ```
 The predefined env-strings are of the form
 ```
-<Multi|Single>Agent<track>-v0[_Gui])
-e.g.: MultiAgentAustria-v0_Gui
+<Multi|Single>Agent<track>[_Gui]-v0)
+e.g.: MultiAgentAustria_Gui-v0
 ```
 
 For further documentation on available gym environments, please refer to the [Gym Documentation](./docs/gym.md) (under construction)
@@ -131,7 +131,7 @@ For multi-agent races, we also implement the [PettingZoo API](https://www.pettin
 you can use the `pettingzoo_api` module:
 ```python
 from racecar_gym.envs import pettingzoo_api
-env = pettingzoo_api.racecarenv.env(scenario_path='path/to/scenario')
+env = pettingzoo_api.env(scenario_path='path/to/scenario')
 ```
 For further documentation on available PettingZoo environments, please refer to the [PettingZoo Documentation](./docs/pettingzoo.md) (under construction)
 and the examples shown in [examples/pettingzoo_examples/](./examples/pettingzoo_examples).
