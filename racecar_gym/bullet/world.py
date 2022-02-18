@@ -6,7 +6,6 @@ from typing import Dict, Any, List
 import gym
 import numpy as np
 import pybullet as p
-from PIL import Image
 from gym import logger
 
 from racecar_gym.bullet import util
