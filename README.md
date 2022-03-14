@@ -119,7 +119,7 @@ env = gym_api.SingleAgentRaceEnv(scenario=SingleAgentScenario.from_spec('path/to
 ```
 The predefined env-strings are of the form
 ```
-<Multi|Single>Agent<track>[_Gui]-v0)
+<Multi|Single>Agent<track>[_Gui]-v0
 e.g.: MultiAgentAustria_Gui-v0
 ```
 
