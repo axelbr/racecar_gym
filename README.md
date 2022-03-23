@@ -2,7 +2,7 @@
 
 ![berlin track](docs/racecar_gym.gif)
 
-A gym environment for a miniature racecar using the bullet physics engine with pybullet.
+A gym environment for a miniature, [F1Tenth](https://f1tenth.org/)-like racecar using the bullet physics engine with pybullet.
 ## Installation
 You can install ``racecar_gym`` with the following commands:
 
@@ -139,7 +139,7 @@ and the examples shown in [examples/pettingzoo_examples/](./examples/pettingzoo_
 
 ## Maps
 
-Currently four maps are available:
+Currently available maps are listed below. The gridmaps are originally from the [F1Tenth](https://github.com/f1tenth) repositories.
 
 | Image                                 | Name     |
 |---------------------------------------|----------|
@@ -147,8 +147,8 @@ Currently four maps are available:
 | ![berlin](docs/tracks/berlin.png)     | Berlin   |
 | ![montreal](docs/tracks/montreal.png) | Montreal |
 | ![torino](docs/tracks/torino.png)     | Torino   |
-| ![torino](docs/tracks/circle.png)     | Circle   |
-| ![torino](docs/tracks/plechaty.png)   | Plechaty |
+| ![circle](docs/tracks/circle.png)     | Circle   |
+| ![plechaty](docs/tracks/plechaty.png)   | Plechaty |
 
 
 
