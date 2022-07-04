@@ -66,7 +66,14 @@ def load_vehicle(spec: VehicleSpec) -> core.Vehicle:
     sensors = list(filter(lambda s: s.name in requested_sensors, config.sensors))
     sensors = [FixedTimestepSensor(sensor=load_sensor(config=c), frequency=c.frequency, time_step=0.01) for c in
                sensors]
-    actuators = [load_actuator(config=c) for c in config.actuators]
+
+    requested_actuators = set(spec.actuators)
+    available_actuators = set([actuator.name for actuator in config.actuators])
+    if not requested_actuators.issubset(available_actuators):
+        raise NotImplementedError(f'Actuators {requested_actuators - available_actuators} not available.')
+    actuators = list(filter(lambda a: a.name in requested_actuators, config.actuators))
+    actuators = [load_actuator(config=c) for c in actuators]
+
     car_config = RaceCar.Config(urdf_file=config.urdf_file, color=_compute_color(config.color))
     vehicle = RaceCar(sensors=sensors, actuators=actuators, config=car_config)
     return vehicle
