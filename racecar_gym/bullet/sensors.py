@@ -83,8 +83,10 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
                                                    rays=self._rays)
 
     def _setup_raycast(self, min_distance: float, scan_range: float, rays: int):
-        start = min_distance
-        end = min_distance + scan_range
+        # bugfix: the raycast must start from the car,
+        # otherwise it will ignore walls that closer than  ̀mindist`from the sensor
+        start = 0.0
+        end = scan_range
         from_points, to_points = [], []
         angle = self._config.angle_start + np.pi / 2.0
         increment = self._config.angle / self._config.rays
