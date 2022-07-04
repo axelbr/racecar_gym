@@ -10,9 +10,9 @@ from racecar_gym.bullet.configs import SensorConfig, VehicleConfig, ActuatorConf
 from racecar_gym.bullet.sensors import Lidar, PoseSensor, AccelerationSensor, VelocitySensor, RGBCamera, BulletSensor, \
     FixedTimestepSensor
 from racecar_gym.bullet.vehicle import RaceCar
-from racecar_gym.envs.specs import WorldSpec, VehicleSpec
 from .world import World
 from ..core.agent import Agent
+from racecar_gym.core.specs import VehicleSpec, WorldSpec
 
 base_path = os.path.dirname(os.path.abspath(__file__))
 

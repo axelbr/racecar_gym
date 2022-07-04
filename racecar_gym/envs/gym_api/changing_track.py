@@ -2,9 +2,9 @@ from typing import List, Dict, Callable
 
 from .single_agent_race import SingleAgentRaceEnv
 from .multi_agent_race import MultiAgentRaceEnv
-from .scenarios import MultiAgentScenario, SingleAgentScenario
-from .util.changing_track_race_env import ChangingTrackRaceEnv
-import pathlib
+from racecar_gym.envs.scenarios import MultiAgentScenario, SingleAgentScenario
+from .changing_track_race_env import ChangingTrackRaceEnv
+
 
 class ChangingTrackMultiAgentRaceEnv(ChangingTrackRaceEnv):
 

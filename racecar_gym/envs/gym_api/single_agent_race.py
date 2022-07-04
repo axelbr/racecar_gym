@@ -1,6 +1,6 @@
 from typing import Dict
 import gym
-from .scenarios import SingleAgentScenario
+from racecar_gym.envs.scenarios import SingleAgentScenario
 
 class SingleAgentRaceEnv(gym.Env):
 

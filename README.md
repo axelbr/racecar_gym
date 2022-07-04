@@ -2,7 +2,7 @@
 
 ![berlin track](docs/racecar_gym.gif)
 
-A gym environment for a miniature racecar using the bullet physics engine with pybullet.
+A gym environment for a miniature, [F1Tenth](https://f1tenth.org/)-like racecar using the bullet physics engine with pybullet.
 ## Installation
 You can install ``racecar_gym`` with the following commands:
 
@@ -103,22 +103,54 @@ Currently, the state looks like this:
 |rank|`int`|Current rank of the agent, based on lap and progress.|
 |wrong_way|`bool`|Indicates wether the agent goes in the right or wrong direction.|
 |observations|`Dict`|The most recent observations of the agent.
-## Scenes
 
-Currently four maps are available. Each scenario is also available with a GUI
-server. To launch the rendering window, you can append '*_Gui*' to the environment name (e.g. *MultiAgentTrack1-v0* vs *MultiAgentTrack1_Gui-v0*).
+## Available API's
+
+`racecar_gym` currently implements the [Gym API](https://www.gymlibrary.ml/) and the [PettingZoo API](https://www.pettingzoo.ml/).
+
+### Gym API
+To use the *Gym API* you can either instantiate environments with the standard keys or by loading custom scenarios.
+In either case, you have to load the `gym_api` module from this package:
+```python
+import gym
+from racecar_gym.envs import gym_api, SingleAgentScenario # import the gym_envs module
+env = gym.make('SingleAgentAustria_Gui-v0') # use a suitable env-string
+env = gym_api.SingleAgentRaceEnv(scenario=SingleAgentScenario.from_spec('path/to/spec')) # or create env from custom config
+```
+The predefined env-strings are of the form
+```
+<Multi|Single>Agent<track>[_Gui]-v0
+e.g.: MultiAgentAustria_Gui-v0
+```
+
+For further documentation on available gym environments, please refer to the [Gym Documentation](./docs/gym.md) (under construction)
+and the examples shown in [examples/gym_examples/](./examples/gym_examples).
+
+### PettingZoo API
+For multi-agent races, we also implement the [PettingZoo API](https://www.pettingzoo.ml/). To create a PettingZoo environment,
+you can use the `pettingzoo_api` module:
+```python
+from racecar_gym.envs import pettingzoo_api
+env = pettingzoo_api.env(scenario_path='path/to/scenario')
+```
+For further documentation on available PettingZoo environments, please refer to the [PettingZoo Documentation](./docs/pettingzoo.md) (under construction)
+and the examples shown in [examples/pettingzoo_examples/](./examples/pettingzoo_examples).
 
 
-| Image | Name |
-| --- | --- |
-|![austria](docs/tracks/austria.png)|`MultiAgentAustria-v0`, `SingleAgentAustria-v0`|
-|![berlin](docs/tracks/berlin.png)|`MultiAgentBerlin-v0`, `SingleAgentBerlin-v0`|
-|![montreal](docs/tracks/montreal.png)|`MultiAgentMontreal-v0`, `SingleAgentMontreal-v0`|
-|![torino](docs/tracks/torino.png)|`MultiAgentTorino-v0`, `SingleAgentTorino-v0`|
-|![torino](docs/tracks/circle.png)|`MultiAgentCircle_cw-v0`, `MultiAgentCircle_ccw-v0`, `SingleAgentCircle_cw-v0`, `SingleAgentCircle_ccw-v0`|
-|![torino](docs/tracks/plechaty.png)|`MultiAgentPlechaty-v0`, `SingleAgentPlechaty-v0`|
+## Maps
 
-Scenarios can also be customized. Have a look at the examples.
+Currently available maps are listed below. The gridmaps are originally from the [F1Tenth](https://github.com/f1tenth) repositories.
+
+| Image                                 | Name     |
+|---------------------------------------|----------|
+| ![austria](docs/tracks/austria.png)   | Austria  |                                                                                                   |
+| ![berlin](docs/tracks/berlin.png)     | Berlin   |
+| ![montreal](docs/tracks/montreal.png) | Montreal |
+| ![torino](docs/tracks/torino.png)     | Torino   |
+| ![circle](docs/tracks/circle.png)     | Circle   |
+| ![plechaty](docs/tracks/plechaty.png)   | Plechaty |
+
+
 
 ## Notes
 Please note that this is work in progress, and interfaces might change. Also more detailed documentation and additional scenarios will follow.
