@@ -59,7 +59,38 @@ class Motor(BulletActuator[Tuple[float, float]]):
             )
 
     def space(self) -> gym.Space:
-        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float64)
+        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
+
+
+class Speed(BulletActuator[Tuple[float, float]]):
+    @dataclass
+    class Config:
+        velocity_multiplier: float
+        max_velocity: float
+        max_force: float
+
+    def __init__(self, name: str, config: Config):
+        super().__init__(name)
+        self._config = config
+
+    def control(self, target_speed: float) -> None:
+        """ target_speed is assumed to be mapped from [0,max_velocity] to [-1, +1]"""
+        target_speed = np.clip(target_speed, -1, +1)  # sanity check
+        target_speed = (target_speed + 1.0) / 2.0 * self._config.max_velocity  # convert to actual range
+
+        velocity = target_speed * self._config.velocity_multiplier
+        force = self._config.max_force
+
+        for index in self.joint_indices:
+            pybullet.setJointMotorControl2(
+                self.body_id, index,
+                pybullet.VELOCITY_CONTROL,
+                targetVelocity=velocity,
+                force=force
+            )
+
+    def space(self) -> gym.Space:
+        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
 
 
 class SteeringWheel(BulletActuator[float]):
@@ -83,4 +114,4 @@ class SteeringWheel(BulletActuator[float]):
             )
 
     def space(self) -> gym.Space:
-        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float64)
+        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
