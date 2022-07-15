@@ -28,6 +28,7 @@ class RaceCar(Vehicle):
 
         self._actuator_indices = {
             'motor': [8, 15],
+            'speed': [8, 15],
             'steering': [0, 2]
         }
         self._actuators = dict([(a.name, a) for a in actuators])
