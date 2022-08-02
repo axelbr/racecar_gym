@@ -51,13 +51,12 @@ class World(world.World):
                 ('progress', 'norm_distance_from_start'),
                 ('obstacle', 'norm_distance_to_obstacle'),
                 ('occupancy', 'drivable_area')
-                ]
+            ]
         ])
         self._state['maps'] = self._maps
         self._tmp_occupancy_map = None      # used for `random_ball` sampling
         self._progress_center = None        # used for `random_ball` sampling
         self._trajectory = []
-
 
     def init(self) -> None:
         if self._config.rendering:
@@ -167,20 +166,6 @@ class World(world.World):
         pose = self._state[agent.id]['pose']
         progress = progress_map.get_value(position=(pose[0], pose[1], 0))
         dist_obstacle = obstacle_map.get_value(position=(pose[0], pose[1], 0))
-
-        # compute next waypoint
-        margin = 50
-        y, x = progress_map.to_pixel((pose[0], pose[1], 0.0))
-        progress_surround = progress_map._map[y-margin:y+margin, x-margin:x+margin]
-        # note: we have to discard too far progresses because they could be part of future sections of the map
-        # they are visible in the surrounding of the progress map, but not reachable by the current position
-        reasonable_surround = progress_surround * (progress_surround <= (progress + 0.05))
-        mask_best_progress = reasonable_surround >= np.max(reasonable_surround)
-        masked_distance_surround = obstacle_map._map[y-margin:y+margin, x-margin:x+margin] * mask_best_progress
-        rel_row, rel_col = np.unravel_index(np.argmax(masked_distance_surround), masked_distance_surround.shape)
-        waypoint = progress_map.to_meter(y-margin+rel_row, x-margin+rel_col)
-
-        self._state[agent.id]['next_waypoint'] = (*waypoint, 0.0)
 
         self._state[agent.id]['velocity'] = velocity
         self._state[agent.id]['progress'] = progress

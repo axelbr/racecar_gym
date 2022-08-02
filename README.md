@@ -43,6 +43,7 @@ agents:
     vehicle:
       name: racecar
       sensors: [lidar, pose, velocity, acceleration]
+      actuators: [motor, steering]
       color: blue # default is blue, one of red, green, blue, yellow, magenta or random
     task:
       task_name: maximize_progress
@@ -74,15 +75,21 @@ pose, velocity, acceleration, LiDAR and RGB Camera. Further, the observation spa
 |rgb_camera|`Box(<height>, <width>, 3)`|`height: 240, width: 320`|RGB image of the front camera.|
 
 ### Actions
-The action space for a single agent is a defined by the actuators of the vehicle. For instance, [differential racecar](models/vehicles/racecar/racecar.yml)
-defines two actuators: motor and steering. The action space is therefore a dictionary with keys `motor` and `steering`.
-Note, that the action space of the car is normalized between -1 and 1.
-The complete action space for this vehicle looks like this:
+The action space for a single agent is a defined by the actuators of the vehicle. 
+**By default**, [differential racecar](models/vehicles/racecar/racecar.yml) defines two actuators: motor and steering. 
+The action space is therefore a dictionary with keys `motor` and `steering`.
 
-|Key|Space|Description|
-|---|---|---|
-|motor|`Box(low=-1, high=1, shape=(1,))`|Throttle command. If negative, the car accelerates backwards.|
-|steering|`Box(low=-1, high=1, shape=(1,))`|Normalized steering angle.|
+Alternatevely, the agent can control the target speed and steering, but must be defined in the scenario specification.
+In this case, the action space is a dictionary with keys `speed` and `steering`.
+
+Note, that the action space of the car is normalized between -1 and 1.
+The action space can include the following actuators:
+
+| Key      |Space| Description                                                                 |
+|----------|---|-----------------------------------------------------------------------------|
+| motor    |`Box(low=-1, high=1, shape=(1,))`| Throttle command. If negative, the car accelerates backwards.               |
+| speed    |`Box(low=-1, high=1, shape=(1,))`| Normalized target speed. |
+| steering |`Box(low=-1, high=1, shape=(1,))`| Normalized steering angle.                                                  |
 
 ### State
 In addition to observations obtained by sensors, the environment passes back the true state of each vehicle in each
