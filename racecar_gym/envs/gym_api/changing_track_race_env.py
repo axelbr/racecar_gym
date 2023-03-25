@@ -1,16 +1,22 @@
 import random
-from typing import Callable, List
+from typing import Callable, List, Any, Optional, Dict, Tuple
 
-import gym
+import gymnasium
+from gymnasium.core import ObsType
 
 from .subprocess_env import SubprocessEnv
 
 
-class ChangingTrackRaceEnv(gym.Env):
+class ChangingTrackRaceEnv(gymnasium.Env):
 
-    def __init__(self, env_factories: List[Callable[[], gym.Env]], order: str = 'sequential'):
+    metadata = {
+        'render_modes': ['human', 'rgb_array_follow', 'rgb_array_birds_eye', 'rgb_array_lidar']
+    }
+
+    def __init__(self, env_factories: List[Callable[[], gymnasium.Env]], order: str = 'sequential', render_mode: str = 'follow'):
         super().__init__()
         self._current_track_index = 0
+        self._render_mode = render_mode
         if order == 'sequential':
             self._order_fn = lambda: (self._current_track_index + 1) % len(env_factories)
         elif order == 'random':
@@ -34,12 +40,18 @@ class ChangingTrackRaceEnv(gym.Env):
     def step(self, action):
         return self._get_env().step(action=action)
 
-    def reset(self, mode: str = 'grid'):
+    def reset(self, *, seed: Optional[int] = None, options: Dict[str, Any] = None) -> Tuple[ObsType, Dict[str, Any]]:
+        super().reset(seed=seed, options=options)
         self._current_track_index = self._order_fn()
-        return self._get_env().reset(mode=mode)
+        if options is not None:
+            mode = options.get('mode', 'grid')
+        else:
+            mode = 'grid'
+        options = options or {}
+        return self._get_env().reset(seed=seed, options={'mode': mode, **options})
 
-    def render(self, mode='follow', **kwargs):
-        return self._get_env().render(mode=mode, **kwargs)
+    def render(self):
+        return self._get_env().render()
 
     def close(self):
         for env in self._envs:

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
-import gym
+import gymnasium
 
 T = TypeVar('T')
 
@@ -13,7 +13,7 @@ class Sensor(Generic[T], ABC):
         self._type = type
 
     @abstractmethod
-    def space(self) -> gym.Space:
+    def space(self) -> gymnasium.Space:
         pass
 
     @abstractmethod

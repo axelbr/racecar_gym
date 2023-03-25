@@ -1,24 +1,24 @@
 from time import sleep
-from racecar_gym import MultiAgentScenario
+import gymnasium
 from racecar_gym.envs import gym_api
 
-scenario = MultiAgentScenario.from_spec(
-    path='../scenarios/custom.yml',
-    rendering=True
+env = gymnasium.make(
+    id='MultiAgentRaceEnv-v0',
+    scenario='../scenarios/custom.yml',
+    render_mode='human'
 )
-
-env = gym_api.MultiAgentRaceEnv(scenario=scenario)
 
 print(env.observation_space)
 print(env.action_space)
 
 done = False
-obs = env.reset(mode='random_ball')
+obs = env.reset(options=dict(mode='grid'))
 
 while not done:
     action = env.action_space.sample()
-    obs, rewards, dones, states = env.step(action)
+    obs, rewards, dones, truncated, states = env.step(action)
     done = any(dones.values())
+    env.render()
     sleep(0.01)
 
 env.close()

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
 
-import gym
+import gymnasium
 import numpy as np
 
 from .agent import Agent
@@ -27,7 +27,7 @@ class World(ABC):
         pass
 
     @abstractmethod
-    def space(self) -> gym.Space:
+    def space(self) -> gymnasium.Space:
         pass
 
     @abstractmethod

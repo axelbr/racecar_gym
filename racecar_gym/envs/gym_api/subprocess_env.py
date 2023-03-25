@@ -2,7 +2,7 @@ from multiprocessing.connection import Connection, Pipe
 from multiprocessing.context import Process
 from typing import Union, Any, Callable
 
-from gym import Env
+from gymnasium import Env
 
 class SubprocessEnv(Env):
 
@@ -41,8 +41,8 @@ class SubprocessEnv(Env):
         self._parent_conn.send(('reset', kwargs))
         return self._return()
 
-    def render(self, mode: str = 'human', **kwargs):
-        self._parent_conn.send(('render', {'mode': mode, **kwargs}))
+    def render(self, **kwargs):
+        self._parent_conn.send(('render', {**kwargs}))
         return self._return()
 
     def close(self):

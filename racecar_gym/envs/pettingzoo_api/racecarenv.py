@@ -1,7 +1,7 @@
 import functools
 from typing import Dict
 
-import gym
+import gymnasium
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 
@@ -34,11 +34,11 @@ class _MultiAgentEnv(AECEnv):
         super().__init__()
 
     @functools.lru_cache(maxsize=None)
-    def observation_space(self, agent: str) -> gym.Space:
+    def observation_space(self, agent: str) -> gymnasium.Space:
         return self._scenario.agents[agent].observation_space
 
     @functools.lru_cache(maxsize=None)
-    def action_space(self, agent: str) -> gym.Space:
+    def action_space(self, agent: str) -> gymnasium.Space:
         return self._scenario.agents[agent].action_space
 
     def observe(self, agent):

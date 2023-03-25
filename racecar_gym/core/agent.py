@@ -1,6 +1,6 @@
 from typing import Any
 
-import gym
+import gymnasium
 
 from .definitions import Pose, Velocity
 from .vehicles import Vehicle
@@ -31,11 +31,11 @@ class Agent:
         return self._vehicle.id
 
     @property
-    def action_space(self) -> gym.Space:
+    def action_space(self) -> gymnasium.Space:
         return self._vehicle.action_space
 
     @property
-    def observation_space(self) -> gym.Space:
+    def observation_space(self) -> gymnasium.Space:
         return self._vehicle.observation_space
 
     def step(self, action):

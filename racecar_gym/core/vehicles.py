@@ -1,7 +1,8 @@
+import numpy as np
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List
 
-import gym
+import gymnasium
 
 from .actuators import Actuator
 from .definitions import Pose
@@ -36,12 +37,13 @@ class Vehicle(ABC):
         pass
 
     @property
-    def action_space(self) -> gym.spaces.Dict:
-        return gym.spaces.Dict(dict((name, actuator.space()) for name, actuator in self.actuators.items()))
+    def action_space(self) -> gymnasium.spaces.Dict:
+        return gymnasium.spaces.Dict(dict((name, actuator.space()) for name, actuator in self.actuators.items()))
 
     @property
-    def observation_space(self) -> gym.spaces.Dict:
-        return gym.spaces.Dict(dict((s.name, s.space()) for s in self.sensors))
+    def observation_space(self) -> gymnasium.spaces.Dict:
+        spaces = dict((s.name, s.space()) for s in self.sensors)
+        return gymnasium.spaces.Dict(spaces)
 
     @abstractmethod
     def reset(self, pose: Pose):

@@ -3,10 +3,10 @@ import random
 from dataclasses import dataclass
 from typing import Dict, Any, List
 
-import gym
+import gymnasium
 import numpy as np
 import pybullet as p
-from gym import logger
+from gymnasium import logger
 
 from racecar_gym.bullet import util
 from racecar_gym.bullet.configs import MapConfig
@@ -129,9 +129,9 @@ class World(world.World):
 
         return self._state
 
-    def space(self) -> gym.Space:
-        return gym.spaces.Dict({
-            'time': gym.spaces.Box(low=0, high=math.inf, shape=(1,))
+    def space(self) -> gymnasium.Space:
+        return gymnasium.spaces.Dict({
+            'time': gymnasium.spaces.Box(low=0, high=math.inf, shape=(1,))
         })
 
     def _update_race_info(self, agent):

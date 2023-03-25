@@ -1,10 +1,10 @@
-import gym
+import gymnasium
 from typing import Callable, List, Any, Dict
 
 import numpy as np
 
 
-class ActionRepeat(gym.Wrapper):
+class ActionRepeat(gymnasium.Wrapper):
 
     def __init__(self, env, steps: int, reward_aggregate_fn: Callable[[List], Any], termination_fn: Callable[[Any], bool]):
         super().__init__(env)

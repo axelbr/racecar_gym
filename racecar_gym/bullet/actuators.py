@@ -2,7 +2,7 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import Tuple, TypeVar, List
 
-import gym
+import gymnasium
 import numpy as np
 import pybullet
 
@@ -58,8 +58,8 @@ class Motor(BulletActuator[Tuple[float, float]]):
                 force=force
             )
 
-    def space(self) -> gym.Space:
-        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
+    def space(self) -> gymnasium.Space:
+        return gymnasium.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
 
 
 class Speed(BulletActuator[Tuple[float, float]]):
@@ -89,8 +89,8 @@ class Speed(BulletActuator[Tuple[float, float]]):
                 force=force
             )
 
-    def space(self) -> gym.Space:
-        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
+    def space(self) -> gymnasium.Space:
+        return gymnasium.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
 
 
 class SteeringWheel(BulletActuator[float]):
@@ -113,5 +113,5 @@ class SteeringWheel(BulletActuator[float]):
                 targetPosition=-angle
             )
 
-    def space(self) -> gym.Space:
-        return gym.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
+    def space(self) -> gymnasium.Space:
+        return gymnasium.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)

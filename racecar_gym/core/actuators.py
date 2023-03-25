@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
-import gym
+import gymnasium
 
 T = TypeVar('T')
 
@@ -15,7 +15,7 @@ class Actuator(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    def space(self) -> gym.Space:
+    def space(self) -> gymnasium.Space:
         pass
 
     @property
