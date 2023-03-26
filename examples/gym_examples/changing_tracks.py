@@ -1,5 +1,4 @@
 from racecar_gym.envs import gym_api
-from racecar_gym import SingleAgentScenario
 
 scenarios = [f'../scenarios/{track}.yml' for track in ['austria', 'gbr', 'barcelona']]
 env = gym_api.ChangingTrackSingleAgentRaceEnv(scenarios=scenarios, order='random')

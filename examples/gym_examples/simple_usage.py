@@ -4,8 +4,8 @@ import racecar_gym.envs.gym_api
 
 # Currently, three rendering modes are available: 'human', 'rgb_array_birds_eye' and 'rgb_array_follow'
 # human: Render the scene in a window.
-# birds_eye: Follow an agent in birds eye perspective.
-# follow: Follow an agent in a 3rd person view.
+# rgb_array_birds_eye: Follow an agent in birds eye perspective.
+# rgb_array_follow: Follow an agent in a 3rd person view.
 env = gymnasium.make('SingleAgentAustria-v0', render_mode='rgb_array_follow')
 done = False
 
