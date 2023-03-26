@@ -1,11 +1,12 @@
-from typing import List, Callable
+from typing import List, Callable, Any, Optional, Dict, Tuple
 
-import gym
-from gym import Env
+import gymnasium
+from gymnasium import Env
+from gymnasium.core import ObsType
 
 from .subprocess_env import SubprocessEnv
 
-class VectorizedRaceEnv(gym.Env):
+class VectorizedRaceEnv(gymnasium.Env):
 
     metadata = {'render.modes': ['follow', 'birds_eye']}
 
@@ -15,28 +16,29 @@ class VectorizedRaceEnv(gym.Env):
             for factory
             in factories
         ]
-        self.observation_space = gym.spaces.Tuple([env.observation_space for env in self._envs])
-        self.action_space = gym.spaces.Tuple([env.action_space for env in self._envs])
+        self.observation_space = gymnasium.spaces.Tuple([env.observation_space for env in self._envs])
+        self.action_space = gymnasium.spaces.Tuple([env.action_space for env in self._envs])
 
     def step(self, actions):
         promises = []
         for action, env in zip(actions, self._envs):
             promises.append(env.step(action))
 
-        observations, rewards, dones, states = [], [], [], []
+        observations, rewards, terminates, truncates, states = [], [], [], [], []
         for promise in promises:
-            obs, reward, done, state = promise()
+            obs, reward, terminate, truncate, state = promise()
             observations.append(obs)
             rewards.append(reward)
-            dones.append(done)
+            terminates.append(terminate)
+            truncates.append(truncate)
             states.append(state)
 
-        return observations, rewards, dones, states
+        return observations, rewards, terminates, truncates, states
 
-    def reset(self, **kwargs):
+    def reset(self, *, seed: Optional[int] = None, options: Optional[Dict[str, Any]] = None) -> Tuple[ObsType, Dict[str, Any]]:
         observations = []
         for env in self._envs:
-            obs = env.reset(**kwargs)
+            obs = env.reset(seed=seed, options=options)
             observations.append(obs())
         return observations
 
@@ -47,7 +49,7 @@ class VectorizedRaceEnv(gym.Env):
     def render(self, mode: str = 'follow', **kwargs):
         renderings, promises = [], []
         for env in self._envs:
-            promises.append(env.render(mode=mode, **kwargs))
+            promises.append(env.render())
 
         for promise in promises:
             renderings.append(promise())

@@ -1,30 +1,36 @@
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Any, Optional
 
-from gym import Env
+import gymnasium
+from gymnasium.core import ObsType
 
-from racecar_gym.envs.scenarios import MultiAgentScenario
-from .multi_agent_race import MultiAgentRaceEnv
+from . import MultiAgentRaceEnv
 from .vectorized_race import VectorizedRaceEnv
 
 
-class VectorizedMultiAgentRaceEnv(Env):
+class VectorizedMultiAgentRaceEnv(gymnasium.Env):
+    metadata = {
+        'render_modes': ['human', 'rgb_array_follow', 'rgb_array_birds_eye', 'rgb_array_lidar']
+    }
 
-    metadata = {'render.modes': ['follow', 'birds_eye', 'lidar']}
-
-    def __init__(self, scenarios: List[MultiAgentScenario]):
-        self._env = VectorizedRaceEnv(factories=[lambda: MultiAgentRaceEnv(s) for s in scenarios])
+    def __init__(self, scenarios: List[str], render_mode: str = 'human', render_options: Dict = None):
+        self._env = VectorizedRaceEnv(
+            factories=[
+                lambda: MultiAgentRaceEnv(s, render_mode=render_mode, render_options=render_options)
+                for s
+                in scenarios
+            ]
+        )
         self.action_space, self.observation_space = self._env.action_space, self._env.observation_space
-
 
     def step(self, actions: Tuple[Dict]):
         return self._env.step(actions=actions)
 
-    def reset(self, mode: str = 'grid'):
-        return self._env.reset(mode=mode)
+    def reset(self, *, seed: Optional[int] = None, options: Optional[Dict[str, Any]] = None) -> Tuple[ObsType, Dict[str, Any]]:
+        return self._env.reset(seed=seed, options=options)
 
     def close(self):
         self._env.close()
 
-    def render(self, mode='follow', agent: str = None, **kwargs):
-        return self._env.render(mode=mode, agent=agent, **kwargs)
+    def render(self):
+        return self._env.render()
 

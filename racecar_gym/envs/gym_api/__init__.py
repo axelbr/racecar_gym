@@ -6,15 +6,14 @@ from .multi_agent_race import MultiAgentRaceEnv
 from .changing_track import ChangingTrackSingleAgentRaceEnv, ChangingTrackMultiAgentRaceEnv
 
 from .single_agent_race import SingleAgentRaceEnv
-#from .vectorized_multi_agent_race import VectorizedMultiAgentRaceEnv
-#from .vectorized_single_agent_race import VectorizedSingleAgentRaceEnv
-from ..scenarios import MultiAgentScenario, SingleAgentScenario
+from .vectorized_multi_agent_race import VectorizedMultiAgentRaceEnv
+from .vectorized_single_agent_race import VectorizedSingleAgentRaceEnv
 from . import wrappers
 
 base_path = os.path.dirname(__file__)
 
 def _register_multi_agent(name: str, file: str):
-    scenario = MultiAgentScenario.from_spec(path=f'{base_path}/../../../scenarios/{file}')
+    scenario = f'{base_path}/../../../scenarios/{file}'
     register(
         id=name,
         entry_point='racecar_gym.envs.gym_api:MultiAgentRaceEnv',

@@ -13,15 +13,15 @@ class ActionRepeat(gymnasium.Wrapper):
         self._steps = steps
 
     def step(self, action):
-        obs, info, done = None, None, None
+        obs, info, terminated, truncated = None, None, None, None
         rewards = []
         for i in range(self._steps):
-            obs, reward, done, info = self.env.step(action)
+            obs, reward, terminated, truncated, info = self.env.step(action)
             rewards.append(reward)
-            if self._termination_fn(done):
+            if self._termination_fn(terminated):
                 break
         reward = self._reward_aggregate_fn(rewards)
-        return obs, reward, done, info
+        return obs, reward, terminated, truncated, info
 
 def _aggregate_dicts(dicts, initial_value: Any, agg_fn: Callable[[Any, Any], Any]):
     result = dict((key, initial_value) for key in dicts[0].keys())

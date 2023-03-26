@@ -1,10 +1,10 @@
-import gym
+import gymnasium
 import numpy as np
 
-from racecar_gym import MultiAgentRaceEnv
+from racecar_gym.envs.gym_api import MultiAgentRaceEnv
 
 
-class FlattenActionWrapper(gym.ActionWrapper):
+class FlattenActionWrapper(gymnasium.ActionWrapper):
     """
     Flattens the nested action dictionary to numpy arrays. Only Box spaces are supported.
     """
@@ -15,13 +15,13 @@ class FlattenActionWrapper(gym.ActionWrapper):
         self._reverse_mappings = dict((i, key) for i, key in enumerate(env.action_space.spaces.keys()))
         self._build_spaces(base_env=env)
 
-    def _build_spaces(self, base_env: gym.Env):
+    def _build_spaces(self, base_env: gymnasium.Env):
         new_action_space = dict()
         for agent, action_space in base_env.action_space.spaces.items():
             low = np.concatenate([space.low for space in action_space.spaces.values()])
             high = np.concatenate([space.high for space in action_space.spaces.values()])
-            new_action_space[agent] = gym.spaces.Box(low, high)
-        self.action_space = gym.spaces.Dict(new_action_space)
+            new_action_space[agent] = gymnasium.spaces.Box(low, high)
+        self.action_space = gymnasium.spaces.Dict(new_action_space)
 
     def reverse_action(self, action):
         for agent in action:

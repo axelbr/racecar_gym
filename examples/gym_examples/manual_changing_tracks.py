@@ -1,8 +1,8 @@
 from racecar_gym.envs import gym_api
 from racecar_gym import MultiAgentScenario, SingleAgentScenario
 
-scenarios = [MultiAgentScenario.from_spec(f'../scenarios/{track}.yml', rendering=True) for track in ['austria', 'barcelona']]
-env = gym_api.ChangingTrackMultiAgentRaceEnv(scenarios=scenarios, order='manual')
+scenarios = [f'../scenarios/{track}.yml' for track in ['austria', 'barcelona']]
+env = gym_api.ChangingTrackMultiAgentRaceEnv(scenarios=scenarios, order='manual', render_mode='rgb_array_follow')
 
 for _ in range(4):
     env.set_next_env()
@@ -11,5 +11,6 @@ for _ in range(4):
         for _ in range(500):
             action = env.action_space.sample()
             _ = env.step(action)
+            env.render()
 
 env.close()
