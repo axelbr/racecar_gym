@@ -5,6 +5,12 @@
 A gym environment for a miniature, [F1Tenth](https://f1tenth.org/)-like racecar using the bullet physics engine with pybullet.
 ## Installation
 
+> **Warning**
+> We now migrated to *gymnasium*. If you need to use the old gym api, you can either use some of the [compatibility wrappers](https://gymnasium.farama.org/content/gym_compatibility/) of gymnasium
+> or you can use older versions of this gym. The last version supporting the old gym api is tagged as **gym-api**:
+>
+>`git checkout gym-api; pip install -e .`
+
 You can install ``racecar_gym`` with the following commands:
 
 ```shell_script
@@ -22,11 +28,6 @@ VERSION=v1.0.0
 wget https://github.com/axelbr/racecar_gym/releases/download/tracks-${VERSION}/all.zip
 unzip all.zip
 ```
-> **Warning**
-> If you need to use the old gym api, you can either use some of the compatibility wrappers of gymnasium
-> or you can use older versions of this gym. The last version supporting the old gym api is tagged as 'gym-api':
->
->`git checkout gym-api; pip install -e .`
 
 ## Environments
 
