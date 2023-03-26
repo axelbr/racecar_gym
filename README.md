@@ -119,15 +119,38 @@ Currently, the state looks like this:
 To use the *Gym API* you can either instantiate environments with the standard keys or by loading custom scenarios.
 In either case, you have to load the `gym_api` module from this package:
 ```python
-import gym
-from racecar_gym.envs import gym_api, SingleAgentScenario # import the gym_envs module
-env = gym.make('SingleAgentAustria_Gui-v0') # use a suitable env-string
-env = gym_api.SingleAgentRaceEnv(scenario=SingleAgentScenario.from_spec('path/to/spec')) # or create env from custom config
+import gymnasium
+import racecar_gym.envs.gym_api
+
+# For predefined environments:
+env = gymnasium.make(
+    id='SingleAgentAustria-v0',
+    render_mode='human'
+)
+
+# For custom scenarios:
+env = gymnasium.make(
+    id='SingleAgentRaceEnv-v0', 
+    scenario='path/to/scenario',
+    render_mode='rgb_array_follow', # optional
+    render_options=dict(width=320, height=240, agent='A') # optional
+)
+
+done = False
+reset_options = dict(mode='grid')
+obs, info = env.reset(options=reset_options)
+
+while not done:
+    action = env.action_space.sample()
+    obs, rewards, terminated, truncated, states = env.step(action)
+    done = terminated or truncated
+
+env.close()
 ```
 The predefined env-strings are of the form
 ```
-<Multi|Single>Agent<track>[_Gui]-v0
-e.g.: MultiAgentAustria_Gui-v0
+<Multi|Single>Agent<track>-v0
+e.g.: MultiAgentAustria-v0
 ```
 
 For further documentation on available gym environments, please refer to the [Gym Documentation](./docs/gym.md) (under construction)
