@@ -166,7 +166,7 @@ For multi-agent races, we also implement the [PettingZoo API](https://www.pettin
 you can use the `pettingzoo_api` module:
 ```python
 from racecar_gym.envs import pettingzoo_api
-env = pettingzoo_api.env(scenario_path='path/to/scenario')
+env = pettingzoo_api.env(scenario='path/to/scenario')
 ```
 For further documentation on available PettingZoo environments, please refer to the [PettingZoo Documentation](./docs/pettingzoo.md) (under construction)
 and the examples shown in [examples/pettingzoo_examples/](./examples/pettingzoo_examples).
