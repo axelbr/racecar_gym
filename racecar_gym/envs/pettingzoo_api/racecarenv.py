@@ -31,9 +31,12 @@ class _MultiAgentRaceEnv(ParallelEnv):
     def action_space(self, agent: AgentID) -> gymnasium.spaces.Space:
         return self._env.action_space.spaces[agent]
 
-    def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> ObsDict:
-        obs, _ = self._env.reset(seed=seed, options=options)
-        return obs
+    def reset(self, seed: Optional[int] = None, return_info: bool = False, options: Optional[dict] = None) -> ObsDict:
+        obs, info = self._env.reset(seed=seed, options=options)
+        if return_info:
+            return obs, info
+        else:
+            return obs
 
     def step(self, actions: ActionDict) -> Tuple[
         ObsDict, Dict[str, float], Dict[str, bool], Dict[str, bool], Dict[str, dict]
