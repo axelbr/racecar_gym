@@ -3,14 +3,16 @@
 
 
 import gymnasium
-#import sys
-#sys.modules["gym"] = gym
+import sys
+sys.modules["gym"] = gymnasium
+# import gym
 
 from racecar_gym.envs import pettingzoo_api
 from stable_baselines3.ppo import CnnPolicy, MlpPolicy, MultiInputPolicy
 import supersuit as ss
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
+from flatten_action_wrapper import FlattenAction
 
 
 #careful with versioning and supersuit, needs pettingzoo == 1.22.4
@@ -41,14 +43,14 @@ env = ss.pettingzoo_env_to_vec_env_v1(env)
 #env = ss.concat_vec_envs_v1(env, 8, num_cpus=1, base_class='stable_baselines3')
 
 #flattening the action space --> a bit hacky...
-env.action_space = gymnasium.spaces.utils.flatten_space(env.action_space)
+# env.action_space = gymnasium.spaces.utils.flatten_space(env.action_space)
 
 #print(env.observation_space)
 
 #check_env(env)
 
 env = gymnasium.wrappers.FlattenObservation(env)
-
+env = FlattenAction(env)
 
 
 #print(env.observation_space)
@@ -67,7 +69,7 @@ model = PPO(MlpPolicy, env, verbose=2, gamma=0.95, n_steps=20, ent_coef=0.090516
             vf_coef=0.042202, max_grad_norm=0.9, gae_lambda=0.99, n_epochs=5, clip_range=0.3, batch_size=20)
 
 #timesteps argument in the .learn() method refers to actions taken by an individual agent, not the total number of times the game is played.
-model.learn(total_timesteps=10,progress_bar = True)
+model.learn(total_timesteps=10, progress_bar = True)
 
 
 

@@ -6,7 +6,7 @@ from nptyping import NDArray
 
 from racecar_gym.core import Agent
 
-def get_velocity(id: int) -> NDArray[(6,), np.float]:
+def get_velocity(id: int) -> NDArray[(6,), float]:
     linear, angular = pybullet.getBaseVelocity(id)
     position, orientation = pybullet.getBasePositionAndOrientation(id)
     rotation = pybullet.getMatrixFromQuaternion(orientation)
