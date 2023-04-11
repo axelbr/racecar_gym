@@ -1,5 +1,9 @@
 from typing import Dict, SupportsFloat, Any, Tuple, Optional
+
 import gymnasium
+#import sys
+#sys.modules["gym"] = gym
+
 import numpy as np
 from gymnasium.core import ActType, ObsType
 
@@ -24,6 +28,10 @@ class MultiAgentRaceEnv(gymnasium.Env):
         self._time = 0.0
         self.action_space = gymnasium.spaces.Dict([(k, a.action_space) for k, a in self._scenario.agents.items()])
 
+        #hacky way to test out flattening the action spaces
+        #but the action spaces need to be flattened at this level before
+        #self.action_space = gymnasium.spaces.utils.flatten_space(self.action_space)
+
     @property
     def scenario(self):
         return self._scenario
@@ -44,6 +52,7 @@ class MultiAgentRaceEnv(gymnasium.Env):
         dones = {}
         rewards = {}
         state = {}
+        truncated = {}
 
         for id, agent in self._scenario.agents.items():
             observations[id], state[id] = agent.step(action=action[id])
@@ -56,8 +65,9 @@ class MultiAgentRaceEnv(gymnasium.Env):
             observations[id]['time'] = np.array(state[id]['time'], dtype=np.float32)
             dones[id] = agent.done(state)
             rewards[id] = agent.reward(state, action[id])
+            truncated[id] = False
 
-        return observations, rewards, dones, False, state
+        return observations, rewards, dones, truncated, state
 
     def set_state(self, agent: str, pose: Pose):
         self._scenario.agents[agent].reset(pose=pose)
@@ -91,4 +101,5 @@ class MultiAgentRaceEnv(gymnasium.Env):
             mode = self._render_mode.replace('rgb_array_', '')
             agent = options.pop('agent')
             return self._scenario.world.render(agent_id=agent, mode=mode, **options)
+
 

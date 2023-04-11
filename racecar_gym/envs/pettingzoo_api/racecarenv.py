@@ -1,7 +1,11 @@
+from __future__ import annotations
 import functools
 from typing import Dict, Optional, Tuple, List
 
 import gymnasium
+#import sys
+#sys.modules["gym"] = gym
+
 import numpy as np
 from pettingzoo import ParallelEnv
 from pettingzoo.utils.env import ObsDict, ActionDict, AgentID
@@ -19,9 +23,19 @@ class _MultiAgentRaceEnv(ParallelEnv):
             render_mode=render_mode,
             render_options=render_options,
         )
-        self.agents = self._env.scenario.agents.keys()
-        self.action_spaces = self._env.action_space # type: ignore
+        #self.agents = self._env.scenario.agents.keys()
+        #self.action_spaces = self._env.action_space # type: ignore
+        #self.observation_spaces = self._env.observation_space
+
+        #trying to add edits that match the latest definition of parallel envs for pettingzoo
+
+        self.agents = list(self._env.scenario.agents.keys())
+        self.possible_agents = list(self._env.scenario.agents.keys())
         self.observation_spaces = self._env.observation_space
+        self.action_spaces = self._env.action_space
+
+        #adding render_mode to alleviate an error with sb3
+        self.render_mode = self._env._render_mode
 
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space:
@@ -31,12 +45,9 @@ class _MultiAgentRaceEnv(ParallelEnv):
     def action_space(self, agent: AgentID) -> gymnasium.spaces.Space:
         return self._env.action_space.spaces[agent]
 
-    def reset(self, seed: Optional[int] = None, return_info: bool = False, options: Optional[dict] = None) -> ObsDict:
-        obs, info = self._env.reset(seed=seed, options=options)
-        if return_info:
-            return obs, info
-        else:
-            return obs
+    def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> ObsDict:
+        obs, _ = self._env.reset(seed=seed, options=options)
+        return obs
 
     def step(self, actions: ActionDict) -> Tuple[
         ObsDict, Dict[str, float], Dict[str, bool], Dict[str, bool], Dict[str, dict]
@@ -47,3 +58,7 @@ class _MultiAgentRaceEnv(ParallelEnv):
     def render(self) -> None | np.ndarray | str | List:
         return self._env.render()
 
+    #messing around with trying to flatten action spaces
+
+    def flatten(self):
+        return self._env.flatten()

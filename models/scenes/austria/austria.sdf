@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.6">
+  <world name="austria">
+    <gravity>0 0 -9.8</gravity>
+    <model name="walls">
+      <static>1</static>
+      <pose frame="">0 0 0 0 0 0</pose>
+      <link name="link_d0">
+        <inertial>
+          <mass>0</mass>
+          <inertia>
+            <ixx>0.166667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.166667</iyy>
+            <iyz>0</iyz>
+            <izz>0.166667</izz>
+          </inertia>
+        </inertial>
+        <collision concave="yes" name="collision_0">
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/Walls.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/Walls.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="floor">
+      <static>1</static>
+      <pose frame="">0 0 0 0 0 0</pose>
+      <link name="link_d0">
+        <inertial>
+          <mass>0</mass>
+          <inertia>
+            <ixx>0.166667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.166667</iyy>
+            <iyz>0</iyz>
+            <izz>0.166667</izz>
+          </inertia>
+        </inertial>
+        <collision concave="yes" name="collision_0">
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/Floor.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/Floor.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>
