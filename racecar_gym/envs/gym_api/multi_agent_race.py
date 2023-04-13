@@ -5,6 +5,7 @@ import gymnasium
 #sys.modules["gym"] = gym
 
 import numpy as np
+from numpy import inf
 from gymnasium.core import ActType, ObsType
 
 from racecar_gym.envs.scenarios import MultiAgentScenario
@@ -27,6 +28,10 @@ class MultiAgentRaceEnv(gymnasium.Env):
             self._render_options['agent'] = next(iter(self._scenario.agents))
         self._time = 0.0
         self.action_space = gymnasium.spaces.Dict([(k, a.action_space) for k, a in self._scenario.agents.items()])
+        self.possible_agents = list(self.scenario.agents.keys())
+
+        #wanted observation spaces to be static and not revert back to original on evry call
+        #self.observation_space = self.observation_space_c
 
         #hacky way to test out flattening the action spaces
         #but the action spaces need to be flattened at this level before

@@ -4,7 +4,7 @@ agents:
   - id: A
     vehicle:
       name: racecar
-      sensors: [ lidar, pose, velocity, acceleration ]
+      sensors: [ pose, velocity, acceleration ]
       color: green
     task:
       task_name: maximize_progress
@@ -12,7 +12,7 @@ agents:
   - id: B
     vehicle:
       name: racecar_slower
-      sensors: [ lidar, pose, velocity, acceleration ]
+      sensors: [ pose, velocity, acceleration ]
       color: yellow
     task:
       task_name: maximize_progress
@@ -20,7 +20,7 @@ agents:
   - id: C
     vehicle:
       name: racecar_slowest
-      sensors: [ lidar, pose, velocity, acceleration ]
+      sensors: [ pose, velocity, acceleration ]
       color: red
     task:
       task_name: maximize_progress
@@ -28,7 +28,7 @@ agents:
   - id: D
     vehicle:
       name: racecar
-      sensors: [ lidar, pose, velocity, acceleration ]
+      sensors: [ pose, velocity, acceleration ]
     task:
       task_name: maximize_progress
       params: {laps: 1, time_limit: 120.0, terminate_on_collision: False}

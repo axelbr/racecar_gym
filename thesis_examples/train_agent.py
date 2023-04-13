@@ -2,6 +2,10 @@ import sys
 import gymnasium
 sys.modules["gym"] = gymnasium
 
+from gymnasium.vector.utils import concatenate, create_empty_array, iterate
+
+import math
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -24,6 +28,11 @@ import supersuit as ss
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 from flatten_action_wrapper import FlattenAction
+
+from dictionary_space_utility import unwrap_obs_space, refit_obs
+
+
+from sb3env_wrapper import SB3Wrapper
 
 
 def batchify_obs(obs, device):
@@ -55,6 +64,38 @@ def unbatchify(x, env):
 
     return x
 
+def concat_obs(env,obs_dict):
+
+    obs_list = []
+    for i, agent in enumerate(env.par_env.possible_agents):
+        if agent not in obs_dict:
+            raise AssertionError(
+                "environment has agent death. Not allowed for pettingzoo_env_to_vec_env_v1 unless black_death is True"
+            )
+        obs_list.append(obs_dict[agent])
+
+    return concatenate(
+        env.observation_space,
+        obs_list,
+        create_empty_array(env.observation_space, env.num_envs),
+    )
+
+def collate_dict(self, observation):
+    if type(observation) is not dict:
+        # assume tensor
+        return observation
+    res = []
+    for obs, obs_value in observation.items():
+        if type(obs_value) == dict:
+            sub_obs = self.collate_dict(obs_value)
+            obs_value = sub_obs
+        elif type(obs_value) == list:
+            obs_value = torch.Tensor(obs_value)
+        elif type(obs_value) is int or type(obs_value) is float:
+            obs_value = torch.Tensor([obs_value])
+        res.append(obs_value)
+    res = torch.cat(res, 0)
+    return res
 
 def run():
 
@@ -131,15 +172,43 @@ def run():
     #     N=10,
     #     params=params,
     # )
-    env = pettingzoo_api.env(scenario='../scenarios/austria_het.yml', render_mode="rgb_array_follow")
-    env = gymnasium.make('SingleAgentAustria-v0', render_mode='rgb_array_follow')
-    # env = gymnasium.wrappers.FlattenObservation(env)
-    env = FlattenAction(env)
+    #env = pettingzoo_api.env(scenario='../scenarios/austria_het.yml', render_mode="rgb_array_follow")
+
+    #env = gymnasium.make('SingleAgentAustria-v0', render_mode='rgb_array_follow')
+    #env = gymnasium.wrappers.FlattenObservation(env)
+
+    env = gymnasium.make(
+        id='MultiAgentRaceEnv-v0',
+        scenario='../scenarios/austria_het.yml',
+        render_mode="rgb_array_follow"
+    )
+
+    #env = pettingzoo_api.env(scenario='../scenarios/austria_het.yml', render_mode="rgb_array_follow")
+
+    #env = ss.pettingzoo_env_to_vec_env_v1(env)
+
+
+    #env = FlattenAction(env)
+    num_agents = len(env.possible_agents)
+
+    #seems like flattening the observations looses information?? or the order of info is scrambled
+    #env = gymnasium.wrappers.FlattenObservation(env)
+
+
+    #environment wrapper for handling sb3
+    sb3_env = SB3Wrapper(env)
     parallel_env = env
+
+    #print(sb3_env.observation_space)
+
+
+
+
+
 
     baseline = "PPO"
     if baseline == "PPO":
-        agent_model = PPO("MultiInputPolicy", parallel_env)
+        agent_model = PPO("MultiInputPolicy", sb3_env)
     elif baseline == "A2C":
         agent_model = A2C("MlpPolicy", parallel_env)
     elif baseline == "DQN":
@@ -147,13 +216,19 @@ def run():
     else:
         raise NotImplementedError("Baseline Strategy not Implemented.")
 
+
     # env = color_reduction_v0(env)
     # env = resize_v1(env, frame_size[0], frame_size[1])
     # env = frame_stack_v1(env, stack_size=stack_size)
     # TODO(christine): make sure the rest of the parameters are set up
-    num_agents = len(env.possible_agents) # look up how to do this programatically
-    num_actions = env.action_space(env.possible_agents[0]).n
-    observation_size = env.observation_space(env.possible_agents[0]).shape
+    #num_agents = len(parallel_env.par_env.possible_agents) # look up how to do this programatically
+    #print(num_agents)
+
+    #not sure if this is necessary for a continuous action space??
+    #num_actions = parallel_env.par_env.action_space(parallel_env.par_env.possible_agents[0]).n
+
+    #not sure if this is needed, come back later. Observation size might be a bit tricky due to dict structure
+    #observation_size = parallel_env.par_env.observation_space.shape
 
 
     """ For Plotting Purposes """
@@ -183,15 +258,28 @@ def run():
             training_mode_prefix = "train"
 
         agent_rewards = {}
-        for agent in env.possible_agents:
+        for agent in parallel_env.possible_agents:
             agent_rewards[agent] = 0
 
+        #come back to this...
         total_episodic_return = 0
 
         # collect an episode
         with torch.no_grad():
             # collect observations and convert to batch of torch tensors
-            next_obs = env.reset(seed=None)
+
+            #print(env.observation_space)
+            #print(parallel_env.observation_space.spaces['A'])
+
+
+            #print(parallel_env.observation_space)
+
+
+            next_obs,state = parallel_env.reset(seed=None) #original obs space
+
+
+
+
 
             # reset the episodic return
             total_episodic_return = {}
@@ -201,16 +289,35 @@ def run():
             # each episode has num_steps
             for t_step in range(rollout_len):
                 if render:
-                    env.render()
+                    parallel_env.render()
 
                 #TODO(christine): make sure environment steps properly
-                obs = batchify_obs(next_obs, device)
+
+                #this will not work with racecar environment
+                #obs = batchify_obs(next_obs, device)
 
                 # get action from the agent
-                actions, values, log_probs = agent_model.policy(obs)
 
+                #collecting all the individual agents actions
+                ind_actions = {}
+                for key in sb3_env.possible_agents:
+                    print(next_obs[key])
+                    sb3_obs, _ = refit_obs(next_obs[key])
+                    print(sb3_obs)
+
+                    #error with .policy() function that is caused by the dimensions of the new observations (I think)
+                    #actions, values, log_probs = agent_model.policy(sb3_obs)
+                    actions = agent_model.predict(sb3_obs)
+
+                    ind_actions[key] = actions
+
+                    #After collecting all the individual actions, I now need to collate/combine all the actions into one action space to use with env.step()
+
+
+
+                # check this --> probably not going to work well with the new action space and obs space
                 # execute the environment and log data
-                next_obs, rewards, terms, truncs, infos = env.step(
+                next_obs, rewards, terms, truncs, infos = parallel_env.step(
                     unbatchify(actions.numpy(), env)
                 )
 
