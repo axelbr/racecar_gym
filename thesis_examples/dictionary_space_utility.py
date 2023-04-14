@@ -104,12 +104,37 @@ def refit_obs(obs):
     return new_dict, obs['time']
 
 
+#returns a flattened observation space
+def flatten_obs_space():
+
+    #low_b = [pose,vel,accel]
+
+    low_b = np.array([-100,-100,-3,-math.pi,-math.pi,-math.pi,14, -14, -14, -6,-6,-6,-inf,-inf,-inf,-inf,-inf,-inf])
+    high_b = np.array([100,100,3,math.pi,math.pi,math.pi,14,14,14,6,6,6,inf,inf,inf,inf,inf,inf])
+
+    flat_space = gymnasium.spaces.Box(low = low_b, high = high_b, shape = (18,), dtype = np.float64)
+
+    return flat_space
 
 
+#returns a flattened observation
+def flatten_obs(obs):
+    flat_obs = obs['pose']
+    keys = ['velocity','acceleration']
+    for key in keys:
+        flat_obs = np.append(flat_obs,obs[key])
+    flat_obs = np.reshape(flat_obs,(18,))
+
+    return flat_obs
+
+#preprocessing for obs before using .policy functions such as predict_values
+def policyprep(obs,sb3_env):
+    obs = th.from_numpy(obs)
+    obs = obs.reshape((-1,) + sb3_env.observation_space.shape)
+
+    return obs
 
 
-
-    # need a function that does a reverse of the above
 
 
 

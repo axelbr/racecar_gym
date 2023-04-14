@@ -29,7 +29,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 from flatten_action_wrapper import FlattenAction
 
-from dictionary_space_utility import unwrap_obs_space, refit_obs
+from dictionary_space_utility import unwrap_obs_space, refit_obs, flatten_obs, policyprep
 
 
 from sb3env_wrapper import SB3Wrapper
@@ -208,7 +208,7 @@ def run():
 
     baseline = "PPO"
     if baseline == "PPO":
-        agent_model = PPO("MultiInputPolicy", sb3_env)
+        agent_model = PPO("MlpPolicy", sb3_env)
     elif baseline == "A2C":
         agent_model = A2C("MlpPolicy", parallel_env)
     elif baseline == "DQN":
@@ -216,6 +216,7 @@ def run():
     else:
         raise NotImplementedError("Baseline Strategy not Implemented.")
 
+    #trained = agent_model.learn(total_timesteps = 10)
 
     # env = color_reduction_v0(env)
     # env = resize_v1(env, frame_size[0], frame_size[1])
@@ -300,16 +301,26 @@ def run():
 
                 #collecting all the individual agents actions
                 ind_actions = {}
+                ind_values = {}
+                ind_log_probs = {}
                 for key in sb3_env.possible_agents:
-                    print(next_obs[key])
-                    sb3_obs, _ = refit_obs(next_obs[key])
-                    print(sb3_obs)
+                    #print(next_obs[key])
+                    sb3_obs = flatten_obs(next_obs[key])
+                    #print(sb3_obs)
 
                     #error with .policy() function that is caused by the dimensions of the new observations (I think)
                     #actions, values, log_probs = agent_model.policy(sb3_obs)
-                    actions = agent_model.predict(sb3_obs)
+                    #actions = agent_model.predict(sb3_obs)
+
+                    sb3_obs = policyprep(sb3_obs,sb3_env)
+
+                    #values = agent_model.policy.predict_values(sb3_obs)
+                    actions, values, log_probs = agent_model.policy(sb3_obs)
 
                     ind_actions[key] = actions
+                    ind_values[key] = values
+                    ind_log_probs[key] = log_probs
+
 
                     #After collecting all the individual actions, I now need to collate/combine all the actions into one action space to use with env.step()
 
