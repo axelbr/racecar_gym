@@ -88,7 +88,7 @@ class RayWrapper(MultiAgentEnv):
     def step(self, actions: ActionDict) -> Tuple[
         ObsDict, Dict[str, float], Dict[str, bool], Dict[str, bool], Dict[str, dict]
     ]:
-        #unflattening the actions so that multi_agent_race env can process it
+        #unflattening the actions so that multi_agent_race env can process it --> not needed?
         #unflat_acts = unflatten_acts(actions)
 
         #stepping with the multi_agent_race env's function
@@ -103,12 +103,9 @@ class RayWrapper(MultiAgentEnv):
 
         #return self._env.step(actions) # type: ignore
 
-        #dones['__all__'] =  False
-        #print(self._env.observation_space)
-
+        #checking if the environment has terminated
         dones.update({'__all__': all(dones.values())})
-        truncated.update({'__all__': False})
-        print(dones['__all__'])
+        truncated.update({'__all__': all(truncated.values())})
 
         #returning the required values
         return flat_obs, rewards, dones, truncated, state
