@@ -109,13 +109,22 @@ def flatten_obs_space():
 
     #low_b = [pose,vel,accel]
 
-    low_b = np.array([-100,-100,-3,-math.pi,-math.pi,-math.pi,14, -14, -14, -6,-6,-6,-inf,-inf,-inf,-inf,-inf,-inf])
+    low_b = np.array([-100,-100,-3,-math.pi,-math.pi,-math.pi,-14, -14, -14, -6,-6,-6,-inf,-inf,-inf,-inf,-inf,-inf])
     high_b = np.array([100,100,3,math.pi,math.pi,math.pi,14,14,14,6,6,6,inf,inf,inf,inf,inf,inf])
 
     flat_space = gymnasium.spaces.Box(low = low_b, high = high_b, shape = (18,), dtype = np.float64)
 
     return flat_space
 
+def flatten_acts_space():
+
+    low_b = np.array([-1,-1])
+    high_b = np.array([1,1])
+
+    #action_space = [motor, steering]
+    flat_space = gymnasium.spaces.Box(low = low_b, high = high_b, shape = (2,), dtype = np.float32)
+
+    return flat_space
 
 #returns a flattened observation
 def flatten_obs(obs):
@@ -127,13 +136,42 @@ def flatten_obs(obs):
 
     return flat_obs
 
+
+# returns the flattented action **
+def flatten_acts(act):
+    flat_act = act['motor']
+    keys = ['motor', 'steering']
+
+    for key in keys:
+        flat_act = np.append(flat_act, act[key])
+
+    return flat_act
+
+
+#given a flattened action space, return it unflattened in the style of racecar env
+def unflatten_acts(acts):
+
+    unflat_act = {}
+
+    #assuming the actions from rllib will come as dictionaries with form agentID:act
+    for key in acts.keys():
+        ray_acts = acts[key]
+        motor = ray_acts["motor"]
+        steering = ray_acts["steering"]
+
+        tmp_dict = {"motor":motor,"steering":steering}
+        unflat_act[key] = tmp_dict
+
+    return unflat_act
+
 #preprocessing for obs before using .policy functions such as predict_values
 def policyprep(obs,sb3_env):
+    #old shape was [18,]
     obs = th.from_numpy(obs)
+    #new shape is [1,18]
     obs = obs.reshape((-1,) + sb3_env.observation_space.shape)
 
     return obs
-
 
 
 

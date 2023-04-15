@@ -9,6 +9,7 @@ from racecar_gym.envs.gym_api import MultiAgentRaceEnv
 from ray.tune.registry import register_env
 from ray.rllib.algorithms import ppo
 from ray.rllib.algorithms.ppo import PPOConfig
+from ray.tune.logger import pretty_print
 
 import ray
 
@@ -25,7 +26,7 @@ def env_creator(env_config):
 register_env("my_env",env_creator)
 
 
-ray.init()
+#ray.init()
 #algo = PPOTrainer(env="my_env", config = {
 #    "multiagent":{}, "env")
 #results = algo.train()
@@ -33,4 +34,8 @@ ray.init()
 config = PPOConfig()
 config = config.environment(env = "my_env", env_config ={"num_agents": 4})
 algo = config.build()
-results = algo.train()
+
+for _ in range(10):
+    results = algo.train()
+    print(pretty_print(results))
+

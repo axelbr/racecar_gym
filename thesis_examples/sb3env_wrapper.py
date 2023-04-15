@@ -13,7 +13,7 @@ from racecar_gym.envs.gym_api import MultiAgentRaceEnv
 
 import numpy as np
 
-from dictionary_space_utility import unwrap_obs_space, flatten_obs_space
+from dictionary_space_utility import unwrap_obs_space, flatten_obs_space,flatten_acts_space
 
 
 
@@ -61,7 +61,10 @@ class SB3Wrapper(gymnasium.Env):
         act = self._env.action_space.spaces[agent]
 
         #flattening the action space
-        action_space = gymnasium.spaces.flatten_space(act)
+        #action_space = gymnasium.spaces.flatten_space(act)
+        #action_space = flatten_acts_space(act)
+
+        action_space = flatten_acts_space()
         return action_space
 
 
