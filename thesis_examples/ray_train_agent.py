@@ -42,7 +42,7 @@ register_env("my_env",env_creator)
 #    "multiagent":{}, "env")
 #results = algo.train()
 
-epochs = 10
+epochs = 100000
 rollout_fragment_length = 1000
 params = {"epochs": epochs,
           "rollout_fragment_length": rollout_fragment_length} #TODO(christine.ohenzuwa): add command line args using python argparse
@@ -91,7 +91,7 @@ for epoch in range(params["epochs"]):
         learner_stats = {"learner_agent_" + agent_prefix + "/" + k:v for (k,v) in agent_dict["learner_stats"].items()}
         log_dict.update(learner_stats)
     if epoch % 10 == 0:
-        checkpoint = algo.save()
+        checkpoint = algo.save("/home/christine/trained_models")
         log_dict["checkpoint"] = checkpoint
     wandb.log(log_dict)
 
