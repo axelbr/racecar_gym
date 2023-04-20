@@ -4,6 +4,7 @@ import numpy as np
 import pprint
 import random
 import matplotlib.pyplot as plt
+import cv2
 
 from ray.rllib.agents.ppo import PPOTrainer
 from ray_wrapper import RayWrapper
@@ -15,6 +16,7 @@ from ray.rllib.algorithms.ppo import PPOConfig
 from ray.tune.logger import pretty_print
 from ray.rllib.policy.policy import PolicySpec
 from dictionary_space_utility import flatten_obs
+from ray.rllib.algorithms.algorithm import Algorithm
 from time import sleep
 
 
@@ -64,9 +66,9 @@ config = config.multi_agent(policies = policies,
 
 algo = config.build()
 
-for _ in range(1):
-    results = algo.train()
-    print(pretty_print(results))
+#for _ in range(1):
+#    results = algo.train()
+#    print(pretty_print(results))
 
 
 
@@ -85,13 +87,15 @@ ray_env = RayWrapper(env)
 def simulate(ray_env,algo,eps):
     joint_trajectories = {}
     policy_agent_mapping = algo.config['multiagent']['policy_mapping_fn']
+    video_array = []
     for episode in range(eps):
         trajectories = dict.fromkeys('Episode {}'.format(episode))
         print('Episode: {}'.format(episode))
         obs, _ = ray_env.reset()
         #print(obs)
         done = {agent: False for agent in obs.keys()}
-
+        img_array = []
+        timestep = 0
         while True: # Run until the episode ends
             # Get actions from policies
             joint_action = {}
@@ -105,22 +109,32 @@ def simulate(ray_env,algo,eps):
 
             # Step the simulation
             obs, reward, done, truncated, info = ray_env.step(joint_action)
+            rgb_array = ray_env.render()
+            #transfer to BGR for openCV
 
-            for agent_id in obs.keys():
+            img_array.append(cv2.cvtColor(rgb_array, cv2.COLOR_RGB2BGR))
+            #print("new timestep!")
+
+            #for agent_id in obs.keys():
                 # might need to flatten this in the future --> nested dict structure
-                trajectories['Episode {}'.format(episode)][agent_id]['action'] = joint_action[agent_id]
-                trajectories['Episode {}'.format(episode)][agent_id]['pose'] = info[agent_id]['pose']
-
-
-
-
-
-
+            #    trajectories['Episode {}'.format(episode)][agent_id]['action'] = joint_action[agent_id]
+            #    trajectories['Episode {}'.format(episode)][agent_id]['pose'] = info[agent_id]['pose']
 
             #rgb_array = ray_env.render()
             #print(rgb_array.shape)
             #plt.clear()
             #plt.imshow(rgb_array)
             sleep(0.01)
+            timestep = timestep + 1
             if done['__all__']:
+                video_array.append(img_array)
                 break
+    return video_array
+
+
+checkpoint_path = "/home/christine/trained_models/checkpoint_000041"
+algo = Algorithm.from_checkpoint(checkpoint_path)
+vids = simulate(ray_env,algo,1000)
+
+#filename = "trained_vid_{}" .format(episode)
+#out = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc(*'mp4v'), 30, (320,240))
