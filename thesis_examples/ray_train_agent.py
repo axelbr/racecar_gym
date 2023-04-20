@@ -132,9 +132,21 @@ def simulate(ray_env,algo,eps):
     return video_array
 
 
-checkpoint_path = "/home/christine/trained_models/checkpoint_000041"
+checkpoint_path = "/home/christine/trained_models/checkpoint_000151"
 algo = Algorithm.from_checkpoint(checkpoint_path)
-vids = simulate(ray_env,algo,1000)
+vids = simulate(ray_env,algo,1)
 
-#filename = "trained_vid_{}" .format(episode)
-#out = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc(*'mp4v'), 30, (320,240))
+
+
+#assume the input is a set of images representing one video --> not working
+def createvideo(vid):
+    episode = 1
+    filename = "trained_vid.mp4"
+    out = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc(*'mp4v'), 30, (320,240))
+    for pic in vid:
+        out.write(pic)
+
+    out.release()
+
+
+createvideo(vids[0])
