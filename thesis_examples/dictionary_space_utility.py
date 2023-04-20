@@ -110,7 +110,7 @@ def flatten_obs_space():
     #low_b = [pose,vel,accel]
 
     #making some of the boundaries slighy higher than pi for now
-    low_b = np.array([-100,-100,-3,-math.pi+0.5,-math.pi+0.5,-math.pi+0.5,-14, -14, -14, -6,-6,-6,-inf,-inf,-inf,-inf,-inf,-inf])
+    low_b = np.array([-100,-100,-3,-math.pi-0.5,-math.pi-0.5,-math.pi-0.5,-14, -14, -14, -6,-6,-6,-inf,-inf,-inf,-inf,-inf,-inf])
     high_b = np.array([100,100,3,math.pi+0.5,math.pi+0.5,math.pi+0.5,14,14,14,6,6,6,inf,inf,inf,inf,inf,inf])
 
     flat_space = gymnasium.spaces.Box(low = low_b, high = high_b, shape = (18,), dtype = np.float64)

@@ -79,7 +79,7 @@ for epoch in range(params["epochs"]):
 
     # Train the model for (1?) epoch with a pre-specified rollout fragment length (how many rollouts?).
     results = algo.train()
-    print(pretty_print(results))
+    #print(pretty_print(results))
 
     # Log the results
     log_dict = {}  # reset the log dict
