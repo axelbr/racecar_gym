@@ -59,13 +59,14 @@ class RayWrapper(MultiAgentEnv):
 
     def action_space(self, agent: AgentID) -> gymnasium.spaces.Space:
         act = self._env.action_space.spaces[agent]
+        act = self._env.action_space['A']
 
         # flattening the action space
         # action_space = gymnasium.spaces.flatten_space(act)
         # action_space = flatten_acts_space(act)
 
         action_space = flatten_acts_space()
-        return action_space
+        return act
 
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> ObsDict:
         obs, _ = self._env.reset(seed=seed, options=options)
