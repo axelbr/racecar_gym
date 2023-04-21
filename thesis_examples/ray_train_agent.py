@@ -5,6 +5,7 @@ import pprint
 import random
 import matplotlib.pyplot as plt
 import cv2
+import yaml
 
 from ray.rllib.agents.ppo import PPOTrainer
 from ray_wrapper import RayWrapper
@@ -18,7 +19,7 @@ from ray.rllib.policy.policy import PolicySpec
 from dictionary_space_utility import flatten_obs
 from ray.rllib.algorithms.algorithm import Algorithm
 from time import sleep
-
+from collections import defaultdict
 
 import ray
 
@@ -66,10 +67,6 @@ config = config.multi_agent(policies = policies,
 
 algo = config.build()
 
-#for _ in range(1):
-#    results = algo.train()
-#    print(pretty_print(results))
-
 
 
 
@@ -77,25 +74,33 @@ algo = config.build()
 env = gymnasium.make(
         id='MultiAgentRaceEnv-v0',
         scenario='../scenarios/austria_het.yml',
-        render_mode="rgb_array_follow",
-        render_options=dict(width=320, height=240, agent='A')
+        render_mode="human",
+        #render_options=dict(width=320, height=240, agent='A')
     )
 
 ray_env = RayWrapper(env)
 
 #function for simulating agents with a trained model, also collect a dictionary of trajectories for the agent
 def simulate(ray_env,algo,eps):
-    joint_trajectories = {}
     policy_agent_mapping = algo.config['multiagent']['policy_mapping_fn']
     video_array = []
+    trajectories = {}
     for episode in range(eps):
-        trajectories = dict.fromkeys('Episode {}'.format(episode))
+        trajectories['Episode{}'.format(episode)] = {}
         print('Episode: {}'.format(episode))
         obs, _ = ray_env.reset()
         #print(obs)
         done = {agent: False for agent in obs.keys()}
+
         img_array = []
+        timesteps = []
         timestep = 0
+        traj = {}
+        for agent_id in obs.keys():
+            traj['x_pos_{}'.format(agent_id)] = []
+            traj['y_pos_{}'.format(agent_id)] = []
+            traj['yaw_pos_{}'.format(agent_id)] = []
+
         while True: # Run until the episode ends
             # Get actions from policies
             joint_action = {}
@@ -109,33 +114,36 @@ def simulate(ray_env,algo,eps):
 
             # Step the simulation
             obs, reward, done, truncated, info = ray_env.step(joint_action)
-            rgb_array = ray_env.render()
-            #transfer to BGR for openCV
 
-            img_array.append(cv2.cvtColor(rgb_array, cv2.COLOR_RGB2BGR))
-            #print("new timestep!")
+            for agent_id in obs.keys():
+                traj['x_pos_{}'.format(agent_id)].append(info[agent_id]['pose'][0])
+                traj['y_pos_{}'.format(agent_id)].append(info[agent_id]['pose'][1])
+                traj['yaw_pos_{}'.format(agent_id)].append(info[agent_id]['pose'][5])
 
-            #for agent_id in obs.keys():
-                # might need to flatten this in the future --> nested dict structure
-            #    trajectories['Episode {}'.format(episode)][agent_id]['action'] = joint_action[agent_id]
-            #    trajectories['Episode {}'.format(episode)][agent_id]['pose'] = info[agent_id]['pose']
+            timesteps.append(timestep)
+            timestep = timestep + 1
 
             #rgb_array = ray_env.render()
-            #print(rgb_array.shape)
-            #plt.clear()
-            #plt.imshow(rgb_array)
-            sleep(0.01)
-            timestep = timestep + 1
+            #ray_env.render()
+            #transfer to BGR for openCV
+
+            #img_array.append(cv2.cvtColor(rgb_array, cv2.COLOR_RGB2BGR))
+
+            #rgb_array = ray_env.render()
+            #sleep(0.01)
+
             if done['__all__']:
-                video_array.append(img_array)
+                #video_array.append(img_array)
+                trajectories['Episode{}'.format(episode)] = traj
+                trajectories['Episode{}'.format(episode)]['timesteps'] = timesteps
                 break
-    return video_array
+    return trajectories
 
 
-checkpoint_path = "/home/christine/trained_models/checkpoint_000151"
+checkpoint_path = "/home/christine/trained_models/checkpoint_001051"
 algo = Algorithm.from_checkpoint(checkpoint_path)
-vids = simulate(ray_env,algo,1)
-
+#vids = simulate(ray_env,algo,1)
+trajectories = simulate(ray_env,algo,10)
 
 
 #assume the input is a set of images representing one video --> not working
@@ -148,5 +156,9 @@ def createvideo(vid):
 
     out.release()
 
-
-createvideo(vids[0])
+#takes a dictiionary containing trajectories and saves them to yml file
+def save_trajs(trajectories,filepath = "test.yml"):
+    file = open(filepath,"w")
+    yaml.dump(trajectories,file)
+    file.close()
+    print("trajectories file saved")
