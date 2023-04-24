@@ -1,0 +1,39 @@
+wandb_version: 1
+
+epochs:
+  desc: null
+  value: 100000
+rollout_fragment_length:
+  desc: null
+  value: 1000
+_wandb:
+  desc: null
+  value:
+    python_version: 3.9.15
+    cli_version: 0.14.2
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1681943553.148486
+    t:
+      1:
+      - 1
+      - 2
+      - 3
+      - 12
+      - 30
+      - 55
+      2:
+      - 1
+      - 2
+      - 3
+      - 12
+      - 30
+      - 55
+      3:
+      - 16
+      - 23
+      4: 3.9.15
+      5: 0.14.2
+      8:
+      - 5

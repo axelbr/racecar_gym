@@ -1,0 +1,77 @@
+{
+    "os": "Linux-5.15.0-69-generic-x86_64-with-glibc2.31",
+    "python": "3.9.15",
+    "heartbeatAt": "2023-04-20T00:32:58.858999",
+    "startedAt": "2023-04-20T00:32:58.440940",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/christine/racecar_gym/thesis_examples/ray_train_agent.py",
+    "codePath": "thesis_examples/ray_train_agent.py",
+    "git": {
+        "remote": "https://github.com/ohenzuwac/racecar_gym",
+        "commit": "402a561cda31a5206b4f83135358139d0cf5e54c"
+    },
+    "email": "ohenzuwa@princeton.edu",
+    "root": "/home/christine/racecar_gym",
+    "host": "christine-HP-Spectre-x360-Convertible-13-ap0xxx",
+    "username": "christine",
+    "executable": "/home/christine/anaconda3/envs/testMARL/bin/python",
+    "cpu_count": 4,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 1.875,
+        "min": 400.0,
+        "max": 4600.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2.0,
+            "min": 400.0,
+            "max": 4600.0
+        },
+        {
+            "current": 2.0,
+            "min": 400.0,
+            "max": 4600.0
+        },
+        {
+            "current": 2.0,
+            "min": 400.0,
+            "max": 4600.0
+        },
+        {
+            "current": 2.0,
+            "min": 400.0,
+            "max": 4600.0
+        },
+        {
+            "current": 1.0,
+            "min": 400.0,
+            "max": 4600.0
+        },
+        {
+            "current": 2.119,
+            "min": 400.0,
+            "max": 4600.0
+        },
+        {
+            "current": 2.0,
+            "min": 400.0,
+            "max": 4600.0
+        },
+        {
+            "current": 2.0,
+            "min": 400.0,
+            "max": 4600.0
+        }
+    ],
+    "disk": {
+        "total": 91.10977554321289,
+        "used": 14.452545166015625
+    },
+    "memory": {
+        "total": 15.247920989990234
+    }
+}
