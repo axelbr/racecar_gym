@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 ./models/scenes/*
 
-/thesis_examples/wandb/
+/thesis_examples/wandb/*
