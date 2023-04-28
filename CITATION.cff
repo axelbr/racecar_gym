@@ -4,9 +4,11 @@ authors:
 - family-names: "Brunnbauer"
   given-names: "Axel"
   orcid: "https://orcid.org/0000-0002-8934-7355"
+  affiliation: TU Wien
 - family-names: "Berducci"
   given-names: "Luigi"
   orcid: "https://orcid.org/0000-0002-3497-6007"
+  affiliation: TU Wien
 title: "racecar_gym"
 version: 0.0.1
 url: "https://github.com/axelbr/racecar_gym"
