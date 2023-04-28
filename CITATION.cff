@@ -8,5 +8,5 @@ authors:
   given-names: "Luigi"
   orcid: "https://orcid.org/0000-0002-3497-6007"
 title: "racecar_gym"
-version: 1.0.0
+version: 0.0.1
 url: "https://github.com/axelbr/racecar_gym"
