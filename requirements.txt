@@ -1,7 +1,7 @@
-pybullet
-scipy
-numpy
-gym
-yamldataclassconfig
-nptyping
-matplotlib
+pybullet==3.1.7
+scipy==1.5.4
+numpy==1.18.5
+gym==0.18.0
+yamldataclassconfig==1.3.2
+nptyping==1.4.2
+matplotlib==3.3.4
