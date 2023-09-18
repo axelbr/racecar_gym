@@ -6,7 +6,7 @@ import racecar_gym.envs.gym_api
 # human: Render the scene in a window.
 # rgb_array_birds_eye: Follow an agent in birds eye perspective.
 # rgb_array_follow: Follow an agent in a 3rd person view.
-env = gymnasium.make('SingleAgentAustria-v0', render_mode='rgb_array_follow')
+env = gymnasium.make('SingleAgentAustria-v0', render_mode='human')
 done = False
 
 # Currently, there are two reset modes available: 'grid' and 'random'.
