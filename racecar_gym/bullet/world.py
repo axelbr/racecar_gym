@@ -1,4 +1,5 @@
 import math
+import pkgutil
 import random
 from dataclasses import dataclass
 from typing import Dict, Any, List
@@ -65,6 +66,11 @@ class World(world.World):
                 p.connect(p.GUI)
         else:
             p.connect(p.DIRECT)
+            # Load EGL plugin for GPU-accelerated offscreen rendering.
+            # Without this, ER_BULLET_HARDWARE_OPENGL falls back to CPU TinyRenderer.
+            egl = pkgutil.get_loader('eglRenderer')
+            if egl is not None:
+                p.loadPlugin(egl.get_filename(), '_eglRendererPlugin')
 
         self._load_scene(self._config.sdf)
         p.setTimeStep(self._config.time_step)

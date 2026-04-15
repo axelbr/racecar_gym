@@ -1,6 +1,7 @@
 from time import sleep
 import gymnasium
 import racecar_gym.envs.gym_api
+import cv2
 
 # Currently, three rendering modes are available: 'human', 'rgb_array_birds_eye' and 'rgb_array_follow'
 # human: Render the scene in a window.
@@ -20,6 +21,7 @@ while not done:
     sleep(0.01)
     if t % 30 == 0:
         image = env.render()
+        print(obs.keys())
     t+=1
 
 

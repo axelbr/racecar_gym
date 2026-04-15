@@ -1,6 +1,6 @@
 from racecar_gym.envs import pettingzoo_api
 
-env = pettingzoo_api.env(scenario='../scenarios/austria.yml', render_mode='human')
+env = pettingzoo_api.env(scenario='../scenarios/test_pettingzoo.yml', render_mode='human')
 obs = env.reset()
 policy = lambda obs, agent: env.action_space(agent).sample()
 done = False

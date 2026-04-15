@@ -1,0 +1,21 @@
+world:
+  name: austria
+agents:
+  - id: A
+    vehicle:
+      name: racecar
+      sensors: [ rgb_camera ]
+      actuators: [steering, speed]
+      color: red
+    task:
+      task_name: maximize_progress
+      params: {laps: 2, time_limit: 180.0, terminate_on_collision: False}
+  - id: B
+    vehicle:
+      name: racecar
+      sensors: [ rgb_camera ]
+      actuators: [steering, speed]
+      color: blue
+    task:
+      task_name: maximize_progress
+      params: {laps: 2, time_limit: 180.0, terminate_on_collision: False}

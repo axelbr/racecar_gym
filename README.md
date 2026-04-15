@@ -3,6 +3,26 @@
 ![berlin track](docs/racecar_gym.gif)
 
 A gym environment for a miniature, [F1Tenth](https://f1tenth.org/)-like racecar using the bullet physics engine with pybullet.
+
+## Introduction
+강화학습 텀프로젝트를 위한 repositroy 입니다. \
+[racecar_gym](https://github.com/axelbr/racecar_gym)으로 부터 구성되었고 pybullet physics engine을 이용한 gymnasium 환경입니다.
+
+## Prerequisites
+- Conda or virtual env
+- Python 3.10
+- CPU or NVIDIA GPU
+- PyTorch
+
+## Installation
+```bash
+# For conda (Recommended)
+git clone https://github.com/YSL2683/racecar_gym.git
+cd racecar_gym
+conda create -n racecar python=3.10
+pip install -e .
+```
+
 ## Installation
 
 > **Warning**
