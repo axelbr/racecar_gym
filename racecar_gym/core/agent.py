@@ -1,6 +1,7 @@
 from typing import Any
 
 import gymnasium
+import numpy as np
 
 from .definitions import Pose, Velocity
 from .vehicles import Vehicle
@@ -48,6 +49,9 @@ class Agent:
 
     def reward(self, state, action) -> float:
         return self._task.reward(agent_id=self._id, state=state, action=action)
+
+    def seed(self, np_random: np.random.Generator) -> None:
+        self._vehicle.seed(np_random)
 
     def reset(self, pose: Pose):
         self._vehicle.reset(pose=pose)

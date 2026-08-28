@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Dict, Any, Tuple
 
+import numpy as np
 import pybullet
 
 from racecar_gym.bullet.actuators import BulletActuator
@@ -13,13 +14,14 @@ class RaceCar(Vehicle):
     @dataclass
     class Config:
         urdf_file: str
-        color: Tuple[float, float, float, float]
+        color: str
 
     def __init__(self, sensors: List[BulletSensor], actuators: List[BulletActuator], config: Config):
         super().__init__()
         self._id = None
         self._config = config
         self._on_finish = False
+        self._np_random = np.random.default_rng()
 
         self._sensor_indices = {
             'lidar': 4,
@@ -53,6 +55,7 @@ class RaceCar(Vehicle):
         else:
             pos, orn = pose
             pybullet.resetBasePositionAndOrientation(self._id, pos, pybullet.getQuaternionFromEuler(orn))
+            pybullet.changeVisualShape(self._id, -1, rgbaColor=self._color())
 
         for sensor in self.sensors:
             joint_index = None
@@ -66,11 +69,29 @@ class RaceCar(Vehicle):
                 joint_indices = self._actuator_indices[name]
             actuator.reset(body_id=self._id, joint_indices=joint_indices)
 
+    def seed(self, np_random: np.random.Generator) -> None:
+        super().seed(np_random)
+        self._np_random = np_random
+
+    def _color(self) -> Tuple[float, float, float, float]:
+        colors = {
+            'red': (1.0, 0.0, 0.0, 1.0),
+            'green': (0.0, 1.0, 0.0, 1.0),
+            'blue': (0.0, 0.0, 1.0, 1.0),
+            'yellow': (1.0, 1.0, 0.0, 1.0),
+            'magenta': (1.0, 0.0, 1.0, 1.0),
+        }
+        if self._config.color == 'random':
+            return (*self._np_random.random(3), 1.0)
+        if self._config.color not in colors:
+            raise ValueError(f'Unsupported vehicle color: {self._config.color}')
+        return colors[self._config.color]
+
     def _load_model(self, model: str, initial_pose: Pose) -> int:
         position, orientation = initial_pose
         orientation = pybullet.getQuaternionFromEuler(orientation)
         id = pybullet.loadURDF(model, position, orientation)
-        pybullet.changeVisualShape(id, -1, rgbaColor=self._config.color)
+        pybullet.changeVisualShape(id, -1, rgbaColor=self._color())
         return id
 
     def _setup_constraints(self):

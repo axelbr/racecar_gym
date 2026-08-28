@@ -21,6 +21,10 @@ class Vehicle(ABC):
             observations[sensor.name] = sensor.observe()
         return observations
 
+    def seed(self, np_random: np.random.Generator) -> None:
+        for sensor in self.sensors:
+            sensor.seed(np_random)
+
     @property
     @abstractmethod
     def id(self) -> Any:
