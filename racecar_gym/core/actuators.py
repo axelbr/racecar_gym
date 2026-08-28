@@ -15,6 +15,10 @@ class Actuator(ABC, Generic[T]):
         pass
 
     @abstractmethod
+    def stop(self) -> None:
+        pass
+
+    @abstractmethod
     def space(self) -> gymnasium.Space:
         pass
 

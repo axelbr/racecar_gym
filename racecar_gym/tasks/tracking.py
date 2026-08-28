@@ -44,7 +44,10 @@ class WaypointFollow(Task):
         agent_state = state[agent_id]
         if self._terminate_on_collision and self._check_collision(agent_state):
             return True
-        return agent_state['lap'] > self._laps or self._time_limit < agent_state['time']
+        return agent_state['lap'] > self._laps
+
+    def truncated(self, agent_id, state) -> bool:
+        return self._time_limit < state[agent_id]['time']
 
     def _check_collision(self, agent_state):
         safe_margin = 0.25

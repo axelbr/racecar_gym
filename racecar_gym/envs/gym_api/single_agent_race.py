@@ -23,7 +23,7 @@ class SingleAgentRaceEnv(gymnasium.Env):
     @property
     def observation_space(self):
         space = self._scenario.agent.observation_space
-        space.spaces['time'] = gymnasium.spaces.Box(low=0, high=1, shape=())
+        space.spaces['time'] = self._scenario.world.space()['time']
         return space
 
     @property
@@ -36,9 +36,10 @@ class SingleAgentRaceEnv(gymnasium.Env):
         self._scenario.world.update()
         state = self._scenario.world.state()
         observation['time'] = np.array(state[self._scenario.agent.id]['time'], dtype=np.float32)
-        done = self._scenario.agent.done(state)
+        terminated = self._scenario.agent.done(state)
+        truncated = self._scenario.agent.truncated(state)
         reward = self._scenario.agent.reward(state, action)
-        return observation, reward, done, False, state[self._scenario.agent.id]
+        return observation, reward, terminated, truncated, state[self._scenario.agent.id]
 
     def reset(self, *, seed: Optional[int] = None, options: Optional[Dict[str, Any]] = None) -> Tuple[ObsType, Dict[str, Any]]:
         super().reset(seed=seed, options=options)

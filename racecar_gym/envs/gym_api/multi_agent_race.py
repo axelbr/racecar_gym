@@ -33,31 +33,41 @@ class MultiAgentRaceEnv(gymnasium.Env):
         spaces = {}
         for id, agent in self._scenario.agents.items():
             spaces[id] = agent.observation_space
-            spaces[id].spaces['time'] = gymnasium.spaces.Box(low=0, high=1, shape=())
+            spaces[id].spaces['time'] = self._scenario.world.space()['time']
         return gymnasium.spaces.Dict(spaces)
 
-    def step(self, action: ActType) -> Tuple[ObsType, Dict[str, SupportsFloat], Dict[str, bool], bool, Dict[str, Any]]:
+    def step(self, action: ActType) -> Tuple[ObsType, Dict[str, SupportsFloat], Dict[str, bool], Dict[str, bool], Dict[str, Any]]:
+
+        return self.step_agents(action, list(self._scenario.agents))
+
+    def step_agents(self, action: ActType, agent_ids) -> Tuple[ObsType, Dict[str, SupportsFloat], Dict[str, bool], Dict[str, bool], Dict[str, Any]]:
 
         assert self._initialized, 'Reset before calling step'
 
         observations = {}
         dones = {}
+        truncations = {}
         rewards = {}
         state = {}
 
-        for id, agent in self._scenario.agents.items():
+        for id in agent_ids:
+            agent = self._scenario.agents[id]
             observations[id], state[id] = agent.step(action=action[id])
 
         self._scenario.world.update()
         state = self._scenario.world.state()
 
-        for id, agent in self._scenario.agents.items():
+        for id in agent_ids:
+            agent = self._scenario.agents[id]
             state[id]['observations'] = observations[id]
             observations[id]['time'] = np.array(state[id]['time'], dtype=np.float32)
             dones[id] = agent.done(state)
+            truncations[id] = agent.truncated(state)
             rewards[id] = agent.reward(state, action[id])
-
-        return observations, rewards, dones, False, state
+            if dones[id] or truncations[id]:
+                agent.stop()
+        infos = {agent_id: state[agent_id] for agent_id in observations}
+        return observations, rewards, dones, truncations, infos
 
     def set_state(self, agent: str, pose: Pose):
         self._scenario.agents[agent].reset(pose=pose)
@@ -91,4 +101,3 @@ class MultiAgentRaceEnv(gymnasium.Env):
             mode = self._render_mode.replace('rgb_array_', '')
             agent = options.pop('agent')
             return self._scenario.world.render(agent_id=agent, mode=mode, **options)
-

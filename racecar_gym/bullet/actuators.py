@@ -61,6 +61,13 @@ class Motor(BulletActuator[Tuple[float, float]]):
     def space(self) -> gymnasium.Space:
         return gymnasium.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
 
+    def stop(self) -> None:
+        for index in self.joint_indices:
+            pybullet.setJointMotorControl2(
+                self.body_id, index, pybullet.VELOCITY_CONTROL,
+                targetVelocity=0.0, force=0.0,
+            )
+
 
 class Speed(BulletActuator[Tuple[float, float]]):
     @dataclass
@@ -92,6 +99,13 @@ class Speed(BulletActuator[Tuple[float, float]]):
     def space(self) -> gymnasium.Space:
         return gymnasium.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
 
+    def stop(self) -> None:
+        for index in self.joint_indices:
+            pybullet.setJointMotorControl2(
+                self.body_id, index, pybullet.VELOCITY_CONTROL,
+                targetVelocity=0.0, force=self._config.max_force,
+            )
+
 
 class SteeringWheel(BulletActuator[float]):
     @dataclass
@@ -115,3 +129,10 @@ class SteeringWheel(BulletActuator[float]):
 
     def space(self) -> gymnasium.Space:
         return gymnasium.spaces.Box(low=-1.0, high=1.0, shape=(1,), dtype=np.float32)
+
+    def stop(self) -> None:
+        for joint in self.joint_indices:
+            pybullet.setJointMotorControl2(
+                self.body_id, joint, pybullet.POSITION_CONTROL,
+                targetPosition=0.0,
+            )

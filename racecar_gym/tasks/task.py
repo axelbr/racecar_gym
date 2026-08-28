@@ -12,5 +12,9 @@ class Task(ABC):
         pass
 
     @abstractmethod
+    def truncated(self, agent_id, state) -> bool:
+        pass
+
+    @abstractmethod
     def reset(self):
         pass

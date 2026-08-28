@@ -21,6 +21,10 @@ class Vehicle(ABC):
             observations[sensor.name] = sensor.observe()
         return observations
 
+    def stop(self) -> None:
+        for actuator in self.actuators.values():
+            actuator.stop()
+
     @property
     @abstractmethod
     def id(self) -> Any:

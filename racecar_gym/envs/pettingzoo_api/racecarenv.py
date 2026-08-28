@@ -21,7 +21,8 @@ class _MultiAgentRaceEnv(ParallelEnv):
             render_mode=render_mode,
             render_options=render_options,
         )
-        self.agents = self._env.scenario.agents.keys()
+        self.possible_agents = list(self._env.scenario.agents)
+        self.agents = self.possible_agents[:]
         self.action_spaces = self._env.action_space # type: ignore
         self.observation_spaces = self._env.observation_space
 
@@ -34,6 +35,7 @@ class _MultiAgentRaceEnv(ParallelEnv):
         return self._env.action_space.spaces[agent]
 
     def reset(self, seed: Optional[int] = None, return_info: bool = False, options: Optional[dict] = None) -> ObsDict:
+        self.agents = self.possible_agents[:]
         obs, info = self._env.reset(seed=seed, options=options)
         if return_info:
             return obs, info
@@ -43,9 +45,19 @@ class _MultiAgentRaceEnv(ParallelEnv):
     def step(self, actions: ActionDict) -> Tuple[
         ObsDict, Dict[str, float], Dict[str, bool], Dict[str, bool], Dict[str, dict]
     ]:
-        return self._env.step(actions) # type: ignore
+        observations, rewards, terminations, truncations, infos = self._env.step_agents(
+            actions, self.agents
+        )
+        self.agents = [
+            agent
+            for agent in self.agents
+            if not terminations[agent] and not truncations[agent]
+        ]
+        return observations, rewards, terminations, truncations, infos
 
 
     def render(self) -> None | np.ndarray | str | List:
         return self._env.render()
 
+    def close(self):
+        self._env.close()
