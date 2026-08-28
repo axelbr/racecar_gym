@@ -57,18 +57,24 @@ class World(world.World):
         self._tmp_occupancy_map = None      # used for `random_ball` sampling
         self._progress_center = None        # used for `random_ball` sampling
         self._trajectory = []
+        self._client_id = None
 
     def init(self) -> None:
         if self._config.rendering:
             id = -1  # p.connect(p.SHARED_MEMORY)
             if id < 0:
-                p.connect(p.GUI)
+                self._client_id = p.connect(p.GUI)
         else:
-            p.connect(p.DIRECT)
+            self._client_id = p.connect(p.DIRECT)
 
         self._load_scene(self._config.sdf)
         p.setTimeStep(self._config.time_step)
         p.setGravity(0, 0, self._config.gravity)
+
+    def close(self) -> None:
+        if self._client_id is not None and p.isConnected(self._client_id):
+            p.disconnect(self._client_id)
+            self._client_id = None
 
     def reset(self):
         p.setTimeStep(self._config.time_step)

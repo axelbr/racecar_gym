@@ -53,6 +53,22 @@ class RaceCar(Vehicle):
         else:
             pos, orn = pose
             pybullet.resetBasePositionAndOrientation(self._id, pos, pybullet.getQuaternionFromEuler(orn))
+            pybullet.resetBaseVelocity(
+                self._id,
+                linearVelocity=(0.0, 0.0, 0.0),
+                angularVelocity=(0.0, 0.0, 0.0),
+            )
+            for joint in range(pybullet.getNumJoints(self._id)):
+                pybullet.resetJointState(self._id, joint, targetValue=0.0, targetVelocity=0.0)
+                # PyBullet retains motor controllers across teleports, so explicitly
+                # disable the previous episode's commands until the next action.
+                pybullet.setJointMotorControl2(
+                    self._id,
+                    joint,
+                    pybullet.VELOCITY_CONTROL,
+                    targetVelocity=0.0,
+                    force=0.0,
+                )
 
         for sensor in self.sensors:
             joint_index = None

@@ -19,6 +19,10 @@ class World(ABC):
         pass
 
     @abstractmethod
+    def close(self) -> None:
+        pass
+
+    @abstractmethod
     def update(self) -> float:
         pass
 
@@ -41,4 +45,3 @@ class World(ABC):
     @abstractmethod
     def seed(self, seed: int = None):
         pass
-

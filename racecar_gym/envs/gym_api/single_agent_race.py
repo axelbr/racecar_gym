@@ -51,9 +51,10 @@ class SingleAgentRaceEnv(gymnasium.Env):
             mode = options['mode']
         else:
             mode = 'grid'
-        obs = self._scenario.agent.reset(self._scenario.world.get_starting_position(self._scenario.agent, mode))
+        self._scenario.agent.reset(self._scenario.world.get_starting_position(self._scenario.agent, mode))
         self._scenario.world.update()
         state = self._scenario.world.state()
+        obs = self._scenario.agent.observe()
         obs['time'] = np.array(state[self._scenario.agent.id]['time'], dtype=np.float32)
         return obs, state[self._scenario.agent.id]
 
@@ -63,3 +64,6 @@ class SingleAgentRaceEnv(gymnasium.Env):
         else:
             mode = self._render_mode.replace('rgb_array_', '')
             return self._scenario.world.render(mode=mode, agent_id=self._scenario.agent.id, **self._render_options)
+
+    def close(self):
+        self._scenario.world.close()

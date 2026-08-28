@@ -39,9 +39,12 @@ class Agent:
         return self._vehicle.observation_space
 
     def step(self, action):
-        observation = self._vehicle.observe()
+        observation = self.observe()
         self._vehicle.control(action)
         return observation, {}
+
+    def observe(self):
+        return self._vehicle.observe()
 
     def done(self, state) -> bool:
         return self._task.done(agent_id=self._id, state=state)
@@ -52,5 +55,3 @@ class Agent:
     def reset(self, pose: Pose):
         self._vehicle.reset(pose=pose)
         self._task.reset()
-        observation = self._vehicle.observe()
-        return observation
