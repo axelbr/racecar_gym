@@ -66,7 +66,16 @@ class MultiAgentRaceEnv(gymnasium.Env):
         super().reset(seed=seed, options=options)
         if not self._initialized:
             self._scenario.world.init()
+            for agent in self._scenario.agents.values():
+                initial_pose = self._scenario.world.get_starting_position(
+                    agent=agent, mode='grid'
+                )
+                agent.reset(initial_pose)
+            self._scenario.world.update()
             self._initialized = True
+        if seed is not None:
+            self._scenario.world.seed(seed)
+        self._scenario.world.reset()
         if options is not None:
             mode = options.get('mode', 'grid')
         else:
@@ -76,7 +85,6 @@ class MultiAgentRaceEnv(gymnasium.Env):
         for agent in self._scenario.agents.values():
             obs = agent.reset(self._scenario.world.get_starting_position(agent=agent, mode=mode))
             observations[agent.id] = obs
-        self._scenario.world.reset()
         self._scenario.world.update()
         state = self._scenario.world.state()
         for agent in self._scenario.agents.values():
@@ -91,4 +99,3 @@ class MultiAgentRaceEnv(gymnasium.Env):
             mode = self._render_mode.replace('rgb_array_', '')
             agent = options.pop('agent')
             return self._scenario.world.render(agent_id=agent, mode=mode, **options)
-

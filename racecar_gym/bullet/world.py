@@ -57,6 +57,9 @@ class World(world.World):
         self._tmp_occupancy_map = None      # used for `random_ball` sampling
         self._progress_center = None        # used for `random_ball` sampling
         self._trajectory = []
+        self._reset_state_id = None
+        self._np_random = np.random.default_rng()
+        self._random = random.Random()
 
     def init(self) -> None:
         if self._config.rendering:
@@ -71,9 +74,11 @@ class World(world.World):
         p.setGravity(0, 0, self._config.gravity)
 
     def reset(self):
+        if self._reset_state_id is None:
+            self._reset_state_id = p.saveState()
+        p.restoreState(self._reset_state_id)
         p.setTimeStep(self._config.time_step)
         p.setGravity(0, 0, self._config.gravity)
-        p.stepSimulation()
         self._time = 0.0
         self._state = dict([(a.id, {}) for a in self._agents])
 
@@ -88,10 +93,12 @@ class World(world.World):
             strategy = AutomaticGridStrategy(obstacle_map=self._maps['obstacle'], number_of_agents=len(self._agents))
         elif mode == 'random':
             strategy = RandomPositioningStrategy(progress_map=self._maps['progress'],
-                                                 obstacle_map=self._maps['obstacle'], alternate_direction=False)
+                                                 obstacle_map=self._maps['obstacle'],
+                                                 random_generator=self._random, alternate_direction=False)
         elif mode == 'random_bidirectional':
             strategy = RandomPositioningStrategy(progress_map=self._maps['progress'],
-                                                 obstacle_map=self._maps['obstacle'], alternate_direction=True)
+                                                 obstacle_map=self._maps['obstacle'],
+                                                 random_generator=self._random, alternate_direction=True)
         elif mode == 'random_ball':
             progress_radius = 0.05
             min_distance_to_wall = 0.5
@@ -100,11 +107,12 @@ class World(world.World):
             if start_index == 0:    # on first agent, compute a fixed interval for sampling and copy occupancy map
                 progresses = progress_map[obstacle_map > min_distance_to_wall]                                  # center has enough distance from the walls
                 progresses = progresses[(progresses > progress_radius) & (progresses < (1-progress_radius))]    # center+-radius in [0,1]
-                self._progress_center = np.random.choice(progresses)
+                self._progress_center = self._np_random.choice(progresses)
                 self._tmp_occupancy_map = self._maps['occupancy'].map.copy()
             strategy = RandomPositioningWithinBallStrategy(progress_map=self._maps['progress'],
                                                            obstacle_map=self._maps['obstacle'],
                                                            drivable_map=self._tmp_occupancy_map,
+                                                           random_generator=self._random,
                                                            progress_center=self._progress_center,
                                                            progress_radius=progress_radius,
                                                            min_distance_to_obstacle=min_distance_to_wall)
@@ -218,7 +226,7 @@ class World(world.World):
             return util.birds_eye(agent=agent, width=width, height=height)
 
     def seed(self, seed: int = None):
-        if self is None:
-            seed = 0
-        np.random.seed(seed)
-        random.seed(seed)
+        self._np_random = np.random.default_rng(seed)
+        self._random = random.Random(seed)
+        for agent in self._agents:
+            agent.seed(self._np_random)

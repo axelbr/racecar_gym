@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
 import gymnasium
+import numpy as np
 
 T = TypeVar('T')
 
@@ -18,6 +19,10 @@ class Sensor(Generic[T], ABC):
 
     @abstractmethod
     def observe(self) -> T:
+        pass
+
+    @abstractmethod
+    def seed(self, np_random: np.random.Generator) -> None:
         pass
 
     @property

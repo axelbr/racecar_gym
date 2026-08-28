@@ -44,9 +44,15 @@ class SingleAgentRaceEnv(gymnasium.Env):
         super().reset(seed=seed, options=options)
         if not self._initialized:
             self._scenario.world.init()
+            initial_pose = self._scenario.world.get_starting_position(
+                self._scenario.agent, 'grid'
+            )
+            self._scenario.agent.reset(initial_pose)
+            self._scenario.world.update()
             self._initialized = True
-        else:
-            self._scenario.world.reset()
+        if seed is not None:
+            self._scenario.world.seed(seed)
+        self._scenario.world.reset()
         if options is not None and 'mode' in options:
             mode = options['mode']
         else:

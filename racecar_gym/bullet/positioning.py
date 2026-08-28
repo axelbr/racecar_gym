@@ -36,22 +36,24 @@ class AutomaticGridStrategy(PositioningStrategy):
 class RandomPositioningStrategy(PositioningStrategy):
 
     def __init__(self, progress_map: GridMap, obstacle_map: GridMap,
-                 min_distance_to_obstacle: float = 0.5, alternate_direction=False):
+                 random_generator: random.Random, min_distance_to_obstacle: float = 0.5,
+                 alternate_direction=False):
         self._progress = progress_map
         self._obstacles = obstacle_map
         self._obstacle_margin = min_distance_to_obstacle
         self._alternate_direction = alternate_direction
+        self._random = random_generator
 
     def get_pose(self, agent_index: int) -> Pose:
         center_corridor = np.argwhere(self._obstacles.map > self._obstacle_margin)
         delta_progress_next_pos = 0.025
-        if self._alternate_direction and random.random()<0.5:
+        if self._alternate_direction and self._random.random() < 0.5:
             delta_progress_next_pos = -delta_progress_next_pos
         x, y, angle = self._random_position(self._progress, center_corridor, delta_progress_next_pos)
         return (x, y, 0.05), (0, 0, angle)
 
     def _random_position(self, progress_map, sampling_map, delta_progress_next_pos=0.025):
-        position = random.choice(sampling_map)
+        position = self._random.choice(sampling_map)
         progress = progress_map.map[position[0], position[1]]
 
         # next position is a random point in the map which has progress greater than the current `position`
@@ -77,7 +79,7 @@ class RandomPositioningStrategy(PositioningStrategy):
         if direction_area.shape[0] == 0:
             raise ValueError(
                 f"starting position not exist, consider to change `delta_progress`={delta_progress_next_pos}")
-        next_position = random.choice(direction_area)
+        next_position = self._random.choice(direction_area)
         px, py = position[0], position[1]
         npx, npy = next_position[0], next_position[1]
         diff = np.array(progress_map.to_meter(npx, npy)) - np.array(progress_map.to_meter(px, py))
@@ -89,13 +91,15 @@ class RandomPositioningStrategy(PositioningStrategy):
 class RandomPositioningWithinBallStrategy(RandomPositioningStrategy):
 
     def __init__(self, progress_map: GridMap, obstacle_map: GridMap, drivable_map: np.ndarray,
-                 min_distance_to_obstacle: float = 0.5, progress_center: float = 0.0, progress_radius: float = 0.01):
+                 random_generator: random.Random, min_distance_to_obstacle: float = 0.5,
+                 progress_center: float = 0.0, progress_radius: float = 0.01):
         self._progress = progress_map
         self._obstacles = obstacle_map
         self._occupancy = drivable_map
         self._obstacle_margin = min_distance_to_obstacle
         self._progress_center = progress_center     # the interval is centered w.r.t. a fixed progress value
         self._progress_radius = progress_radius     # the width of the interval is +-progress_radius
+        self._random = random_generator
 
     def get_pose(self, agent_index: int) -> Pose:
         progress_interval = np.logical_and(self._progress.map >= self._progress_center - self._progress_radius,
@@ -104,4 +108,3 @@ class RandomPositioningWithinBallStrategy(RandomPositioningStrategy):
                                                      (self._occupancy * self._obstacles.map) >= self._obstacle_margin))
         x, y, angle = self._random_position(self._progress, center_corridor)
         return (x, y, 0.05), (0, 0, angle)
-

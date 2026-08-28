@@ -1,4 +1,3 @@
-import random
 from typing import Callable, List, Any, Optional, Dict, Tuple
 
 import gymnasium
@@ -20,7 +19,9 @@ class ChangingTrackRaceEnv(gymnasium.Env):
         if order == 'sequential':
             self._order_fn = lambda: (self._current_track_index + 1) % len(env_factories)
         elif order == 'random':
-            self._order_fn = lambda: random.choice(list(set(range(0, len(env_factories))) - {self._current_track_index}))
+            self._order_fn = lambda: self.np_random.choice(
+                [index for index in range(len(env_factories)) if index != self._current_track_index]
+            )
         elif order == 'manual':
             self._order_fn = lambda: self._current_track_index
         self._order = order

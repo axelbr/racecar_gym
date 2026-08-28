@@ -19,10 +19,14 @@ class BulletSensor(Sensor[T], ABC):
         super().__init__(name, type)
         self._body_id = None
         self._joint_index = None
+        self._np_random = np.random.default_rng()
 
     def reset(self, body_id: int, joint_index: int = None):
         self._body_id = body_id
         self._joint_index = joint_index
+
+    def seed(self, np_random: np.random.Generator) -> None:
+        self._np_random = np_random
 
     @property
     def body_id(self) -> int:
@@ -55,6 +59,9 @@ class FixedTimestepSensor(BulletSensor[T], ABC):
 
     def reset(self, body_id: int, joint_index: int = None):
         self._sensor.reset(body_id=body_id, joint_index=joint_index)
+
+    def seed(self, np_random: np.random.Generator) -> None:
+        self._sensor.seed(np_random)
 
 
 class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
@@ -117,7 +124,11 @@ class Lidar(BulletSensor[NDArray[(Any,), np.float]]):
             parentLinkIndex=self.joint_index)
         hit_fractions = np.array(results, dtype=object)[:, 2].astype(dtype=float)
         ranges = self._config.range * hit_fractions + self._config.min_range
-        noise = np.random.uniform(1.0 - self._config.accuracy, 1.0 + self._config.accuracy, size=ranges.shape)
+        noise = self._np_random.uniform(
+            1.0 - self._config.accuracy,
+            1.0 + self._config.accuracy,
+            size=ranges.shape,
+        )
         scan = np.clip(ranges * noise, a_min=self._config.min_range, a_max=self._config.range)
 
         if self._config.debug:
@@ -230,7 +241,7 @@ class AccelerationSensor(BulletSensor[NDArray[(6,), np.float]]):
         velocity = util.get_velocity(id=self.body_id)
         acceleration = (velocity - self._last_velocity) / self._config.time_delta
         scale = np.abs(velocity * self._config.gaussian_noise + 0.01)
-        acceleration = np.random.normal(loc=acceleration, scale=scale)
+        acceleration = self._np_random.normal(loc=acceleration, scale=scale)
         self._last_velocity = velocity
         if self._config.debug:
             print(f'[DEBUG][imu] acceleration: {acceleration}')
@@ -252,7 +263,7 @@ class VelocitySensor(BulletSensor[NDArray[(6,), np.float]]):
     def _get_velocity(self):
         velocity = util.get_velocity(id=self.body_id)
         scale = np.abs(velocity * self._config.gaussian_noise + 0.01)
-        velocity = np.random.normal(loc=velocity, scale=scale)
+        velocity = self._np_random.normal(loc=velocity, scale=scale)
         return velocity
 
     def space(self) -> gymnasium.Space:
@@ -287,7 +298,7 @@ class PoseSensor(BulletSensor[NDArray[(6,), np.float]]):
         position, orientation = p.getBasePositionAndOrientation(self.body_id)
         orientation = p.getEulerFromQuaternion(orientation)
         pose = np.append(position, orientation)
-        pose = np.random.normal(loc=pose, scale=self._config.gaussian_noise)
+        pose = self._np_random.normal(loc=pose, scale=self._config.gaussian_noise)
         if self._config.debug:
             print(f'[DEBUG][gps] pose: {[round(v, 2) for v in pose]}')
         return pose
