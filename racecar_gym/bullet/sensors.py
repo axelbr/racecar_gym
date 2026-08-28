@@ -54,6 +54,8 @@ class FixedTimestepSensor(BulletSensor[T], ABC):
         return self._last_observation
 
     def reset(self, body_id: int, joint_index: int = None):
+        self._last_timestep = 0
+        self._last_observation = None
         self._sensor.reset(body_id=body_id, joint_index=joint_index)
 
 
@@ -219,6 +221,10 @@ class AccelerationSensor(BulletSensor[NDArray[(6,), np.float]]):
     def __init__(self, name: str, type: str, config: Config):
         super().__init__(name, type)
         self._config = config
+        self._last_velocity = np.zeros(shape=6)
+
+    def reset(self, body_id: int, joint_index: int = None):
+        super().reset(body_id=body_id, joint_index=joint_index)
         self._last_velocity = np.zeros(shape=6)
 
     def space(self) -> gymnasium.Space:
