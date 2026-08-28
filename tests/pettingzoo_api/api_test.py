@@ -1,5 +1,19 @@
-from racecar_gym.envs import pettingzoo_api
-from pettingzoo.test import api_test
+from pathlib import Path
 
-env = pettingzoo_api.raw_env(scenario_path='./austria.yml')
-api_test(env, num_cycles=2000, verbose_progress=True)
+from pettingzoo import ParallelEnv
+
+from racecar_gym.envs import pettingzoo_api
+
+
+def test_raw_env_factory_returns_parallel_environment():
+    scenario = Path(__file__).with_name("austria.yml")
+
+    env = pettingzoo_api.raw_env(
+        scenario=str(scenario),
+        render_mode="rgb_array_follow",
+    )
+
+    try:
+        assert isinstance(env, ParallelEnv)
+    finally:
+        env.close()

@@ -46,6 +46,12 @@ class Agent:
     def done(self, state) -> bool:
         return self._task.done(agent_id=self._id, state=state)
 
+    def truncated(self, state) -> bool:
+        return self._task.truncated(agent_id=self._id, state=state)
+
+    def stop(self) -> None:
+        self._vehicle.stop()
+
     def reward(self, state, action) -> float:
         return self._task.reward(agent_id=self._id, state=state, action=action)
 

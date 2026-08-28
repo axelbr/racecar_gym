@@ -6,7 +6,8 @@ import numpy as np
 
 class ActionRepeat(gymnasium.Wrapper):
 
-    def __init__(self, env, steps: int, reward_aggregate_fn: Callable[[List], Any], termination_fn: Callable[[Any], bool]):
+    def __init__(self, env, steps: int, reward_aggregate_fn: Callable[[List], Any],
+                 termination_fn: Callable[[Any, Any], bool]):
         super().__init__(env)
         self._reward_aggregate_fn = reward_aggregate_fn
         self._termination_fn = termination_fn
@@ -18,7 +19,7 @@ class ActionRepeat(gymnasium.Wrapper):
         for i in range(self._steps):
             obs, reward, terminated, truncated, info = self.env.step(action)
             rewards.append(reward)
-            if self._termination_fn(terminated):
+            if self._termination_fn(terminated, truncated):
                 break
         reward = self._reward_aggregate_fn(rewards)
         return obs, reward, terminated, truncated, info
@@ -36,13 +37,18 @@ def MultiAgentActionRepeat(env, steps: int):
     def aggregate(rewards):
         return _aggregate_dicts(dicts=rewards, initial_value=0.0, agg_fn=float.__add__)
 
-    def termination(done):
-        return any(done.values())
+    def termination(terminated, truncated):
+        return any(terminated.values()) or any(truncated.values())
 
     return ActionRepeat(env=env, steps=steps, reward_aggregate_fn=aggregate, termination_fn=termination)
 
 def SingleAgentActionRepeat(env, steps: int):
-    return ActionRepeat(env=env, steps=steps, reward_aggregate_fn=sum, termination_fn=lambda done: done)
+    return ActionRepeat(
+        env=env,
+        steps=steps,
+        reward_aggregate_fn=sum,
+        termination_fn=lambda terminated, truncated: terminated or truncated,
+    )
 
 def VectorizedSingleAgentActionRepeat(env, steps: int):
 
@@ -50,7 +56,7 @@ def VectorizedSingleAgentActionRepeat(env, steps: int):
         aggregated_rewards = np.array(rewards)
         return aggregated_rewards.sum(axis=0)
 
-    def termination(done):
-        return all(done)
+    def termination(terminated, truncated):
+        return all(np.logical_or(terminated, truncated))
 
     return ActionRepeat(env=env, steps=steps, reward_aggregate_fn=aggregate, termination_fn=termination)

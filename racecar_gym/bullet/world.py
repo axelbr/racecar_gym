@@ -131,7 +131,7 @@ class World(world.World):
 
     def space(self) -> gymnasium.Space:
         return gymnasium.spaces.Dict({
-            'time': gymnasium.spaces.Box(low=0, high=math.inf, shape=(1,))
+            'time': gymnasium.spaces.Box(low=0, high=math.inf, shape=(), dtype=np.float32)
         })
 
     def _update_race_info(self, agent):
