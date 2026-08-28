@@ -19,12 +19,14 @@ class MaximizeProgressTask(Task):
 
     def reward(self, agent_id, state, action) -> float:
         agent_state = state[agent_id]
-        progress = agent_state['lap'] + agent_state['progress']
+        progress = agent_state['progress']
         if self._last_stored_progress is None:
             self._last_stored_progress = progress
-        delta = abs(progress - self._last_stored_progress)
-        if delta > .5:  # the agent is crossing the starting line in the wrong direction
-            delta = (1 - progress) + self._last_stored_progress
+        delta = progress - self._last_stored_progress
+        if delta < -.5:  # crossed the starting line in the forward direction
+            delta += 1
+        elif delta > .5:  # crossed the starting line in the reverse direction
+            delta -= 1
         reward = self._frame_reward
         if self._check_collision(agent_state):
             reward += self._collision_reward
